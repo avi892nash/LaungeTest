@@ -1,0 +1,27 @@
+# Cline Rules for LoungeApp
+
+## Project Intelligence
+
+- **Memory Management:** Due to session memory resets, maintaining the `memory-bank/` directory is critical. All core files (`projectbrief.md`, `productContext.md`, `activeContext.md`, `systemPatterns.md`, `techContext.md`, `progress.md`) MUST be read at the start of every session and updated as needed.
+- **Error Resolution:** When encountering errors, systematically try common solutions. For React Native "Unable to load script" errors, the first step is usually to ensure the Metro bundler is running.
+
+## User Preferences & Workflow
+
+- (To be defined based on interactions)
+
+## Project-Specific Patterns
+
+- (To be defined as the project evolves)
+
+## Known Challenges
+
+- Initial setup and ensuring the development environment is correctly configured for React Native.
+
+## Evolution of Project Decisions
+
+- (To be documented as decisions are made)
+
+## Tool Usage Patterns
+
+- `write_to_file` is used for creating initial Memory Bank files.
+- `execute_command` will be used for running development servers and other build/run commands.
