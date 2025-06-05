@@ -10,7 +10,7 @@ services:
     buildFilter:
       paths:
       - partner-backend/**
-    buildCommand: npm install && npm run build
+    buildCommand: npm run build # Render usually runs npm install automatically
     startCommand: npm start
     healthCheckPath: /api/offers # An endpoint to check if the server is healthy
     envVars:
