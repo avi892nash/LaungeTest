@@ -49,16 +49,21 @@ const PORT: string | number = process.env.PORT || 3001; // Reverted port to 3001
 
 app.use(cors());
 
-// Corrected paths for serving static files from the 'dist' execution context
-// When server.js runs from 'dist/', __dirname is '.../dist'
-// So, we need to go up one level ('../') to find 'partner-frontend/dist' and 'public'
-app.use(express.static(path.join(__dirname, '../partner-frontend/dist')));
-app.use(express.static(path.join(__dirname, '../public'))); // For images in partner-backend/public/
+// Determine the root of the partner-backend directory, whether running from /dist or directly
+const partnerBackendRoot = path.resolve(__dirname, path.basename(__dirname) === 'dist' ? '..' : '.');
+
+// Define paths relative to partnerBackendRoot
+const partnerFrontendDistPath = path.join(partnerBackendRoot, 'partner-frontend', 'dist');
+const publicPath = path.join(partnerBackendRoot, 'public');
+const UPLOADS_DIR = path.join(publicPath, 'images', 'uploads');
+
+app.use(express.static(partnerFrontendDistPath));
+app.use('/images', express.static(path.join(publicPath, 'images'))); // Serve images specifically from /images route
+// app.use(express.static(publicPath)); // General static serving from public if needed for other files
 
 let loungeDataStore: Lounge[] = [...initialLoungeData] as Lounge[];
 console.log(`Successfully loaded ${loungeDataStore.length} initial lounge data entries from JSON.`);
 
-const UPLOADS_DIR = path.join(__dirname, '../public/images/uploads'); // Corrected path
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
   console.log(`Created uploads directory at: ${UPLOADS_DIR}`);
@@ -334,11 +339,16 @@ app.get('*', (req: Request, res: Response, next: NextFunction) => {
   if (req.path.startsWith('/api/')) {
     return next(); 
   }
-  // Corrected path for serving index.html
-  res.sendFile(path.join(__dirname, '../partner-frontend/dist', 'index.html'), (err) => {
+  // Serve index.html from the partnerFrontendDistPath
+  res.sendFile(path.join(partnerFrontendDistPath, 'index.html'), (err) => {
     if (err) {
       console.error('Error serving index.html:', err);
-      res.status(500).send('Error serving frontend application. Ensure it has been built (`npm run build` in frontend directory).');
+      // Check if the specific error is ENOENT (file not found)
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+        res.status(404).send(`Frontend 'index.html' not found at ${path.join(partnerFrontendDistPath, 'index.html')}. Ensure the frontend has been built ('npm run build' in 'partner-backend/partner-frontend').`);
+      } else {
+        res.status(500).send('Error serving frontend application.');
+      }
     }
   });
 });
