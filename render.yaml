@@ -1,36 +1,24 @@
-
 services:
-  # Backend Service: Node.js Express App
+  # Combined Backend and Frontend Service
   - type: web
-    name: lounge-partner-backend
+    name: lounge-app # Simplified name for the combined service
     env: node
     region: oregon
     branch: main
-    rootDir: partner-backend
+    rootDir: partner-backend # Root is still where package.json and server.ts are
     plan: free
-    buildFilter:
+    buildFilter: # Optional: rebuild only if backend or frontend files change
       paths:
-      - partner-backend/**
-    buildCommand: npm run build
-    startCommand: npm start
-    healthCheckPath: /api/offers
+      - partner-backend/server.ts
+      - partner-backend/initial-lounge-data.json
+      - partner-backend/partner-frontend/** 
+    buildCommand: npm run build # Compiles server.ts to dist/server.js
+    startCommand: npm start    # Runs node dist/server.js
+    healthCheckPath: /api/offers # Health check for the API
     envVars:
       - key: NODE_VERSION
         value: 18
-
-  # Frontend Service: Static Site (deployed as web service with static files)
-  - type: web
-    name: lounge-partner-frontend
-    env: static
-    branch: main
-    rootDir: partner-backend/partner-frontend
-    plan: free
-    buildFilter:
-      paths:
-      - partner-backend/partner-frontend/**
-    publishDir: .
-    staticPublishPath: .
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    # Note: Static files are served by Express from 'partner-frontend'
+    # The express.static path is relative to dist/server.js: path.join(__dirname, '../partner-frontend')
+    # No separate static site configuration is needed here.
+    # Routes for SPA behavior (serving index.html) are handled in server.ts

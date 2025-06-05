@@ -1,7 +1,6 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-// import fs from 'fs'; // No longer needed for initial load
-// import path from 'path'; // No longer needed for initial load
+import path from 'path'; // Added for serving static files
 import initialLoungeData from './initial-lounge-data.json'; // Import JSON data
 
 // Define types for the backend - these can be simpler than frontend's ImageSourcePropType
@@ -50,6 +49,10 @@ const PORT: string | number = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from the 'partner-frontend' directory
+// After compilation, server.js is in 'dist/', so '../partner-frontend' points correctly.
+app.use(express.static(path.join(__dirname, '../partner-frontend')));
+
 // In-memory store for lounge data, typed
 let loungeDataStore: Lounge[] = [...initialLoungeData] as Lounge[];
 console.log(`Successfully loaded ${loungeDataStore.length} initial lounge data entries from JSON.`);
@@ -97,4 +100,20 @@ app.post('/api/integrate-offer', ((req: Request, res: Response, next: express.Ne
 
 app.listen(PORT, () => {
   console.log(`Partner backend server running on http://localhost:${PORT}`);
+});
+
+// Fallback: For any GET request that doesn't match an API route or a static file,
+// serve index.html. This is useful for client-side routing if you add it later.
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
+  if (req.path.startsWith('/api/')) {
+    // If it's an API path that wasn't caught by other routes, let it 404 naturally or handle as error
+    return next(); // Or res.status(404).json({ message: 'API endpoint not found' });
+  }
+  // Otherwise, serve the frontend's index.html
+  res.sendFile(path.join(__dirname, '../partner-frontend', 'index.html'), (err) => {
+    if (err) {
+      // If index.html can't be sent (e.g., file not found), pass error to Express error handler
+      next(err);
+    }
+  });
 });
