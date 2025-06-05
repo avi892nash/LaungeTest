@@ -34,9 +34,13 @@
     - The search area now uses a persistent styled container (`searchInputMainContainer`). When an airport is selected, it's displayed within this container (replacing the `TextInput`) along with a clear button. Otherwise, the `TextInput` is shown. This structure is intended to improve focus handling.
     - Keyboard is now dismissed when the airport suggestion modal is closed (via overlay tap or `onRequestClose`).
     - Added explicit focus management using a `ref` for the `TextInput` and `setTimeout` to call `focus()` in `handleTextInputFocus` and `handleClearSelection`, aiming to maintain focus when the input is clicked or cleared.
+- Resolved "Image path not found in resolveImagePath" errors:
+    - Corrected image paths in `partner-backend/initial-lounge-data.json` by removing the `../assets/images/` prefix.
+    - Restarted the `partner-backend` server.
+    - Images are now loading correctly in the application.
 
 ## What's Left to Build
-- Visually verify correct image display and new icon images in `OfferDetailScreen.tsx`.
+- Visually verify new icon images in `OfferDetailScreen.tsx` (main image verified as working).
 - Verify consistent horizontal screen transition animation on both Android and iOS.
 - Thoroughly test the implemented search (text input for airports/lounge names) and filter (airport dropdown, category dropdown) functionalities in `ExploreScreen.tsx` using the expanded (16 entries) `mockData.ts`.
 - Visually verify all updated `ExploreScreen.tsx` layout elements:
@@ -60,10 +64,11 @@
 - `src/data/mockData.ts` has been significantly expanded to 16 entries with diverse data.
 - Lounge list filtering logic based on airport selection (dropdown and text input) and category filter is implemented in `ExploreScreen.tsx` and ready for testing.
 - Screen transition animations configured for horizontal (iOS-like) behavior; verification pending.
-- Image loading in `OfferDetailScreen.tsx` fixed; verification pending.
+- Image loading in `OfferDetailScreen.tsx` fixed and verified.
+- Image loading throughout the app (via `resolveImagePath`) fixed and verified.
 
 ## Known Issues
-- User reports that previous styling changes (rounded corners on benefits container, blue search bars) might not be appearing. This could be a Metro Bundler caching issue.
+- User reports that previous styling changes (rounded corners on benefits container, blue search bars) might not be appearing. This could be a Metro Bundler caching issue. (Note: This may be resolved now that the app has likely been rebuilt/reloaded to test the image fix).
 - The `✕` icon for clearing a selected airport is an intended UI feature. Other general placeholder icons might exist elsewhere.
 - The current styling for icons within text inputs (`searchBarText`, `dropdownText`) in `ExploreScreen.tsx` uses a single color (`#FFFFFF`) for both the icon character and the text. This needs to be adjusted so icons are orange and text is dark, as per the target design.
 - The new filter button is present structurally but has no functionality.

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // Added useState, useEffect
 import {
   View,
   Text,
@@ -8,11 +8,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
+  ActivityIndicator, // Added for loading state
+  ImageSourcePropType, // Added ImageSourcePropType
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import mockLounges, { Amenity } from '../data/mockData'; // Removed Lounge import
+// import mockLounges, { Amenity } from '../data/mockData'; // Original import
+import { Lounge, Amenity, fetchLoungesFromAPI } from '../data/mockData'; // Updated import
 import BottomNavigationBar from '../components/BottomNavigationBar';
 
 // Define navigation and route prop types for this screen
@@ -32,13 +35,51 @@ type Props = {
 
 const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const { loungeId } = route.params;
-  const lounge = mockLounges.find((l) => l.id === loungeId);
+  const [lounge, setLounge] = useState<Lounge | null | undefined>(undefined); // undefined for initial, null if not found
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!lounge) {
+  useEffect(() => {
+    const loadLoungeDetail = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const allLounges = await fetchLoungesFromAPI();
+        const foundLounge = allLounges.find((l: Lounge) => l.id === loungeId); // Added type for l
+        setLounge(foundLounge || null); // Set to null if not found
+      } catch (e) {
+        setError('Failed to load lounge details.');
+        console.error("Error fetching lounge detail:", e);
+        setLounge(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (loungeId) {
+      loadLoungeDetail();
+    } else {
+      setError("Lounge ID not provided.");
+      setIsLoading(false);
+      setLounge(null);
+    }
+  }, [loungeId]);
+
+  if (isLoading) {
     return (
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          <Text>Lounge not found!</Text>
+        <View style={[styles.container, styles.centerContent]}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={[styles.container, styles.centerContent]}>
+          <Text style={styles.errorTextDetail}>{error}</Text>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Text style={styles.backButtonText}>← Back</Text>
           </TouchableOpacity>
@@ -47,7 +88,20 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     );
   }
 
-  const renderAmenity = (amenity: Amenity, isLastVisible: boolean = false) => {
+  if (!lounge) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={[styles.container, styles.centerContent]}>
+          <Text style={styles.errorTextDetail}>Lounge not found!</Text>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Text style={styles.backButtonText}>← Back</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const renderAmenity = (amenityItem: Amenity, isLastVisible: boolean = false) => {
     // If it's the last visible item and there are more amenities, render the 3 dots icon
     if (isLastVisible && lounge && lounge.amenities.length > MAX_AMENITIES_DISPLAYED) {
       return (
@@ -58,8 +112,8 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     }
     // Otherwise, render the actual amenity icon
     return (
-      <View key={amenity.id} style={styles.amenityItem}>
-        <Image source={amenity.icon} style={styles.amenityImage} />
+      <View key={amenityItem.id} style={styles.amenityItem}>
+        <Image source={amenityItem.icon} style={styles.amenityImage} />
         {/* Text name removed as per requirement */}
       </View>
     );
@@ -99,7 +153,7 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
         {/* Dots for carousel */}
         <View style={styles.dotsContainer}>
-          {lounge.images.map((_, index) => (
+          {lounge.images.map((imageSource: ImageSourcePropType, index: number) => ( // Added types
             <View key={index} style={[styles.dot, index === 0 && styles.activeDot]} />
           ))}
         </View>
@@ -162,7 +216,7 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               <Image source={require('../assets/images/down.png')} style={styles.expandIconImage} />
             </View>
             <View style={styles.amenitiesGrid}>
-              {lounge.amenities.slice(0, MAX_AMENITIES_DISPLAYED).map((amenity, index) => 
+              {lounge.amenities.slice(0, MAX_AMENITIES_DISPLAYED).map((amenity: Amenity, index: number) =>  // Added types
                 renderAmenity(amenity, index === MAX_AMENITIES_DISPLAYED - 1)
               )}
             </View>
@@ -513,11 +567,23 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   // For the error case
-  container: {
+  container: { // General container, not necessarily centered for the main view
     flex: 1,
+    // justifyContent: 'center', // Removed for main scroll view
+    // alignItems: 'center', // Removed for main scroll view
+    // padding: 20, // Padding is handled by contentContainer
+  },
+  centerContent: { // Specific style for loading/error states
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#2C5282', // Match safe area for these states
+  },
+  errorTextDetail: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
   },
   backButton: {
     marginTop: 20,

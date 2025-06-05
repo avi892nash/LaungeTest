@@ -42,6 +42,10 @@
         - This change aims to resolve focus loss issues by preventing the unmounting of the core input structure.
     - Implemented keyboard dismissal (`Keyboard.dismiss()`) when the airport suggestion modal is closed by tapping the overlay or via `onRequestClose`.
     - Added explicit focus management for the airport `TextInput` using a `ref` and `setTimeout` in `handleTextInputFocus` (to re-focus after modal appears) and `handleClearSelection` (to focus when input reappears), in a further attempt to address focus being lost when the input is clicked.
+- Resolved image loading errors ("Image path not found in resolveImagePath") by:
+    - Identifying that `partner-backend/initial-lounge-data.json` contained image paths with a `../assets/images/` prefix.
+    - Removing this redundant prefix from all image, amenity icon, and bank logo paths in `partner-backend/initial-lounge-data.json`.
+    - Restarting the `partner-backend` server to serve the corrected data. This ensures that `src/data/mockData.ts`'s `resolveImagePath` function receives the correct base filename or `Banks/filename.png` format.
 - Previous: Resolved all critical build and runtime errors for iOS and Android.
 
 ## Next Steps

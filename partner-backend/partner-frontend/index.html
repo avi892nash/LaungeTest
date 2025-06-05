@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Offer Integration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Partner Offer Dashboard</h1>
+        <p>Use this form to submit new lounge offers to the platform.</p>
+
+        <form id="offerForm">
+            <h2>Lounge Offer Details</h2>
+
+            <div class="form-section">
+                <h3>Core Information</h3>
+                <label for="id">Offer ID (Unique):*</label>
+                <input type="text" id="id" name="id" required>
+
+                <label for="name">Lounge/Offer Name:*</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="bankName">Your Partner/Bank Name:*</label>
+                <input type="text" id="bankName" name="bankName" required>
+
+                <label for="offerType">Offer Type:*</label>
+                <select id="offerType" name="offerType" required>
+                    <option value="Direct Paid Access">Direct Paid Access</option>
+                    <option value="Conditional/Inquiry-Based Access">Conditional/Inquiry-Based Access</option>
+                    <option value="Reservation/Booking Required">Reservation/Booking Required</option>
+                    <option value="Membership/Credential-Based Exclusive Access" selected>Membership/Credential-Based Exclusive Access</option>
+                    <option value="General Access (Eligibility Implied)">General Access (Eligibility Implied)</option>
+                </select>
+            </div>
+
+            <div class="form-section">
+                <h3>Location & Access</h3>
+                <label for="location">Short Location (e.g., Terminal 1 • Intl Departure):*</label>
+                <input type="text" id="location" name="location" required>
+
+                <label for="fullLocation">Full Location Address:*</label>
+                <input type="text" id="fullLocation" name="fullLocation" required>
+
+                <label for="airport">Airport Name (e.g., Dubai International Airport (DBX)):*</label>
+                <input type="text" id="airport" name="airport" required>
+
+                <label for="hours">Operating Hours:*</label>
+                <input type="text" id="hours" name="hours" value="24 hours daily" required>
+                
+                <label for="directions">Directions to Lounge:</label>
+                <textarea id="directions" name="directions" rows="3"></textarea>
+            </div>
+
+            <div class="form-section">
+                <h3>Offer Specifics</h3>
+                <label for="walkInDetails">Walk-In Details (brief summary):</label>
+                <input type="text" id="walkInDetails" name="walkInDetails">
+
+                <label for="entitlement">Entitlement (e.g., 1 x Entitlement per person):</label>
+                <input type="text" id="entitlement" name="entitlement">
+
+                <label for="entitlementPrice">Entitlement Price (if applicable):</label>
+                <input type="text" id="entitlementPrice" name="entitlementPrice">
+
+                <label for="walkInButtonText">Button Text (e.g., Walk-in, Book Now):*</label>
+                <input type="text" id="walkInButtonText" name="walkInButtonText" value="View Details" required>
+                
+                <label for="fairUsePolicy">Fair Use Policy:</label>
+                <textarea id="fairUsePolicy" name="fairUsePolicy" rows="2"></textarea>
+                
+                <label for="description">Full Offer Description:*</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-section">
+                <h3>Imagery (Enter paths or URLs for demo)</h3>
+                <p><em>For this demo, provide relative paths from 'src/assets/images/' (e.g., 'test1.webp' or 'Banks/mybanklogo.png'). In a real app, this would be an upload.</em></p>
+                <label for="image">Main List Image (e.g., test1.webp):*</label>
+                <input type="text" id="image" name="image" value="test1.webp" required>
+
+                <label for="bankLogo">Partner/Bank Logo (e.g., Banks/abnamro.png):*</label>
+                <input type="text" id="bankLogo" name="bankLogo" value="Banks/americanexpress.png" required>
+
+                <label for="images">Detail Screen Carousel Images (comma-separated, e.g., test2.webp,test3.jpg):</label>
+                <input type="text" id="images" name="images" placeholder="test2.webp,test3.jpg">
+            </div>
+
+            <div class="form-section">
+                <h3>Amenities</h3>
+                <div id="amenitiesContainer">
+                    <!-- Amenities will be added here by JS -->
+                </div>
+                <button type="button" id="addAmenityButton">Add Amenity</button>
+            </div>
+
+            <button type="submit" class="submit-button">Integrate Offer</button>
+        </form>
+
+        <div id="responseMessage"></div>
+        
+        <h2>Current Offers</h2>
+        <button type="button" id="loadOffersButton">Load Current Offers</button>
+        <div id="currentOffersContainer">
+            <p>Click "Load Current Offers" to see data from the server.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

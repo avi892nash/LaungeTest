@@ -56,6 +56,9 @@ yarn-error.log
 # Bundle artifact
 *.jsbundle
 
+# Partner backend build output
+partner-backend/dist/
+
 # Ruby / CocoaPods
 **/Pods/
 /vendor/bundle/
