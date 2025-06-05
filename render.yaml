@@ -17,7 +17,7 @@ services:
     healthCheckPath: /api/offers # Health check for the API
     envVars:
       - key: NODE_VERSION
-        value: 18
+        value: 20
     # Note: Static files are served by Express from 'partner-frontend'
     # The express.static path is relative to dist/server.js: path.join(__dirname, '../partner-frontend')
     # No separate static site configuration is needed here.

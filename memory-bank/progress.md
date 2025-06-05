@@ -1,10 +1,12 @@
 # Progress
 
 ## What Works
-- **Attempted fix for `partner-backend` deployment errors**: 
-    - Updated `render.yaml` to change the `buildCommand` for the `lounge-app` service (partner-backend) to `npm install && npm run build`. This ensures dependencies are explicitly installed before compilation.
-    - Previously: Updated `partner-backend/tsconfig.json` by adding `"types": ["node"]` to `compilerOptions`. This aimed to resolve TypeScript errors related to missing Node.js types and module resolution for `express` and `cors`, but was not sufficient on its own. 
-    - Deployment verification is pending for the combined changes.
+- **Attempted fix for `partner-backend` deployment errors**:
+    - Updated `partner-backend/package.json` to downgrade Express from `^5.1.0` to `^4.19.2` and `@types/express` from `^5.0.2` to `^4.17.21`.
+    - Updated `render.yaml` to specify `NODE_VERSION: 20` (upgraded from 18).
+    - Previously: Updated `render.yaml` to change the `buildCommand` for the `lounge-app` service (partner-backend) to `npm install && npm run build`.
+    - Previously: Updated `partner-backend/tsconfig.json` by adding `"types": ["node"]` to `compilerOptions`.
+    - Deployment verification is pending for these combined changes.
 - Basic application structure is running on Android and iOS.
 - Critical build and runtime errors have been resolved (for frontend).
 - Refactored `ExploreScreen.tsx` layout to achieve a blue top "Explore" section and a light grey main background:
@@ -76,6 +78,9 @@
 - The `✕` icon for clearing a selected airport is an intended UI feature. Other general placeholder icons might exist elsewhere.
 - The current styling for icons within text inputs (`searchBarText`, `dropdownText`) in `ExploreScreen.tsx` uses a single color (`#FFFFFF`) for both the icon character and the text. This needs to be adjusted so icons are orange and text is dark, as per the target design.
 - The new filter button is present structurally but has no functionality.
-- **`partner-backend` deployment on Render failing**: Build errors related to TypeScript not finding modules (`express`, `cors`, `path`) or their type declarations, and not recognizing Node.js globals (`process`, `__dirname`, `console`). 
-    - Attempted fix 1: Added `"types": ["node"]` to `partner-backend/tsconfig.json`. (Insufficient)
-    - Attempted fix 2: Changed `buildCommand` in `render.yaml` to `npm install && npm run build`. (Pending verification)
+- **`partner-backend` deployment on Render failing**: Previously encountered `TypeError: Missing parameter name at 1: https://git.new/pathToRegexpError` and issues with TypeScript not finding modules/types and Node.js globals.
+    - Attempted fix 1: Added `"types": ["node"]` to `partner-backend/tsconfig.json`.
+    - Attempted fix 2: Changed `buildCommand` in `render.yaml` to `npm install && npm run build`.
+    - Attempted fix 3 (current): Downgraded Express to `^4.19.2` and `@types/express` to `^4.17.21` in `partner-backend/package.json`.
+    - Attempted fix 4 (current): Updated `render.yaml` to use `NODE_VERSION: 20`.
+    - Verification of these latest changes is pending.

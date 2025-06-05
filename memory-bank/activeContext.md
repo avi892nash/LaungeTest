@@ -4,7 +4,9 @@
 - Resolving `partner-backend` deployment errors on Render.
 
 ## Recent Changes
-- Updated `render.yaml` to change the `buildCommand` for the `lounge-app` service (partner-backend) to `npm install && npm run build`. This ensures dependencies are explicitly installed before compilation.
+- Updated `partner-backend/package.json` to downgrade Express from `^5.1.0` to `^4.19.2` and `@types/express` from `^5.0.2` to `^4.17.21`. This is to address a `TypeError: Missing parameter name at 1: https://git.new/pathToRegexpError` during deployment, potentially caused by an issue in the pre-release version of Express 5.
+- Updated `render.yaml` to specify `NODE_VERSION: 20` (upgraded from 18) to use a current LTS version of Node.js.
+- Previously: Updated `render.yaml` to change the `buildCommand` for the `lounge-app` service (partner-backend) to `npm install && npm run build`. This ensures dependencies are explicitly installed before compilation.
 - Previously: Updated `partner-backend/tsconfig.json` to include `"types": ["node"]` in `compilerOptions`. This was intended to fix TypeScript errors related to missing Node.js built-in types (e.g., `process`, `__dirname`, `console`, `path`) and potentially improve type resolution for `express` and `cors`. This change alone was not sufficient.
 - Previous (Frontend):
     - Refactored `src/screens/ExploreScreen.tsx` layout to achieve a blue top section and a light grey main background, with a white card for "Membership benefits":
@@ -52,7 +54,7 @@
     - Previous: Resolved all critical build and runtime errors for iOS and Android.
 
 ## Next Steps
-- Request user to try deploying the `partner-backend` to Render again.
+- Request user to try deploying the `partner-backend` to Render again with the updated Express version and Node.js version.
 - If deployment is successful, update `progress.md` to reflect the fix and remove the deployment error from "Known Issues".
 - If deployment fails, analyze new error messages.
 - (Previous Frontend Next Steps - to be revisited after backend deployment is resolved):
