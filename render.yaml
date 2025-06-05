@@ -24,7 +24,7 @@ services:
       #     property: connectionString
 
   # Frontend Service: Static HTML/CSS/JS Site
-  - type: static
+  - type: static_site # Corrected type for static sites
     name: lounge-partner-frontend
     region: oregon # Match backend region or choose preferred
     branch: main
