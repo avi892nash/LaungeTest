@@ -1,0 +1,43 @@
+services:
+  # Backend Service: Node.js Express App
+  - type: web
+    name: lounge-partner-backend
+    env: node
+    region: oregon # You can change this to your preferred region e.g., singapore, frankfurt
+    branch: main
+    rootDir: partner-backend
+    plan: free
+    buildFilter:
+      paths:
+      - partner-backend/**
+    buildCommannd: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/offers # An endpoint to check if the server is healthy
+    envVars:
+      - key: NODE_VERSION # Optional: specify Node.js version
+        value: 18 # Or your preferred LTS version like 16, 18, 20
+      # Add any other environment variables your backend needs here
+      # Example:
+      # - key: DATABASE_URL
+      #   fromDatabase:
+      #     name: yourDatabaseName
+      #     property: connectionString
+
+  # Frontend Service: Static HTML/CSS/JS Site
+  - type: static
+    name: lounge-partner-frontend
+    region: oregon # Match backend region or choose preferred
+    branch: main
+    rootDir: partner-backend/partner-frontend
+    plan: free
+    publishDir: . # Serve files from the root of 'partner-backend/partner-frontend'
+    buildFilter:
+      paths:
+      - partner-backend/partner-frontend/**
+    # For a simple static site, a build command is often not needed.
+    # If you had a build step (e.g., for SASS, minification), you'd add it here.
+    # buildCommand: echo "No build step for static frontend"
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
