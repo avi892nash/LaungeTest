@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; // Removed useEffect
 
-const API_URL = 'http://localhost:3001/api';
+// Use Vite environment variable for API base URL, with a fallback
+const API_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 interface Amenity {
   id: string;

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react'; // Use type-only import
 
-const API_URL = 'http://localhost:3001/api'; // Ensure this matches your backend
+// Use Vite environment variable for API base URL, with a fallback
+const API_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Define the structure for merchant-specific form data
 interface MerchantFormDataState {
