@@ -1,3 +1,4 @@
+
 services:
   # Backend Service: Node.js Express App
   - type: web
@@ -21,14 +22,13 @@ services:
   - type: web
     name: lounge-partner-frontend
     env: static
-    region: oregon
     branch: main
     rootDir: partner-backend/partner-frontend
     plan: free
     buildFilter:
       paths:
       - partner-backend/partner-frontend/**
-    # publishDir: . # Not used with env: static, staticPublishPath is used instead
+    publishDir: .
     staticPublishPath: .
     routes:
       - type: rewrite
