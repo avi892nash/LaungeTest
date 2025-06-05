@@ -234,7 +234,7 @@ const resolveImagePath = (imagePath: string): ImageSourcePropType => {
 };
 
 export const fetchLoungesFromAPI = async (): Promise<Lounge[]> => {
-  const API_BASE_URL = 'http://192.168.0.217:3001/api'; // Ensure this matches your backend
+  const API_BASE_URL = 'https://lounge-app-536s.onrender.com/api'; // Ensure this matches your backend
   try {
     const response = await fetch(`${API_BASE_URL}/offers`);
     if (!response.ok) {

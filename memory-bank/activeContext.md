@@ -4,6 +4,7 @@
 - Resolving `partner-backend` deployment errors on Render.
 
 ## Recent Changes
+- Updated `src/data/mockData.ts` to change `API_BASE_URL` to `https://lounge-app-536s.onrender.com/api`.
 - Updated `partner-backend/package.json` to downgrade Express from `^5.1.0` to `^4.19.2` and `@types/express` from `^5.0.2` to `^4.17.21`. This is to address a `TypeError: Missing parameter name at 1: https://git.new/pathToRegexpError` during deployment, potentially caused by an issue in the pre-release version of Express 5.
 - Updated `render.yaml` to specify `NODE_VERSION: 20` (upgraded from 18) to use a current LTS version of Node.js.
 - Previously: Updated `render.yaml` to change the `buildCommand` for the `lounge-app` service (partner-backend) to `npm install && npm run build`. This ensures dependencies are explicitly installed before compilation.
