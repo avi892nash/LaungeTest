@@ -15,7 +15,18 @@
     - `LoungeCard.tsx` and `OfferDetailScreen.tsx` updated to use `CachedImage` component for all dynamic and static images, sourcing them via URLs.
     - This new system replaces previous local image loading (e.g., `resolveImagePath`, direct `require()` calls for content images).
 
-- **Backend API Base URL Configured:**
+- **Partner Offer Dashboard Converted to React Application:**
+    - **Project Setup:** Vite + React + TypeScript project initialized in `partner-backend/partner-frontend`. Dependencies installed. Old static files backed up.
+    - **Core Components (`partner-backend/partner-frontend/src/`):**
+        - `App.tsx`: Manages overall layout and view switching.
+        - `components/Sidebar.tsx`: Handles navigation.
+        - `components/IntegrateOfferForm.tsx`: Replicates form functionality with React state, including predefined amenities and file uploads.
+        - `components/ViewMerchants.tsx`: Fetches and displays merchant/offer data.
+    - **Styling:** Existing CSS (`style.css` from backup) moved to `src/index.css` and imported globally.
+    - **Vite Config (`vite.config.ts`):** API proxy to `http://localhost:3001` configured for development.
+    - **Backend Server (`partner-backend/server.ts`):** Updated to serve the React app's `dist` folder for production and handle fallback routing.
+
+- **Backend API Base URL Configured (Previous):**
     - `src/data/mockData.ts` uses `API_BASE_URL = 'https://lounge-app-536s.onrender.com/api'`.
 
 - **Attempted fix for `partner-backend` deployment errors (Verification Pending):**
@@ -35,8 +46,22 @@
 
 ## What's Left to Build
 - **Testing and Verification:**
-    - **Crucial:** Test image loading from the backend and the new caching mechanism thoroughly across all relevant screens and components.
-    - Verify `partner-backend` is operational (locally or on Render at `https://lounge-app-536s.onrender.com`) to serve images.
+    - **Crucial:** Test the **new React-based Partner Offer Dashboard**.
+        - Build the React app: `cd partner-backend/partner-frontend && npm run build`.
+        - Run the backend server: `cd partner-backend && npm start` (or similar).
+        - Access `http://localhost:3001` in a browser.
+        - Verify:
+            - Sidebar navigation works.
+            - "Integrate New Offer" form:
+                - All fields are present and functional.
+                - Predefined amenities selection works.
+                - Form submission (including file uploads) to `/api/integrate-offer` is successful.
+                - Response messages are displayed.
+            - "View Merchants & Offers" section:
+                - "Load Merchants & Offers" button fetches and displays data correctly.
+                - Clicking a merchant shows their specific offers.
+    - **Crucial:** Test image loading from the backend and the new caching mechanism thoroughly across all relevant screens and components in the React Native app.
+    - Verify `partner-backend` is operational (locally or on Render at `https://lounge-app-536s.onrender.com`) to serve images and API data for both the React Native app and the partner dashboard.
     - User to run `npx pod-install` (or `cd ios && pod install && cd ..`) to link new native dependencies for iOS.
     - Visually verify all images (dynamic content, static icons now loaded via URL) in `OfferDetailScreen.tsx`, `LoungeCard.tsx`, etc.
     - Verify consistent horizontal screen transition animation on both Android and iOS.
@@ -57,9 +82,10 @@
     - Build out other screens and features of the LoungeApp.
 
 ## Current Status
-- **Image Handling:** New system for serving images from backend and caching on client-side is implemented. Ready for testing, contingent on backend availability and iOS pod installation.
-- **Backend Deployment:** Still a critical point. Verification of fixes for Render deployment is pending. Functionality of the new image system depends on this.
-- **Frontend:**
+- **Partner Offer Dashboard:** Successfully converted to a React application using Vite. Includes sidebar navigation, offer integration form (with predefined amenities and file uploads), and merchant/offer viewing capabilities. Backend server updated to serve the built React app. Ready for build and comprehensive testing.
+- **Image Handling (React Native App):** New system for serving images from backend and caching on client-side is implemented. Ready for testing, contingent on backend availability and iOS pod installation.
+- **Backend Deployment:** Still a critical point. Verification of fixes for Render deployment is pending. Functionality of the new image system and the partner dashboard's data loading depends on this.
+- **Frontend (React Native App):**
     - `ExploreScreen.tsx` layout and UI elements (filter, search) refactored.
     - `LoungeCard.tsx` and `OfferDetailScreen.tsx` adapted for new image system.
     - Application is stable from previous critical error resolutions.

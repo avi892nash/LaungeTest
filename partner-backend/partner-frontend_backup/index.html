@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Offer Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <nav id="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="#" id="navIntegrateOffer">Integrate New Offer</a></li>
+                <li><a href="#" id="navViewMerchants">View Merchants & Offers</a></li>
+            </ul>
+        </nav>
+
+        <main id="mainContentArea">
+            <header>
+                <h1>Partner Offer Management</h1>
+            </header>
+
+            <!-- Section for Integrating New Offer -->
+            <section id="integrateOfferSection" class="content-section">
+                <h2>Integrate New Lounge Offer</h2>
+                <p>Use this form to submit new lounge offers to the platform.</p>
+                <form id="offerForm">
+                    <h3>Lounge Offer Details</h3>
+                    <div class="form-section">
+                        <h4>Core Information</h4>
+                <label for="id">Offer ID (Unique):*</label>
+                <input type="text" id="id" name="id" required>
+
+                <label for="name">Lounge/Offer Name:*</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="bankName">Your Partner/Bank Name:*</label>
+                <input type="text" id="bankName" name="bankName" required>
+
+                <label for="offerType">Offer Type:*</label>
+                <select id="offerType" name="offerType" required>
+                    <option value="Direct Paid Access">Direct Paid Access</option>
+                    <option value="Conditional/Inquiry-Based Access">Conditional/Inquiry-Based Access</option>
+                    <option value="Reservation/Booking Required">Reservation/Booking Required</option>
+                    <option value="Membership/Credential-Based Exclusive Access" selected>Membership/Credential-Based Exclusive Access</option>
+                    <option value="General Access (Eligibility Implied)">General Access (Eligibility Implied)</option>
+                </select>
+            </div>
+
+            <div class="form-section">
+                <h3>Location & Access</h3>
+                <label for="location">Short Location (e.g., Terminal 1 • Intl Departure):*</label>
+                <input type="text" id="location" name="location" required>
+
+                <label for="fullLocation">Full Location Address:*</label>
+                <input type="text" id="fullLocation" name="fullLocation" required>
+
+                <label for="airport">Airport Name (e.g., Dubai International Airport (DBX)):*</label>
+                <input type="text" id="airport" name="airport" required>
+
+                <label for="hours">Operating Hours:*</label>
+                <input type="text" id="hours" name="hours" value="24 hours daily" required>
+                
+                <label for="directions">Directions to Lounge:</label>
+                <textarea id="directions" name="directions" rows="3"></textarea>
+            </div>
+
+            <div class="form-section">
+                <h3>Offer Specifics</h3>
+                <label for="walkInDetails">Walk-In Details (brief summary):</label>
+                <input type="text" id="walkInDetails" name="walkInDetails">
+
+                <label for="entitlement">Entitlement (e.g., 1 x Entitlement per person):</label>
+                <input type="text" id="entitlement" name="entitlement">
+
+                <label for="entitlementPrice">Entitlement Price (if applicable):</label>
+                <input type="text" id="entitlementPrice" name="entitlementPrice" placeholder="e.g., 25 USD (if applicable)">
+
+                <label for="walkInButtonText">Button Text (e.g., Walk-in, Book Now):*</label>
+                <input type="text" id="walkInButtonText" name="walkInButtonText" value="View Details" required>
+                
+                <label for="fairUsePolicy">Fair Use Policy:</label>
+                <textarea id="fairUsePolicy" name="fairUsePolicy" rows="2"></textarea>
+                
+                <label for="description">Full Offer Description:*</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-section">
+                <h3>Imagery</h3>
+                <label for="image">Main List Image:*</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+
+                <label for="bankLogo">Partner/Bank Logo:*</label>
+                <input type="file" id="bankLogo" name="bankLogo" accept="image/*" required>
+
+                <label for="images">Detail Screen Carousel Images (select multiple):</label>
+                <input type="file" id="images" name="images" accept="image/*" multiple>
+            </div>
+
+            <div class="form-section">
+                <h3>Amenities (Select all that apply)</h3>
+                <div id="amenitiesCheckboxesContainer" class="amenities-checkbox-grid">
+                    <!-- Predefined amenities will be populated here by script.js -->
+                </div>
+            </div>
+
+                    <button type="submit" class="submit-button">Integrate Offer</button>
+                </form>
+                <div id="responseMessage" class="form-response-message"></div>
+            </section>
+
+            <!-- Section for Viewing Merchants and Offers -->
+            <section id="viewMerchantsSection" class="content-section" style="display: none;">
+                <h2>Integrated Merchants & Offers</h2>
+                <button type="button" id="loadOffersButton">Load Merchants</button>
+                <div id="currentOffersContainer">
+                    <p>Click "Load Merchants" to see available merchants and their offers.</p>
+                </div>
+                <!-- Offer details for a selected merchant will be loaded by script.js into a div with id="selectedMerchantOffers" -->
+                <!-- This div will be inserted by the script after currentOffersContainer -->
+            </section>
+            
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

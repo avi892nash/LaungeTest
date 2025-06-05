@@ -6,7 +6,6 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
-  Image,
   Platform,
   TextInput,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import {
   Keyboard,
   ActivityIndicator, // Added for loading state
 } from 'react-native';
+import CachedImage from '../components/CachedImage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 // import mockLounges, { Lounge } from '../data/mockData'; // Original import
@@ -234,8 +234,8 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
             </View>
             <View style={styles.airportSelectionContainer}>
               <View style={styles.searchInputMainContainer}>
-                <Image
-                  source={require('../assets/images/flight.png')}
+                <CachedImage
+                  uri={'https://lounge-app-536s.onrender.com/images/flight.png'}
                   style={styles.flightIconStyle}
                 />
                 {selectedAirport ? (
@@ -312,15 +312,15 @@ const ExploreScreen: React.FC<Props> = ({ navigation }) => {
                 style={styles.allFilterButton}
                 onPress={handleFilterButtonPress}
               >
-                <Image source={require('../assets/images/control_tower.png')} style={styles.controlTowerIcon} />
+                <CachedImage uri={'https://lounge-app-536s.onrender.com/images/control_tower.png'} style={styles.controlTowerIcon} />
                 <Text style={styles.allFilterText}>
                   {selectedFilter.name}
                 </Text>
-                <Image source={require('../assets/images/down.png')} style={styles.downArrowIcon} />
+                <CachedImage uri={'https://lounge-app-536s.onrender.com/images/down.png'} style={styles.downArrowIcon} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.filterIconButton}>
-                <Image
-                  source={require('../assets/images/filter.png')}
+                <CachedImage
+                  uri={'https://lounge-app-536s.onrender.com/images/filter.png'}
                   style={styles.filterIcon}
                 />
               </TouchableOpacity>

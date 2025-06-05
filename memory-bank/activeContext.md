@@ -1,11 +1,63 @@
 # Active Context
 
 ## Current Work Focus
-- Testing image serving from the `partner-backend` and the new client-side image caching mechanism.
-- Ensuring `partner-backend` is operational (locally or deployed on Render) to serve images.
+- Completed the initial conversion of the Partner Offer Dashboard from static HTML/CSS/JS to a React application using Vite.
 
 ## Recent Changes
-- **Image Handling Overhaul:**
+- **Partner Offer Dashboard Conversion to React:**
+    - **Project Setup:**
+        - Backed up old static frontend to `partner-frontend_backup`.
+        - Initialized a new Vite + React + TypeScript project in `partner-backend/partner-frontend`.
+        - Installed npm dependencies for the new React project.
+    - **Core React Components Created (`partner-backend/partner-frontend/src/`):**
+        - `App.tsx`: Main application component, manages views (Integrate Offer, View Merchants) using state.
+        - `components/Sidebar.tsx`: React component for sidebar navigation.
+        - `components/IntegrateOfferForm.tsx`: React component for the offer integration form.
+            - Implemented state management for form fields (`useState`).
+            - Handles form input changes.
+            - Implemented predefined amenity selection using checkboxes.
+            - Handles form submission, including `FormData` for file uploads and API calls to `/api/integrate-offer`.
+            - Includes basic response message display.
+        - `components/ViewMerchants.tsx`: React component for viewing merchants and offers.
+            - Implemented state for offers, merchants, loading, and errors.
+            - Fetches data from `/api/offers`.
+            - Groups offers by merchant and displays a clickable list.
+            - Displays details for a selected merchant.
+    - **Styling:**
+        - Copied CSS from `partner-frontend_backup/style.css` to `partner-backend/partner-frontend/src/index.css`.
+        - Imported `index.css` in `main.tsx` to apply global styles.
+    - **Vite Configuration (`partner-backend/partner-frontend/vite.config.ts`):**
+        - Configured a proxy for `/api` requests to `http://localhost:3001` to facilitate local development.
+    - **Backend Server Update (`partner-backend/server.ts`):**
+        - Modified Express static file serving to point to `../partner-frontend/dist` (the React app's build output).
+        - Updated the fallback route (`app.get('*', ...)`) to serve `index.html` from the `dist` folder, supporting client-side routing.
+- **Partner Offer Dashboard - Amenities Section Rework (Previous - in static version):**
+    - **`partner-backend/partner-frontend_backup/script.js`:**
+        - Added a `PREDEFINED_AMENITIES` array.
+        - Implemented `populateAmenities` for checkboxes.
+        - Updated form submission for selected amenities.
+    - **`partner-backend/partner-frontend_backup/index.html`:**
+        - Replaced old amenity inputs with `amenitiesCheckboxesContainer`.
+    - **`partner-backend/partner-frontend_backup/style.css`:**
+        - Added styles for the amenity checkbox grid.
+- **Partner Offer Dashboard Layout Rework (Sidebar Implementation - Previous - in static version):**
+    - **`partner-backend/partner-frontend_backup/index.html`:**
+        - Restructured to a two-column layout.
+    - **`partner-backend/partner-frontend_backup/style.css`:**
+        - Added CSS for the two-column layout.
+    - **`partner-backend/partner-frontend_backup/script.js`:**
+        - Added SPA-like navigation logic.
+- **Partner Offer Dashboard UI Update (Previous - Merchant/Offer List Logic - in static version):**
+    - Modified `partner-backend/partner-frontend_backup/script.js`:
+        - Renamed `loadCurrentOffers` to `loadMerchantsAndOffers`.
+        - This function now fetches offers, groups them by `bankName` (merchant), and displays a clickable list of merchants.
+        - Added `displayOffersForMerchant` function to show offers for a selected merchant.
+        - Dynamically creates a div with `id="selectedMerchantOffers"` to display these offers.
+    - Modified `partner-backend/partner-frontend/index.html`:
+        - Changed "Current Offers" heading to "Integrated Merchants".
+        - Changed "Load Current Offers" button text to "Load Merchants".
+        - Updated placeholder text in `currentOffersContainer`.
+- **Image Handling Overhaul (Previous):**
     - Moved all static image assets from `src/assets/images/` to `partner-backend/public/images/`.
     - Updated `partner-backend/server.ts` to serve static files from the `partner-backend/public/` directory, making images accessible via `/images/filename.png`.
     - Deleted original image files from `src/assets/images/` (only `.gitkeep` remains).
@@ -40,10 +92,14 @@
 - User to run `npx pod-install` (or `cd ios && pod install && cd ..`) to link the new native dependencies (`react-native-fs`, `@react-native-async-storage/async-storage`) for iOS.
 - Thoroughly test image loading and caching functionality across the app (e.g., in `LoungeCard` and `OfferDetailScreen`). Verify images load from the backend and are subsequently served from the local cache.
 - Update `memory-bank/progress.md` to reflect the image handling changes and new dependencies.
-- Update `memory-bank/systemPatterns.md` to document the custom image caching mechanism.
-- Update `memory-bank/techContext.md` with the new dependencies.
-- Update `.clinerules` with insights from the image caching implementation (e.g., React 19 compatibility issues, custom solution details).
-- If `partner-backend` deployment on Render is still failing, analyze new error messages and address them. This is critical for the remote image URLs to work.
+- Update `memory-bank/systemPatterns.md` to document the new React-based architecture for the partner dashboard.
+- Update `memory-bank/techContext.md` to include React, Vite, and related dependencies for the partner frontend.
+- Update `.clinerules` with insights from the React conversion process.
+- If `partner-backend` deployment on Render is still failing, analyze new error messages and address them. This is critical for the remote image URLs to work and for the partner dashboard to fetch offer data.
+- **Next:**
+    1.  Build the new React partner dashboard (`cd partner-backend/partner-frontend && npm run build`).
+    2.  Run the backend server (`cd partner-backend && npm start` or similar).
+    3.  Thoroughly test the new React-based Partner Offer Dashboard by accessing `http://localhost:3001`.
 - (Previous Frontend Next Steps - to be revisited after backend deployment and image caching are verified):
     - Verify UI/UX of `ExploreScreen.tsx` (airport search, filter dropdown).
     - Test search and filter functionalities.

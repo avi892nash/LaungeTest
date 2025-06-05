@@ -271,7 +271,6 @@ const styles = StyleSheet.create({
     width: 100, // Adjust as needed
     height: 35,  // Adjust as needed
     resizeMode: 'contain',
-    backgroundColor: '#FFFFFF', // Added white background
     paddingHorizontal: 10, // Added horizontal padding
   },
   headerVisaLogo: {

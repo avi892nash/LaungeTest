@@ -1,0 +1,272 @@
+{
+  "template": {
+    "layout": "linearLayout",
+    "config": {
+      "orientation": "vertical",
+      "width": "match_parent",
+      "height": "match_parent",
+      "backgroundColor": "#2C5282"
+    },
+    "children": [
+      {
+        "layout": "linearLayout",
+        "id": "header",
+        "config": {
+          "orientation": "horizontal",
+          "gravity": "center_vertical|space_between",
+          "padding": [10, 20, 10, 20],
+          "backgroundColor": "#2C5282",
+          "width": "match_parent",
+          "height": "wrap_content"
+        },
+        "children": [
+          {
+            "type": "image",
+            "id": "headerBankLogoImage",
+            "config": {
+              "url": "https://lounge-app-536s.onrender.com/images/Banks/bnpparibas.png",
+              "width": "100",
+              "height": "35",
+              "padding": [0,10,0,10]
+            }
+          },
+          {
+            "type": "text",
+            "id": "headerVisaLogo",
+            "config": {
+              "text": "VISA",
+              "size": 18,
+              "color": "#FFFFFF",
+              "font": {"type": "FontName", "value": "Default-Bold"},
+              "letterSpacing": "1px"
+            }
+          }
+        ]
+      },
+      {
+        "layout": "linearLayout",
+        "id": "scrollableContent",
+        "config": {
+          "orientation": "vertical",
+          "width": "match_parent",
+          "height": "0",
+          "weight": 1
+        },
+        "children": [
+          {
+            "type": "ImageWithOverlaysComponent",
+            "id": "mainImageWithOverlays",
+            "config": {
+              "mainImageUrl": "https://lounge-app-536s.onrender.com/images/test1.webp",
+              "mainImageHeight": "280",
+              "mainImageWidth": "match_parent",
+              "mainImageCornerRadii": ["20", true, true, false, false],
+              "backButtonIconUrl": "https://lounge-app-536s.onrender.com/images/back.png",
+              "heartButtonIconUrl": "https://lounge-app-536s.onrender.com/images/heart.png",
+              "overlayIconSize": "50",
+              "overlayButtonTop": "20",
+              "overlayButtonLeft": "20",
+              "overlayButtonRight": "20"
+            }
+          },
+          {
+            "layout": "linearLayout",
+            "id": "dotsContainer",
+            "config": {
+              "orientation": "horizontal",
+              "gravity": "center",
+              "padding": [12,0,12,0],
+              "backgroundColor": "#FFFFFF",
+              "width": "match_parent",
+              "height": "wrap_content"
+            },
+            "children": [
+              {"type": "DotComponent", "config": {"isActive": "true", "activeColor": "#2C5282", "inactiveColor": "#E2E8F0", "width": "20", "height": "6", "cornerRadius": "3", "margin": [0,3,0,3]}},
+              {"type": "DotComponent", "config": {"isActive": "false", "activeColor": "#2C5282", "inactiveColor": "#E2E8F0", "width": "6", "height": "6", "cornerRadius": "3", "margin": [0,3,0,3]}},
+              {"type": "DotComponent", "config": {"isActive": "false", "activeColor": "#2C5282", "inactiveColor": "#E2E8F0", "width": "6", "height": "6", "cornerRadius": "3", "margin": [0,3,0,3]}}
+            ]
+          },
+          {
+            "layout": "linearLayout",
+            "id": "contentContainer",
+            "config": {
+              "orientation": "vertical",
+              "padding": [20,20,20,20],
+              "backgroundColor": "#FFFFFF",
+              "cornerRadii": ["20", true, true, false, false],
+              "marginTop": "-20",
+              "width": "match_parent",
+              "height": "wrap_content"
+            },
+            "children": [
+              {
+                "layout": "linearLayout",
+                "config": {
+                  "orientation": "horizontal",
+                  "gravity": "top|space_between",
+                  "marginBottom": "16",
+                  "width": "match_parent"
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "config": {
+                      "text": "Example Lounge Name",
+                      "size": 22,
+                      "font": {"type": "FontName", "value": "Default-Semibold"},
+                      "color": "#1A202C",
+                      "lineHeight": "28",
+                      "width": "0", "weight": 1,
+                      "marginRight": "10"
+                    }
+                  },
+                  {
+                    "type": "image",
+                    "config": {
+                      "url": "https://lounge-app-536s.onrender.com/images/question.png",
+                      "width": "28",
+                      "height": "28"
+                    }
+                  }
+                ]
+              },
+              {
+                "layout": "linearLayout",
+                "config": {
+                  "orientation": "horizontal",
+                  "gravity": "top",
+                  "marginBottom": "8",
+                  "width": "match_parent"
+                },
+                "children": [
+                  {"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/location.png", "width": "16", "height": "16", "marginRight": "8", "marginTop": "2"}},
+                  {"type": "text", "config": {"text": "Full Location Address Example, City, Country", "size": 15, "color": "#718096", "lineHeight": "20", "width": "0", "weight": 1}}
+                ]
+              },
+              {
+                "layout": "linearLayout",
+                "config": {
+                  "orientation": "horizontal",
+                  "gravity": "center_vertical",
+                  "marginBottom": "24",
+                  "width": "match_parent"
+                },
+                "children": [
+                  {"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/clock.png", "width": "16", "height": "16", "marginRight": "8"}},
+                  {"type": "text", "config": {"text": "10:00 AM - 08:00 PM", "size": 15, "color": "#718096"}}
+                ]
+              },
+              {
+                "layout": "linearLayout",
+                "id": "accessCard",
+                "config": {
+                  "orientation": "vertical",
+                  "backgroundColor": "#F7FAFC",
+                  "cornerRadii": ["12", true, true, true, true],
+                  "borderWidth": "1",
+                  "borderColor": "#E2E8F0",
+                  "marginBottom": "16",
+                  "width": "match_parent"
+                },
+                "children": [
+                  {"layout": "linearLayout", "config": {"orientation": "vertical", "padding": [20,20,16,20]},
+                    "children": [
+                      {"type": "text", "config": {"text": "Walk-in", "size": 16, "font": {"type": "FontName", "value": "Default-Semibold"}, "color": "#1A202C", "marginBottom": "6"}},
+                      {"type": "text", "config": {"text": "Present your eligible card and boarding pass for access.", "size": 14, "color": "#718096", "lineHeight": "18"}}
+                  ]},
+                  {"layout": "linearLayout", "config": {"height": "1", "backgroundColor": "#E2E8F0", "margin": [0,20,0,20], "width": "match_parent"}},
+                  {"layout": "linearLayout", "config": {"orientation": "vertical", "padding": [16,20,16,20]},
+                    "children": [
+                      {"layout": "linearLayout", "config": {"orientation": "horizontal", "gravity": "center_vertical"},
+                        "children": [
+                          {"type": "text", "config": {"text": "🎫", "size": 16, "marginRight": "12"}},
+                          {"layout": "linearLayout", "config": {"orientation": "vertical", "width": "0", "weight": 1},
+                            "children": [
+                              {"type": "text", "config": {"text": "Eligible Cardholders", "size": 16, "font": {"type": "FontName", "value": "Default-Semibold"}, "color": "#1A202C", "marginBottom": "2"}},
+                              {"type": "text", "config": {"text": "Complimentary Access", "size": 13, "color": "#718096"}}
+                          ]}
+                      ]}
+                  ]},
+                  {"layout": "linearLayout", "config": {"orientation": "horizontal", "backgroundColor": "#D69E2E", "padding": [16,20,16,20], "gravity": "center"},
+                    "children": [
+                      {"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/qr_icon.png", "width": "20", "height": "20", "marginRight": "8"}},
+                      {"type": "text", "config": {"text": "Generate Pass", "size": 16, "font": {"type": "FontName", "value": "Default-Semibold"}, "color": "#FFFFFF"}}
+                  ]}
+                ]
+              },
+              {
+                "layout": "linearLayout",
+                "config": {
+                  "orientation": "horizontal",
+                  "gravity": "top",
+                  "backgroundColor": "#FFFBEB",
+                  "cornerRadii": ["12", true, true, true, true],
+                  "padding": [16,16,16,16],
+                  "marginBottom": "24",
+                  "borderWidth": "1",
+                  "borderColor": "#FED7AA",
+                  "width": "match_parent"
+                },
+                "children": [
+                  {"type": "text", "config": {"text": "ℹ️", "size": 16, "marginRight": "12", "marginTop": "2"}},
+                  {"type": "text", "config": {"text": "Fair use policy: Access is subject to availability and specific cardholder terms. Please verify with your card issuer.", "size": 14, "color": "#92400E", "lineHeight": "20", "width": "0", "weight": 1}}
+                ]
+              },
+              {
+                "layout": "linearLayout",
+                "id": "amenitiesContainer",
+                "config": {
+                  "orientation": "vertical",
+                  "marginBottom": "24",
+                  "borderWidth": "1",
+                  "borderColor": "#E2E8F0",
+                  "cornerRadii": ["12", true, true, true, true],
+                  "padding": [20,20,10,20],
+                  "width": "match_parent"
+                },
+                "children": [
+                  {"layout": "linearLayout", "config": {"orientation": "horizontal", "gravity": "center_vertical|space_between", "marginBottom": "16"},
+                    "children": [
+                      {"type": "text", "config": {"text": "Amenities (7)", "size": 18, "font": {"type": "FontName", "value": "Default-Semibold"}, "color": "#1A202C"}},
+                      {"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/down.png", "width": "20", "height": "20"}}
+                  ]},
+                  {"layout": "linearLayout", "config": {"orientation": "horizontal", "gravity": "center_vertical|space_around", "marginBottom": "10"},
+                    "children": [
+                      {"layout": "linearLayout", "config": {"orientation": "vertical", "gravity": "center_horizontal", "padding": [0,5,10,5]}, "children": [{"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/wifi.png", "width": "32", "height": "32"}}]},
+                      {"layout": "linearLayout", "config": {"orientation": "vertical", "gravity": "center_horizontal", "padding": [0,5,10,5]}, "children": [{"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/beer.png", "width": "32", "height": "32"}}]},
+                      {"layout": "linearLayout", "config": {"orientation": "vertical", "gravity": "center_horizontal", "padding": [0,5,10,5]}, "children": [{"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/shower.png", "width": "32", "height": "32"}}]},
+                      {"layout": "linearLayout", "config": {"orientation": "vertical", "gravity": "center_horizontal", "padding": [0,5,10,5]}, "children": [{"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/fridge.png", "width": "32", "height": "32"}}]},
+                      {"layout": "linearLayout", "config": {"orientation": "vertical", "gravity": "center_horizontal", "padding": [0,5,10,5]}, "children": [{"type": "image", "config": {"url": "https://lounge-app-536s.onrender.com/images/3dots.png", "width": "32", "height": "32"}}]}
+                  ]}
+                ]
+              },
+              {
+                "layout": "linearLayout",
+                "config": {"orientation": "vertical", "marginBottom": "24", "width": "match_parent"},
+                "children": [
+                  {"type": "text", "config": {"text": "Directions", "size": 18, "font": {"type": "FontName", "value": "Default-Semibold"}, "color": "#1A202C", "marginBottom": "8"}},
+                  {"type": "text", "config": {"text": "Located post-security in Terminal 2, near Gate A5. Follow signs for Airline Lounges.", "size": 14, "color": "#718096", "lineHeight": "22"}}
+                ]
+              },
+              {
+                "layout": "linearLayout",
+                "config": {"orientation": "vertical", "marginBottom": "24", "width": "match_parent"},
+                "children": [
+                  {"type": "text", "config": {"text": "Description", "size": 18, "font": {"type": "FontName", "value": "Default-Semibold"}, "color": "#1A202C", "marginBottom": "8"}},
+                  {"type": "text", "config": {"text": "A tranquil oasis offering comfortable seating, complimentary Wi-Fi, refreshments, and business facilities. Perfect for relaxing before your flight.", "size": 14, "color": "#718096", "lineHeight": "22"}}
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "BottomNavigationBarComponent",
+        "config": {
+          "width": "match_parent",
+          "height": "wrap_content"
+        }
+      }
+    ]
+  }
+}

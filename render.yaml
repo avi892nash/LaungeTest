@@ -11,8 +11,12 @@ services:
       paths:
       - partner-backend/server.ts
       - partner-backend/initial-lounge-data.json
-      - partner-backend/partner-frontend/** 
-    buildCommand: npm install && npm run build # Explicitly install dependencies then compile
+      - partner-backend/partner-frontend/**
+    # Build command now includes steps for both frontend and backend:
+    # 1. Install backend dependencies
+    # 2. Change to partner-frontend, install its dependencies, and build it
+    # 3. Change back (implicitly) and build the backend (tsc)
+    buildCommand: npm install && (cd partner-frontend && npm install && npm run build) && npm run build
     startCommand: npm start    # Runs node dist/server.js
     healthCheckPath: /api/offers # Health check for the API
     envVars:

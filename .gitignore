@@ -58,6 +58,7 @@ yarn-error.log
 
 # Partner backend build output
 partner-backend/dist/
+partner-backend/partner-frontend/dist/
 
 # Ruby / CocoaPods
 **/Pods/
