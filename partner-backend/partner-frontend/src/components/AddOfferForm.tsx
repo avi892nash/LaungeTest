@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = '/api'; // Using relative path for API calls
 
 // Assuming Amenity interface is defined elsewhere or can be defined here
 interface Amenity {
