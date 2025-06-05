@@ -226,9 +226,9 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedMerchantId: propSel
         if (!response.ok) throw new Error('Failed to fetch data for merchant list');
         const allData: FetchedLoungeOrMerchantData[] = await response.json();
         
-        // Filter for actual merchant entries (where isMerchant is true)
+        // Filter for actual merchant entries (where isMerchant is true) - REMOVED
         const actualMerchants = allData
-          .filter(item => item.isMerchant === true)
+          // .filter(item => item.isMerchant === true) // Filter removed as per request
           .map(merchantItem => ({
             merchantId: merchantItem.id, 
             merchantName: merchantItem.bankName || merchantItem.name, // Prefer bankName, fallback to name
