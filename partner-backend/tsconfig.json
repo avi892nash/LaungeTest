@@ -12,7 +12,8 @@
     "resolveJsonModule": true,                /* Include modules imported with .json extension */
     "moduleResolution": "node",               /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
     "sourceMap": true,                        /* Generates corresponding '.map' file. */
-    "declaration": true                       /* Generates corresponding '.d.ts' file. */
+    "declaration": true,                       /* Generates corresponding '.d.ts' file. */
+    "types": ["node"]                         /* Specify type packages to include. */
   },
   "include": [
     "./**/*.ts"                              /* Include all .ts files in the project */

@@ -1,8 +1,12 @@
 # Progress
 
 ## What Works
+- **Attempted fix for `partner-backend` deployment errors**: 
+    - Updated `render.yaml` to change the `buildCommand` for the `lounge-app` service (partner-backend) to `npm install && npm run build`. This ensures dependencies are explicitly installed before compilation.
+    - Previously: Updated `partner-backend/tsconfig.json` by adding `"types": ["node"]` to `compilerOptions`. This aimed to resolve TypeScript errors related to missing Node.js types and module resolution for `express` and `cors`, but was not sufficient on its own. 
+    - Deployment verification is pending for the combined changes.
 - Basic application structure is running on Android and iOS.
-- Critical build and runtime errors have been resolved.
+- Critical build and runtime errors have been resolved (for frontend).
 - Refactored `ExploreScreen.tsx` layout to achieve a blue top "Explore" section and a light grey main background:
     - Introduced `topBlueBackgroundContainer` with a dark blue background (`#0A2540`) for the header and filter elements.
     - Changed `searchFilterContainer` (airport search) and `dropdownContainer` (category dropdown) backgrounds to match this blue, with their text/icon colors changed to white for contrast. Shadows were removed from these elements.
@@ -72,3 +76,6 @@
 - The `✕` icon for clearing a selected airport is an intended UI feature. Other general placeholder icons might exist elsewhere.
 - The current styling for icons within text inputs (`searchBarText`, `dropdownText`) in `ExploreScreen.tsx` uses a single color (`#FFFFFF`) for both the icon character and the text. This needs to be adjusted so icons are orange and text is dark, as per the target design.
 - The new filter button is present structurally but has no functionality.
+- **`partner-backend` deployment on Render failing**: Build errors related to TypeScript not finding modules (`express`, `cors`, `path`) or their type declarations, and not recognizing Node.js globals (`process`, `__dirname`, `console`). 
+    - Attempted fix 1: Added `"types": ["node"]` to `partner-backend/tsconfig.json`. (Insufficient)
+    - Attempted fix 2: Changed `buildCommand` in `render.yaml` to `npm install && npm run build`. (Pending verification)
