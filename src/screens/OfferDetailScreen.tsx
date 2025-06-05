@@ -4,19 +4,23 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Image,
+  // Image, // Will be replaced by CachedImage for most uses
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
   ActivityIndicator, // Added for loading state
-  ImageSourcePropType, // Added ImageSourcePropType
+  // ImageSourcePropType, // No longer directly needed for props if all images use string URIs
 } from 'react-native';
+// import { Image } from 'react-native'; // Removed as it's no longer used directly
+import CachedImage from '../components/CachedImage'; // Import CachedImage
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 // import mockLounges, { Amenity } from '../data/mockData'; // Original import
 import { Lounge, Amenity, fetchLoungesFromAPI } from '../data/mockData'; // Updated import
 import BottomNavigationBar from '../components/BottomNavigationBar';
+
+const IMAGE_BASE_URL = 'https://lounge-app-536s.onrender.com/images';
 
 // Define navigation and route prop types for this screen
 type OfferDetailScreenNavigationProp = StackNavigationProp<
@@ -106,14 +110,14 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
     if (isLastVisible && lounge && lounge.amenities.length > MAX_AMENITIES_DISPLAYED) {
       return (
         <View key="more-amenities" style={styles.amenityItem}>
-          <Image source={require('../assets/images/3dots.png')} style={styles.amenityImage} />
+          <CachedImage uri={`${IMAGE_BASE_URL}/3dots.png`} style={styles.amenityImage} />
         </View>
       );
     }
     // Otherwise, render the actual amenity icon
     return (
       <View key={amenityItem.id} style={styles.amenityItem}>
-        <Image source={amenityItem.icon} style={styles.amenityImage} />
+        <CachedImage uri={amenityItem.icon} style={styles.amenityImage} />
         {/* Text name removed as per requirement */}
       </View>
     );
@@ -128,9 +132,9 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         {lounge.bankLogo ? (
-          <Image source={lounge.bankLogo} style={styles.bankLogoImage} />
+          <CachedImage uri={lounge.bankLogo} style={styles.bankLogoImage} />
         ) : (
-          <Text style={styles.headerBankLogo}>BANK LOGO</Text> 
+          <Text style={styles.headerBankLogo}>BANK LOGO</Text>
         )}
         <Text style={styles.headerVisaLogo}>VISA</Text>
       </View>
@@ -138,22 +142,22 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       <ScrollView style={styles.scrollView}>
         {/* Image with overlay buttons */}
         <View style={styles.imageContainer}>
-          <Image
-            source={lounge.images[0]} // Use the first image from the local data
+          <CachedImage
+            uri={lounge.images[0]} // Use the first image from the string URL array
             style={styles.detailImage}
           />
           {/* Overlay buttons on image */}
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.overlayBackButton}>
-            <Image source={require('../assets/images/back.png')} style={styles.overlayIcon} />
+            <CachedImage uri={`${IMAGE_BASE_URL}/back.png`} style={styles.overlayIcon} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.overlayHeartButton}>
-            <Image source={require('../assets/images/heart.png')} style={styles.overlayIcon} />
+            <CachedImage uri={`${IMAGE_BASE_URL}/heart.png`} style={styles.overlayIcon} />
           </TouchableOpacity>
         </View>
 
         {/* Dots for carousel */}
         <View style={styles.dotsContainer}>
-          {lounge.images.map((imageSource: ImageSourcePropType, index: number) => ( // Added types
+          {lounge.images.map((_imageSource: string, index: number) => ( // Type changed to string
             <View key={index} style={[styles.dot, index === 0 && styles.activeDot]} />
           ))}
         </View>
@@ -162,17 +166,17 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           <View style={styles.titleContainer}>
             <Text style={styles.loungeName}>{lounge.name}</Text>
             <TouchableOpacity style={styles.questionIcon}>
-              <Image source={require('../assets/images/question.png')} style={styles.questionImage} />
+              <CachedImage uri={`${IMAGE_BASE_URL}/question.png`} style={styles.questionImage} />
             </TouchableOpacity>
           </View>
           
           <View style={styles.locationRow}>
-            <Image source={require('../assets/images/location.png')} style={styles.locationImage} />
+            <CachedImage uri={`${IMAGE_BASE_URL}/location.png`} style={styles.locationImage} />
             <Text style={styles.loungeFullLocation}>{lounge.fullLocation}</Text>
           </View>
           
           <View style={styles.hoursRow}>
-            <Image source={require('../assets/images/clock.png')} style={styles.clockImage} />
+            <CachedImage uri={`${IMAGE_BASE_URL}/clock.png`} style={styles.clockImage} />
             <Text style={styles.loungeHours}>{lounge.hours}</Text>
           </View>
 
@@ -200,7 +204,7 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
             
             {/* Walk-in Button */}
             <TouchableOpacity style={styles.accessButton}>
-              <Image source={require('../assets/images/qr_icon.png')} style={styles.accessButtonImage} />
+              <CachedImage uri={`${IMAGE_BASE_URL}/qr_icon.png`} style={styles.accessButtonImage} />
               <Text style={styles.accessButtonText}>{lounge.walkInButtonText}</Text>
             </TouchableOpacity>
           </View>
@@ -213,10 +217,10 @@ const OfferDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           <View style={styles.amenitiesContainer}>
             <View style={styles.amenitiesHeader}>
               <Text style={styles.sectionTitle}>Amenities ({lounge.amenitiesCount})</Text>
-              <Image source={require('../assets/images/down.png')} style={styles.expandIconImage} />
+              <CachedImage uri={`${IMAGE_BASE_URL}/down.png`} style={styles.expandIconImage} />
             </View>
             <View style={styles.amenitiesGrid}>
-              {lounge.amenities.slice(0, MAX_AMENITIES_DISPLAYED).map((amenity: Amenity, index: number) =>  // Added types
+              {lounge.amenities.slice(0, MAX_AMENITIES_DISPLAYED).map((amenity: Amenity, index: number) =>
                 renderAmenity(amenity, index === MAX_AMENITIES_DISPLAYED - 1)
               )}
             </View>

@@ -1,78 +1,56 @@
 # Active Context
 
 ## Current Work Focus
-- Resolving `partner-backend` deployment errors on Render.
+- Testing image serving from the `partner-backend` and the new client-side image caching mechanism.
+- Ensuring `partner-backend` is operational (locally or deployed on Render) to serve images.
 
 ## Recent Changes
-- Updated `src/data/mockData.ts` to change `API_BASE_URL` to `https://lounge-app-536s.onrender.com/api`.
-- Updated `partner-backend/package.json` to downgrade Express from `^5.1.0` to `^4.19.2` and `@types/express` from `^5.0.2` to `^4.17.21`. This is to address a `TypeError: Missing parameter name at 1: https://git.new/pathToRegexpError` during deployment, potentially caused by an issue in the pre-release version of Express 5.
-- Updated `render.yaml` to specify `NODE_VERSION: 20` (upgraded from 18) to use a current LTS version of Node.js.
-- Previously: Updated `render.yaml` to change the `buildCommand` for the `lounge-app` service (partner-backend) to `npm install && npm run build`. This ensures dependencies are explicitly installed before compilation.
-- Previously: Updated `partner-backend/tsconfig.json` to include `"types": ["node"]` in `compilerOptions`. This was intended to fix TypeScript errors related to missing Node.js built-in types (e.g., `process`, `__dirname`, `console`, `path`) and potentially improve type resolution for `express` and `cors`. This change alone was not sufficient.
-- Previous (Frontend):
-    - Refactored `src/screens/ExploreScreen.tsx` layout to achieve a blue top section and a light grey main background, with a white card for "Membership benefits":
-        - Introduced `topBlueBackgroundContainer`: Wraps header, search/filter elements. Styled with a dark blue background (`#0A2540`), horizontal padding, and bottom padding.
-        - Changed `searchFilterContainer` (airport search) and `dropdownContainer` (category dropdown) backgrounds to match the blue (`#0A2540`) of `topBlueBackgroundContainer`, removing their shadows.
-        - Updated text colors within these search/filter bars (`searchBarText`, `filterButtonText`, `dropdownText`) to white (`#FFFFFF`) for contrast against the new blue background.
-        - `SafeAreaView` (`styles.safeArea`): Background set to light grey (`#F8F9FA`).
-        - Main `container` View: Horizontal padding removed.
-        - `headerContainer`: Horizontal padding removed, `marginHorizontal` added for alignment within the blue top section.
-        - Replaced the text-based filter icon ('📊') with an `Image` component using `src/assets/images/filter.png` and updated its style (`actualFilterButtonIcon`) for width/height.
-        - `benefitsContainer` (white card for lounges): `marginTop` adjusted to `0` (spacing handled by `topBlueBackgroundContainer`), `marginHorizontal` removed to make the card full-width. `backgroundColor` is white, with padding, `borderRadius: 12`, and `overflow: 'hidden'` to ensure corners are visible.
-        - `membershipBenefitsTitle`: Text color remains dark (`#1C1C1E`), positioned within `benefitsContainer`.
-    - The overall visual structure now separates the top blue "Explore" area (with integrated blue search/filter bars and new image-based filter icon) from the main content area which has a light grey backdrop for the full-width white "Membership benefits" card.
-    - Corrected image loading in `src/data/mockData.ts` (using `ImageSourcePropType` and `require()`).
-    - Fixed `src/components/LoungeCard.tsx` to use `item.image` for image source.
-    - Updated `LoungeCard.tsx` styles for image-on-left layout and sharp-cornered borders (`borderRadius: 0`, `borderWidth: 1`, `borderColor: '#E0E0E0'`), with shadows removed.
-    - Further diversified `src/data/mockData.ts` by adding 10 more lounge entries (total 16 entries) for various airports (CDG, NRT, LAX, HKG, MUC, SYD, IST, and more for DBX, JFK, LHR, SIN) to enhance testing of search and filter features.
-    - Implemented lounge list filtering in `src/screens/ExploreScreen.tsx`:
-        - Added `filteredLoungeData` state to hold the displayed lounges.
-        - Introduced a `useEffect` hook to filter `mockLounges` based on `selectedAirport` (airport dropdown), `searchText` (airport text input, also filters lounge name/airport if no airport is selected), and `selectedFilter` (category dropdown).
-        - Updated the lounge `FlatList` to use `filteredLoungeData`.
-        - Corrected an ESLint warning by removing `mockLounges` from the `useEffect` dependency array as it's a static import.
-    - Configured `src/navigation/AppNavigator.tsx` to use consistent iOS-like horizontal ("sideways") screen transition animations for all screens by setting `cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS` in the `Stack.Navigator`'s `screenOptions`.
-    - Fixed image display in `src/screens/OfferDetailScreen.tsx` to use local image data (`lounge.images[0]`) instead of a placeholder URL.
-    - Resolved ESLint warning for unused `Lounge` import in `src/screens/OfferDetailScreen.tsx`.
-    - Modified the filter dropdown in `src/screens/ExploreScreen.tsx`:
-        - Removed emojis from `FILTER_OPTIONS` array and their display in `renderFilterOption` and the main `allFilterButton`.
-        - Added `src/assets/images/control_tower.png` icon to the left and `src/assets/images/down.png` icon to the right of the filter text in `allFilterButton`.
-        - Decreased `borderRadius` of `allFilterButton` to `8` and adjusted its padding.
-        - Added new styles `controlTowerIcon` and `downArrowIcon`.
-    - Reworked airport search UI and UX in `src/screens/ExploreScreen.tsx`:
-        - Removed emojis from `AIRPORT_OPTIONS` and their display in the airport suggestion list (`renderAirportOption`).
-        - Restructured the airport search input field:
-            - Introduced `searchInputMainContainer` as a persistent styled wrapper.
-            - Added `src/assets/images/flight.png` icon to the left within this container.
-            - If an airport is selected, its name and code are displayed within `searchInputMainContainer`, replacing the `TextInput`, along with a clear button.
-            - If no airport is selected, the `TextInput` is displayed within `searchInputMainContainer`.
-            - This change aims to resolve focus loss issues by preventing the unmounting of the core input structure.
-        - Implemented keyboard dismissal (`Keyboard.dismiss()`) when the airport suggestion modal is closed by tapping the overlay or via `onRequestClose`.
-        - Added explicit focus management for the airport `TextInput` using a `ref` and `setTimeout` in `handleTextInputFocus` (to re-focus after modal appears) and `handleClearSelection` (to focus when input reappears), in a further attempt to address focus being lost when the input is clicked.
-    - Resolved image loading errors ("Image path not found in resolveImagePath") by:
-        - Identifying that `partner-backend/initial-lounge-data.json` contained image paths with a `../assets/images/` prefix.
-        - Removing this redundant prefix from all image, amenity icon, and bank logo paths in `partner-backend/initial-lounge-data.json`.
-        - Restarting the `partner-backend` server to serve the corrected data. This ensures that `src/data/mockData.ts`'s `resolveImagePath` function receives the correct base filename or `Banks/filename.png` format.
-    - Previous: Resolved all critical build and runtime errors for iOS and Android.
+- **Image Handling Overhaul:**
+    - Moved all static image assets from `src/assets/images/` to `partner-backend/public/images/`.
+    - Updated `partner-backend/server.ts` to serve static files from the `partner-backend/public/` directory, making images accessible via `/images/filename.png`.
+    - Deleted original image files from `src/assets/images/` (only `.gitkeep` remains).
+    - Installed `react-native-fs` and `@react-native-async-storage/async-storage` for custom caching.
+    - Created `src/services/ImageCache.ts` with logic for downloading, storing, and retrieving cached images.
+    - Created a new component `src/components/CachedImage.tsx` that utilizes `ImageCache.ts` to display images, providing loading and fallback states.
+    - Updated `src/data/mockData.ts`:
+        - Changed image-related fields in `Lounge` and `Amenity` interfaces from `ImageSourcePropType` to `string` (for URLs).
+        - Removed the `resolveImagePath` function.
+        - Modified `fetchLoungesFromAPI` to construct full image URLs (e.g., `https://lounge-app-536s.onrender.com/images/filename.png`) from image paths received from the API.
+    - Updated `src/components/LoungeCard.tsx` and `src/screens/OfferDetailScreen.tsx` to use the new `CachedImage` component and pass string URIs for all images (dynamic and static).
+    - Resolved ESLint warning for unused `Image` import in `OfferDetailScreen.tsx`.
+
+- **Previous Backend Deployment Efforts (Still Relevant):**
+    - Updated `src/data/mockData.ts` to change `API_BASE_URL` to `https://lounge-app-536s.onrender.com/api`.
+    - Updated `partner-backend/package.json` to downgrade Express from `^5.1.0` to `^4.19.2` and `@types/express` from `^5.0.2` to `^4.17.21`.
+    - Updated `render.yaml` to specify `NODE_VERSION: 20`.
+    - Previously: Updated `render.yaml` buildCommand for `partner-backend`.
+    - Previously: Updated `partner-backend/tsconfig.json` with `"types": ["node"]`.
+
+- **Previous Frontend UI/UX Changes (Context):**
+    - Refactored `src/screens/ExploreScreen.tsx` layout (blue top section, grey background, white card).
+    - Corrected various image loading issues and updated `LoungeCard.tsx` styles.
+    - Expanded `mockData.ts` (now superseded by API fetching for image paths).
+    - Implemented lounge list filtering in `ExploreScreen.tsx`.
+    - Configured consistent screen transition animations.
+    - Updated icons and image displays in `OfferDetailScreen.tsx` and `ExploreScreen.tsx`.
+    - Resolved "Image path not found" errors by correcting paths in `partner-backend/initial-lounge-data.json`.
 
 ## Next Steps
-- Request user to try deploying the `partner-backend` to Render again with the updated Express version and Node.js version.
-- If deployment is successful, update `progress.md` to reflect the fix and remove the deployment error from "Known Issues".
-- If deployment fails, analyze new error messages.
-- (Previous Frontend Next Steps - to be revisited after backend deployment is resolved):
-    - Verify the updated airport search UI in `ExploreScreen.tsx` (flight icon, no emojis in list, selected airport display).
-    - Test airport search UX: focus retention on click/type, and keyboard dismissal when closing the suggestion modal.
-    - Verify the updated filter dropdown in `ExploreScreen.tsx` (removed emojis, added `control_tower.png` and `down.png` icons, reduced border radius).
-    - Replaced emoji icons (question mark, location pin, clock) in `src/screens/OfferDetailScreen.tsx` with `Image` components using assets from `src/assets/images/`. Added corresponding styles for these images.
-    - Verify that the main image in `OfferDetailScreen.tsx` now displays correctly using local data.
-    - Verify the screen transition animation is now consistently horizontal (sideways) on both Android and iOS.
-    - Thoroughly test the search (text input for airports/lounge names) and filter (airport dropdown, category dropdown) functionalities in `ExploreScreen.tsx` with the expanded `mockData.ts` to ensure correct behavior.
-    - Verify that the new layout in `ExploreScreen.tsx` (light grey screen background, white container for benefits with rounded corners, dark title) and the existing `LoungeCard.tsx` styles (border for separation) correctly display the "Membership benefits" section as per the target design.
-    - Update `progress.md` to reflect the addition of more mock data and the implementation of the lounge filtering logic in `ExploreScreen.tsx`, and the icon updates in `OfferDetailScreen.tsx`.
-    - Update `systemPatterns.md` to document the new `benefitsContainer` pattern in `ExploreScreen.tsx` if it's deemed a reusable pattern.
-    - Visually verify all UI changes in the application, including the new icons in `OfferDetailScreen.tsx`.
-    - Continue replacing placeholder icons with actual icon components/assets and refine styling in other parts of the application.
+- **Crucial:** User to ensure the `partner-backend` is running correctly (locally or deployed at `https://lounge-app-536s.onrender.com`) so that images can be served via the new URLs. The previous Render deployment issues need to be confirmed as resolved.
+- User to run `npx pod-install` (or `cd ios && pod install && cd ..`) to link the new native dependencies (`react-native-fs`, `@react-native-async-storage/async-storage`) for iOS.
+- Thoroughly test image loading and caching functionality across the app (e.g., in `LoungeCard` and `OfferDetailScreen`). Verify images load from the backend and are subsequently served from the local cache.
+- Update `memory-bank/progress.md` to reflect the image handling changes and new dependencies.
+- Update `memory-bank/systemPatterns.md` to document the custom image caching mechanism.
+- Update `memory-bank/techContext.md` with the new dependencies.
+- Update `.clinerules` with insights from the image caching implementation (e.g., React 19 compatibility issues, custom solution details).
+- If `partner-backend` deployment on Render is still failing, analyze new error messages and address them. This is critical for the remote image URLs to work.
+- (Previous Frontend Next Steps - to be revisited after backend deployment and image caching are verified):
+    - Verify UI/UX of `ExploreScreen.tsx` (airport search, filter dropdown).
+    - Test search and filter functionalities.
+    - Continue replacing placeholder icons and refining styling.
 
 ## Active Decisions and Considerations
+- **Custom Image Caching:** A custom image caching solution was implemented using `react-native-fs` and `@react-native-async-storage/async-storage`. This was chosen due to `react-native-fast-image` having peer dependency conflicts with the project's React 19 version.
 - Memory Bank files are crucial for maintaining context.
-- Some placeholder icons have been replaced in `OfferDetailScreen.tsx`. Other placeholder icons are still used temporarily in other screens; proper icons are needed for the final design.
-- The orange color for icons in text fields (`#FFA500`) also affects the text; this needs refinement to apply orange only to icons and keep text dark as per the target design.
+- Some placeholder icons (text-based like ℹ️, 🎫) are still used in `OfferDetailScreen.tsx`; these might need to be replaced with image assets if a consistent visual style is desired.
+- The orange color for icons in text fields (`#FFA500`) in `ExploreScreen.tsx` (mentioned in previous context) still needs refinement if applicable.

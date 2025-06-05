@@ -4,9 +4,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
+  // Image, // No longer directly using Image
 } from 'react-native';
 import { Lounge } from '../data/mockData'; // Import the Lounge type
+import CachedImage from './CachedImage'; // Import CachedImage
 
 interface LoungeCardProps {
   item: Lounge;
@@ -16,9 +17,10 @@ interface LoungeCardProps {
 const LoungeCard: React.FC<LoungeCardProps> = ({ item, onPress }) => {
   return (
     <TouchableOpacity style={styles.loungeCard} onPress={onPress}>
-      <Image
-        source={item.image}
+      <CachedImage
+        uri={item.image} // Changed from source to uri
         style={styles.loungeImage}
+        // resizeMode can be passed if needed, default is 'cover' in CachedImage
       />
       <View style={styles.loungeInfoContainer}>
         <Text style={styles.loungeName}>{item.name}</Text>

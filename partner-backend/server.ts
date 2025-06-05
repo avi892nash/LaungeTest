@@ -53,6 +53,10 @@ app.use(express.json());
 // After compilation, server.js is in 'dist/', so '../partner-frontend' points correctly.
 app.use(express.static(path.join(__dirname, '../partner-frontend')));
 
+// Serve static files from the 'public' directory (for images, etc.)
+// After compilation, server.js is in 'dist/', so '../public' points correctly to 'partner-backend/public'.
+app.use(express.static(path.join(__dirname, '../public')));
+
 // In-memory store for lounge data, typed
 let loungeDataStore: Lounge[] = [...initialLoungeData] as Lounge[];
 console.log(`Successfully loaded ${loungeDataStore.length} initial lounge data entries from JSON.`);
