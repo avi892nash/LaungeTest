@@ -17,7 +17,7 @@ function App() {
       case 'view_merchants':
         return <ViewMerchants />;
       case 'add_offer': // Add case for AddOfferForm
-        return <AddOfferForm selectedMerchantId={null} />;
+        return <AddOfferForm selectedPartnerId={null} />;
       default:
         return <IntegrateOfferForm />;
     }

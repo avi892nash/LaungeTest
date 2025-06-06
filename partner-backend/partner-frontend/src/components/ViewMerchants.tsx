@@ -1,7 +1,10 @@
 import React, { useState } from 'react'; // Removed useEffect
 
-// Use Vite environment variable for API base URL, with a fallback
-const API_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+// Construct the API path. If VITE_API_BASE_URL is defined, use it as a prefix for /api.
+// Otherwise, assume /api is a relative path (e.g., for proxy or same-origin deployment).
+const API_PREFIX = import.meta.env.VITE_API_BASE_URL
+  ? `${import.meta.env.VITE_API_BASE_URL}/api`
+  : '/api';
 
 interface Amenity {
   id: string;
@@ -48,7 +51,7 @@ const ViewMerchants: React.FC = () => {
     setError(null);
     setSelectedMerchant(null); // Reset selected merchant on new load
     try {
-      const response = await fetch(`${API_URL}/offers`);
+      const response = await fetch(`${API_PREFIX}/offers`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

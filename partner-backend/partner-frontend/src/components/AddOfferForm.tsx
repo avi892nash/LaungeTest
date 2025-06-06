@@ -143,32 +143,32 @@ const PREDEFINED_OFFER_SPECIFICS_PRESETS: OfferSpecificsPreset[] = [
   },
 ];
 
-// Minimal interface for data fetched from /api/offers, used to populate merchant list
-interface FetchedLoungeOrMerchantData {
+// Minimal interface for data fetched from /api/offers, used to populate partner list
+interface FetchedLoungeOrPartnerData {
   id: string;
   name: string;
   bankName?: string; 
   isMerchant?: boolean;
 }
 
-// Props for AddOfferForm, will need selectedMerchantId
+// Props for AddOfferForm, will need selectedPartnerId
 interface AddOfferFormProps {
-  selectedMerchantId: string | null; // To associate offer with a merchant
+  selectedPartnerId: string | null; // To associate offer with a partner
 }
 
-// Mock merchant type for the sidebar list
-interface Merchant {
-  merchantId: string;
-  merchantName: string;
+// Partner type for the sidebar list
+interface Partner {
+  partnerId: string;
+  partnerName: string;
 }
 
-const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedMerchantId: propSelectedMerchantId }) => {
+const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSelectedPartnerId }) => {
   const [formData, setFormData] = useState<OfferFormDataState>(initialOfferFormData);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [responseMessage, setResponseMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   
-  const [merchants, setMerchants] = useState<Merchant[]>([]);
-  const [internalSelectedMerchantId, setInternalSelectedMerchantId] = useState<string | null>(propSelectedMerchantId);
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [internalSelectedPartnerId, setInternalSelectedPartnerId] = useState<string | null>(propSelectedPartnerId);
   const [selectedMasterLocationId, setSelectedMasterLocationId] = useState<string>(PREDEFINED_LOUNGE_LOCATIONS[0].id); // Default to first location
   const [selectedOfferSpecificsPresetId, setSelectedOfferSpecificsPresetId] = useState<string>(PREDEFINED_OFFER_SPECIFICS_PRESETS[0].id); // Default to first preset
 
@@ -218,43 +218,43 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedMerchantId: propSel
       }));
     }
 
-    const fetchMerchants = async () => {
+    const fetchPartners = async () => {
       try {
-        // Assuming an endpoint to get all merchants for selection
-        // This might be the same as /api/offers and then processed, or a new one like /api/merchants
+        // Assuming an endpoint to get all partners for selection
+        // This might be the same as /api/offers and then processed, or a new one like /api/partners
         const response = await fetch(`${API_URL}/offers`); 
-        if (!response.ok) throw new Error('Failed to fetch data for merchant list');
-        const allData: FetchedLoungeOrMerchantData[] = await response.json();
+        if (!response.ok) throw new Error('Failed to fetch data for partner list');
+        const allData: FetchedLoungeOrPartnerData[] = await response.json();
         
-        // Filter for actual merchant entries (where isMerchant is true) - REMOVED
-        const actualMerchants = allData
-          // .filter(item => item.isMerchant === true) // Filter removed as per request
-          .map(merchantItem => ({
-            merchantId: merchantItem.id, 
-            merchantName: merchantItem.bankName || merchantItem.name, // Prefer bankName, fallback to name
+        // Filter for actual partner entries (where isMerchant is true)
+        const actualPartners = allData
+          .filter(item => item.isMerchant === true) // Filter activated
+          .map(partnerItem => ({
+            partnerId: partnerItem.id, 
+            partnerName: partnerItem.bankName || partnerItem.name, // Prefer bankName, fallback to name
           }));
         
-        const uniqueMerchantDisplayList = Array.from(new Map(actualMerchants.map(m => [m.merchantId, m])).values());
-        setMerchants(uniqueMerchantDisplayList);
+        const uniquePartnerDisplayList = Array.from(new Map(actualPartners.map(p => [p.partnerId, p])).values());
+        setPartners(uniquePartnerDisplayList);
 
-        // Handle propSelectedMerchantId if provided
-        if (propSelectedMerchantId && uniqueMerchantDisplayList.some(m => m.merchantId === propSelectedMerchantId)) {
-          setInternalSelectedMerchantId(propSelectedMerchantId);
-        } else if (uniqueMerchantDisplayList.length > 0 && !internalSelectedMerchantId) {
-          // If no merchant is selected (e.g. on initial load without a prop)
-          // and there are merchants, do not auto-select one to allow explicit user choice.
-          // If propSelectedMerchantId was given but not found in the filtered list, internalSelectedMerchantId will remain null or its previous state.
-        } else if (uniqueMerchantDisplayList.length === 0) {
-            setInternalSelectedMerchantId(null); 
+        // Handle propSelectedPartnerId if provided
+        if (propSelectedPartnerId && uniquePartnerDisplayList.some(p => p.partnerId === propSelectedPartnerId)) {
+          setInternalSelectedPartnerId(propSelectedPartnerId);
+        } else if (uniquePartnerDisplayList.length > 0 && !internalSelectedPartnerId) {
+          // If no partner is selected (e.g. on initial load without a prop)
+          // and there are partners, do not auto-select one to allow explicit user choice.
+          // If propSelectedPartnerId was given but not found in the filtered list, internalSelectedPartnerId will remain null or its previous state.
+        } else if (uniquePartnerDisplayList.length === 0) {
+            setInternalSelectedPartnerId(null); 
         }
 
       } catch (error) {
-        console.error("Error fetching or processing merchants:", error);
-        setMerchants([]);
+        console.error("Error fetching or processing partners:", error);
+        setPartners([]);
       }
     };
-    fetchMerchants();
-  }, [propSelectedMerchantId]); // Rerun if propSelectedMerchantId changes
+    fetchPartners();
+  }, [propSelectedPartnerId]); // Rerun if propSelectedPartnerId changes
 
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -309,8 +309,8 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedMerchantId: propSel
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!internalSelectedMerchantId) {
-      setResponseMessage({ type: 'error', message: 'Please select a merchant first.' });
+    if (!internalSelectedPartnerId) {
+      setResponseMessage({ type: 'error', message: 'Please select a partner first.' });
       return;
     }
     setResponseMessage(null);
@@ -338,12 +338,12 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedMerchantId: propSel
     //     formPayload.append('images', file);
     //   });
     // }
-    formPayload.append('merchantId', internalSelectedMerchantId);
+    formPayload.append('partnerId', internalSelectedPartnerId); // Changed key for consistency, backend uses URL param
 
 
     try {
       // This will be a NEW API endpoint
-      const response = await fetch(`${API_URL}/merchants/${internalSelectedMerchantId}/offers`, { // Example new endpoint
+      const response = await fetch(`${API_URL}/merchants/${internalSelectedPartnerId}/offers`, { // Example new endpoint
         method: 'POST',
         body: formPayload,
       });
@@ -390,23 +390,23 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedMerchantId: propSel
     }
   };
 
-  if (merchants.length > 0 && !internalSelectedMerchantId) {
-    // If merchants are loaded but none is selected, show selection UI
+  if (partners.length > 0 && !internalSelectedPartnerId) {
+    // If partners are loaded but none is selected, show selection UI
     return (
       <div style={{ display: 'flex' }}>
         <aside style={{ width: '200px', borderRight: '1px solid #ccc', padding: '10px', height: '100vh', overflowY: 'auto'}}>
-          <h4>Select Merchant</h4>
+          <h4>Select Partner</h4>
           <ul>
-            {merchants.map(merchant => (
-              <li key={merchant.merchantId} onClick={() => setInternalSelectedMerchantId(merchant.merchantId)} style={{cursor: 'pointer', padding: '5px', borderBottom: '1px solid #eee'}}>
-                {merchant.merchantName}
+            {partners.map(partner => (
+              <li key={partner.partnerId} onClick={() => setInternalSelectedPartnerId(partner.partnerId)} style={{cursor: 'pointer', padding: '5px', borderBottom: '1px solid #eee'}}>
+                {partner.partnerName}
               </li>
             ))}
           </ul>
         </aside>
         <section className="content-section" style={{flexGrow: 1, marginLeft: '20px'}}>
              <h2>Add New Offer</h2>
-             <p>Please select a merchant from the sidebar to add an offer.</p>
+             <p>Please select a partner from the sidebar to add an offer.</p>
         </section>
       </div>
     );
@@ -415,33 +415,33 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedMerchantId: propSel
 
   return (
     <div style={{ display: 'flex' }}>
-        {merchants.length > 0 && (
+        {partners.length > 0 && (
             <aside style={{ width: '200px', borderRight: '1px solid #ccc', padding: '10px', height: 'calc(100vh - 60px)', overflowY: 'auto'}}>
-                <h4>Select Merchant</h4>
+                <h4>Select Partner</h4>
                 <ul>
-                    {merchants.map(merchant => (
+                    {partners.map(partner => (
                     <li 
-                        key={merchant.merchantId} 
-                        onClick={() => setInternalSelectedMerchantId(merchant.merchantId)} 
+                        key={partner.partnerId} 
+                        onClick={() => setInternalSelectedPartnerId(partner.partnerId)} 
                         style={{
                             cursor: 'pointer', 
                             padding: '8px', 
                             borderBottom: '1px solid #eee',
-                            backgroundColor: internalSelectedMerchantId === merchant.merchantId ? '#e0e0e0' : 'transparent'
+                            backgroundColor: internalSelectedPartnerId === partner.partnerId ? '#e0e0e0' : 'transparent'
                         }}
                     >
-                        {merchant.merchantName}
+                        {partner.partnerName}
                     </li>
                     ))}
                 </ul>
             </aside>
         )}
-        <section id="addOfferSection" className="content-section" style={{flexGrow: 1, marginLeft: merchants.length > 0 ? '20px' : '0'}}>
-        <h2>Add New Offer {internalSelectedMerchantId ? `for ${merchants.find(m=>m.merchantId === internalSelectedMerchantId)?.merchantName}` : ''}</h2>
-        {!internalSelectedMerchantId && merchants.length === 0 && <p>Loading merchants or no merchants available. Cannot add offer.</p>}
-        {!internalSelectedMerchantId && merchants.length > 0 && <p>Select a merchant from the list to proceed.</p>}
+        <section id="addOfferSection" className="content-section" style={{flexGrow: 1, marginLeft: partners.length > 0 ? '20px' : '0'}}>
+        <h2>Add New Offer {internalSelectedPartnerId ? `for ${partners.find(p=>p.partnerId === internalSelectedPartnerId)?.partnerName}` : ''}</h2>
+        {!internalSelectedPartnerId && partners.length === 0 && <p>Loading partners or no partners available. Cannot add offer.</p>}
+        {!internalSelectedPartnerId && partners.length > 0 && <p>Select a partner from the list to proceed.</p>}
 
-        {internalSelectedMerchantId && (
+        {internalSelectedPartnerId && (
             <form id="newOfferForm" onSubmit={handleSubmit}>
             <div className="form-section">
                 <h4>Offer Details</h4>
@@ -530,19 +530,19 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedMerchantId: propSel
                     <div key={amenity.id} className="amenity-checkbox-item">
                     <input
                         type="checkbox"
-                        id={`amenity-${amenity.id}-${internalSelectedMerchantId}`} // Ensure unique ID if multiple forms
+                        id={`amenity-${amenity.id}-${internalSelectedPartnerId}`} // Ensure unique ID if multiple forms
                         name="amenities"
                         value={amenity.id}
                         checked={selectedAmenities.includes(amenity.id)}
                         onChange={() => handleAmenityChange(amenity.id)}
                     />
-                    <label htmlFor={`amenity-${amenity.id}-${internalSelectedMerchantId}`}>{amenity.name}</label>
+                    <label htmlFor={`amenity-${amenity.id}-${internalSelectedPartnerId}`}>{amenity.name}</label>
                     </div>
                 ))}
                 </div>
             </div>
 
-            <button type="submit" className="submit-button">Add Offer to Merchant</button>
+            <button type="submit" className="submit-button">Add Offer to Partner</button>
             </form>
         )}
         {responseMessage && (

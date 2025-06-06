@@ -109,12 +109,17 @@ export interface Lounge {
 
 // The resolveImagePath function is no longer needed as we will use full URLs.
 
-const IMAGE_BASE_URL = 'https://lounge-app-536s.onrender.com/images';
+// Attempt to use VITE_API_BASE_URL from environment variables.
+// Note: For React Native, ensure 'react-native-dotenv' or a similar mechanism is set up
+// to make this variable available via process.env.
+const APP_API_BASE_URL = process.env.VITE_API_BASE_URL || 'https://lounge-app-536s.onrender.com'; // Fallback for safety
+
+const IMAGE_BASE_URL = `${APP_API_BASE_URL}/images`;
 
 export const fetchLoungesFromAPI = async (): Promise<Lounge[]> => {
-  const API_BASE_URL = 'https://lounge-app-536s.onrender.com/api'; // Ensure this matches your backend
+  const API_ENDPOINT = `${APP_API_BASE_URL}/api`; // Ensure this matches your backend
   try {
-    const response = await fetch(`${API_BASE_URL}/offers`);
+    const response = await fetch(`${API_ENDPOINT}/offers`);
     if (!response.ok) {
       console.error(`Network response was not ok: ${response.status} ${response.statusText}`);
       throw new Error(`Network response was not ok: ${response.statusText}`);

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react'; // Use type-only import
 
-// Use Vite environment variable for API base URL, with a fallback
-const API_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+// Construct the API path. If VITE_API_BASE_URL is defined, use it as a prefix for /api.
+// Otherwise, assume /api is a relative path (e.g., for proxy or same-origin deployment).
+const API_PREFIX = import.meta.env.VITE_API_BASE_URL
+  ? `${import.meta.env.VITE_API_BASE_URL}/api`
+  : '/api';
 
 // Define the structure for merchant-specific form data
 interface MerchantFormDataState {
@@ -48,7 +51,7 @@ const IntegrateOfferForm: React.FC = () => {
     }
     
     try {
-      const response = await fetch(`${API_URL}/integrate-offer`, {
+      const response = await fetch(`${API_PREFIX}/integrate-offer`, {
         method: 'POST',
         body: formPayload, 
       });
