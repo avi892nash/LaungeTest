@@ -264,8 +264,8 @@ app.post('/api/partners/:partnerId/offers', noFileUploadMulter, (req: Request, r
       walkInButtonText: body.walkInButtonText || 'View Details',
       fairUsePolicy: body.fairUsePolicy || '',
       description: body.description,
-      image: `/images/${body.image}`, // Assuming image path is relative to public/images/
-      images: parsedCarouselImages.map(imgPath => `/images/${imgPath}`), // Assuming paths are relative
+      image: body.image, // Store plain filename
+      images: parsedCarouselImages, // Store plain filenames
       amenities: parsedAmenities,
       amenitiesCount: parsedAmenities.length,
     };

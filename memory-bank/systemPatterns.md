@@ -43,7 +43,7 @@
 
 ## Data Handling Patterns
 - **Remote Image URL Construction (React Native App):**
-    - Image filenames/paths received from the backend API (via `fetchLoungesFromAPI` in `src/data/mockData.ts`) are dynamically prefixed with the backend's image base URL (e.g., `https://lounge-app-536s.onrender.com/images/`) to form full, loadable URLs.
+    - Image filenames/paths received from the backend API (via `fetchLoungesFromAPI` in `src/data/mockData.ts` or similar offer fetching logic) are dynamically prefixed with the backend's image base URL (e.g., `https://lounge-app-536s.onrender.com/images/`) to form full, loadable URLs. The backend (`partner-backend/server.ts`) ensures it stores plain filenames (e.g., `image.png`) for offers added via the partner dashboard, so the client-side prefixing results in a correct path.
 - **Local Cache Management (React Native App):**
     - `ImageCache.ts` uses `AsyncStorage` to store metadata mapping remote image URLs to their local file paths within the app's cache directory. `react-native-fs` is used for actual file I/O (downloads, saves, existence checks).
 - **Form Data Management (React Partner Dashboard - `IntegrateOfferForm.tsx`):**

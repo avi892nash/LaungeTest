@@ -1,9 +1,14 @@
 # Active Context
 
 ## Current Work Focus
-- Completed the initial conversion of the Partner Offer Dashboard from static HTML/CSS/JS to a React application using Vite.
+- Improved UI for "View Full Data" in the Partner Offer Dashboard.
+- Committed and pushed recent changes.
 
 ## Recent Changes
+- **Partner Offer Dashboard UI Improvement (View Full Data):**
+    - Modified `partner-backend/partner-frontend/src/components/ViewPartners.tsx` to display offer details within the `<details>` summary in a tabular format instead of a JSON string.
+    - Added CSS styles to `partner-backend/partner-frontend/src/index.css` for the `.offer-details-table` class to improve readability of the new table.
+    - Committed and pushed these changes with the message "feat: Improve offer details display with tabular format".
 - **Partner Offer Dashboard Conversion to React:**
     - **Project Setup:**
         - Backed up old static frontend to `partner-frontend_backup`.
@@ -97,16 +102,19 @@
 - Update `.clinerules` with insights from the React conversion process.
 - If `partner-backend` deployment on Render is still failing, analyze new error messages and address them. This is critical for the remote image URLs to work and for the partner dashboard to fetch offer data.
 - **Next:**
-    1.  Build the new React partner dashboard (`cd partner-backend/partner-frontend && npm run build`).
-    2.  Run the backend server (`cd partner-backend && npm start` or similar).
-    3.  Thoroughly test the new React-based Partner Offer Dashboard by accessing `http://localhost:3001`.
+    1.  **Backend Image Path Fix:** Corrected `partner-backend/server.ts` to store plain image filenames for offers added via the partner dashboard, preventing duplicated `/images/` segments in URLs.
+    2.  Build the new React partner dashboard (`cd partner-backend/partner-frontend && npm run build`).
+    3.  Run the backend server (`cd partner-backend && npm start` or similar).
+    4.  Thoroughly test the new React-based Partner Offer Dashboard by accessing `http://localhost:3001`, paying special attention to the new tabular display in "View Full Data" and verifying that new offers created have correctly formed image URLs when fetched by the client.
 - (Previous Frontend Next Steps - to be revisited after backend deployment and image caching are verified):
     - Verify UI/UX of `ExploreScreen.tsx` (airport search, filter dropdown).
     - Test search and filter functionalities.
     - Continue replacing placeholder icons and refining styling.
+- Update `memory-bank/progress.md` to reflect the UI improvement for "View Full Data".
 
 ## Active Decisions and Considerations
 - **Custom Image Caching:** A custom image caching solution was implemented using `react-native-fs` and `@react-native-async-storage/async-storage`. This was chosen due to `react-native-fast-image` having peer dependency conflicts with the project's React 19 version.
 - Memory Bank files are crucial for maintaining context.
 - Some placeholder icons (text-based like ℹ️, 🎫) are still used in `OfferDetailScreen.tsx`; these might need to be replaced with image assets if a consistent visual style is desired.
 - The orange color for icons in text fields (`#FFA500`) in `ExploreScreen.tsx` (mentioned in previous context) still needs refinement if applicable.
+- **Image URL Formation:** Previously, offers added via the partner dashboard might have had image URLs constructed incorrectly (e.g., `.../images/images/filename.png`) due to the backend prepending `/images/` to already plain filenames. This has been addressed in `partner-backend/server.ts`.

@@ -25,6 +25,7 @@
     - **Styling:** Existing CSS (`style.css` from backup) moved to `src/index.css` and imported globally.
     - **Vite Config (`vite.config.ts`):** API proxy to `http://localhost:3001` configured for development.
     - **Backend Server (`partner-backend/server.ts`):** Updated to serve the React app's `dist` folder for production and handle fallback routing.
+    - **UI Improvement (View Full Data):** The "View Full Data" section within `ViewPartners.tsx` now displays offer details in a structured HTML table instead of a raw JSON string. Corresponding CSS for `.offer-details-table` added to `index.css`. Changes committed and pushed.
 
 - **Backend API Base URL Configured (Previous):**
     - `src/data/mockData.ts` uses `API_BASE_URL = 'https://lounge-app-536s.onrender.com/api'`.
@@ -60,10 +61,11 @@
             - "View Partners & Offers" section:
                 - "Load Partners & Offers" button fetches and displays data correctly.
                 - Clicking a partner shows their specific offers.
+                - Expanding "View Full Data" for an offer displays details in a clear, tabular format.
     - **Crucial:** Test image loading from the backend and the new caching mechanism thoroughly across all relevant screens and components in the React Native app.
     - Verify `partner-backend` is operational (locally or on Render at `https://lounge-app-536s.onrender.com`) to serve images and API data for both the React Native app and the partner dashboard.
     - User to run `npx pod-install` (or `cd ios && pod install && cd ..`) to link new native dependencies for iOS.
-    - Visually verify all images (dynamic content, static icons now loaded via URL) in `OfferDetailScreen.tsx`, `LoungeCard.tsx`, etc.
+    - Visually verify all images (dynamic content, static icons now loaded via URL) in `OfferDetailScreen.tsx`, `LoungeCard.tsx`, etc. Ensure that images for offers added via the partner dashboard load correctly without duplicated path segments.
     - Verify consistent horizontal screen transition animation on both Android and iOS.
     - Thoroughly test search and filter functionalities in `ExploreScreen.tsx`.
     - Visually verify all updated `ExploreScreen.tsx` layout elements.
@@ -82,9 +84,10 @@
     - Build out other screens and features of the LoungeApp.
 
 ## Current Status
-- **Partner Offer Dashboard:** Successfully converted to a React application using Vite. Includes sidebar navigation, offer integration form (with predefined amenities and file uploads), and partner/offer viewing capabilities. Backend server updated to serve the built React app. Ready for build and comprehensive testing.
+- **Partner Offer Dashboard:** Successfully converted to a React application using Vite. Includes sidebar navigation, offer integration form (with predefined amenities and file uploads), and partner/offer viewing capabilities. The "View Full Data" section for offers now uses a tabular display. Backend server updated to serve the built React app. All recent changes committed and pushed. Ready for build and comprehensive testing.
 - **Image Handling (React Native App):** New system for serving images from backend and caching on client-side is implemented. Ready for testing, contingent on backend availability and iOS pod installation.
 - **Backend Deployment:** Still a critical point. Verification of fixes for Render deployment is pending. Functionality of the new image system and the partner dashboard's data loading depends on this.
+- **Backend Image Path Handling:** Corrected an issue in `partner-backend/server.ts` where `/images/` was being prepended to image filenames during offer creation via the partner dashboard. It now stores plain filenames.
 - **Frontend (React Native App):**
     - `ExploreScreen.tsx` layout and UI elements (filter, search) refactored.
     - `LoungeCard.tsx` and `OfferDetailScreen.tsx` adapted for new image system.
@@ -98,3 +101,4 @@
 - The `✕` icon for clearing a selected airport is an intended UI feature. Other general placeholder icons might exist elsewhere (e.g., text emojis ℹ️, 🎫).
 - The current styling for icons within text inputs (`searchBarText`, `dropdownText`) in `ExploreScreen.tsx` uses a single color (`#FFFFFF`) for both the icon character and the text. This needs to be adjusted so icons are orange and text is dark, as per the target design.
 - The new filter button in `ExploreScreen.tsx` is present structurally but has no functionality.
+- **Image URL Duplication (Resolved):** An issue where image URLs could be malformed (e.g., `.../images/images/filename.png`) for offers added via the partner dashboard has been fixed by correcting how the backend stores image paths.
