@@ -7,11 +7,10 @@ const API_PREFIX = import.meta.env.VITE_API_BASE_URL
   ? `${import.meta.env.VITE_API_BASE_URL}/api`
   : '/api';
 
-// Assuming Amenity interface is defined elsewhere or can be defined here
 interface Amenity {
   id: string;
   name: string;
-  icon: string; // Or path to icon
+  icon: string; 
 }
 
 const PREDEFINED_AMENITIES: Amenity[] = [
@@ -26,7 +25,7 @@ const PREDEFINED_AMENITIES: Amenity[] = [
 ];
 
 interface OfferFormDataState {
-  offerTitle: string; // Changed from 'name'
+  offerTitle: string;
   offerType: string;
   location: string;
   fullLocation: string;
@@ -39,8 +38,10 @@ interface OfferFormDataState {
   walkInButtonText: string;
   fairUsePolicy: string;
   description: string;
-  image: string; // For main list image path
-  carouselImages: string[]; // For detail screen carousel image paths
+  image: string; 
+  carouselImages: string[];
+  bankName: string; 
+  bankLogo: string; 
 }
 
 const initialOfferFormData: OfferFormDataState = {
@@ -51,14 +52,16 @@ const initialOfferFormData: OfferFormDataState = {
   airport: '',
   hours: '24 hours daily',
   directions: '',
-  walkInDetails: 'Subject to availability', // Default from new list
-  entitlement: '1 entry per Cardholder', // Default from new list
+  walkInDetails: 'Subject to availability',
+  entitlement: '1 entry per Cardholder',
   entitlementPrice: '',
-  walkInButtonText: 'View Details', // Default from new list
-  fairUsePolicy: 'Standard Fair Use Policy applies.', // Default from new list
+  walkInButtonText: 'View Details',
+  fairUsePolicy: 'Standard Fair Use Policy applies.',
   description: '',
-  image: '', // Will be set randomly
-  carouselImages: [], // Will be set randomly
+  image: '', 
+  carouselImages: [], 
+  bankName: '',
+  bankLogo: '',
 };
 
 const PREDEFINED_TEST_IMAGES: string[] = [
@@ -73,8 +76,8 @@ const PREDEFINED_TEST_IMAGES: string[] = [
 
 interface LoungeLocation {
   id: string;
-  name: string; // For dropdown display, e.g., "Dubai T1 Intl Lounge"
-  location: string; // Short location
+  name: string;
+  location: string;
   fullLocation: string;
   airport: string;
   hours: string;
@@ -113,7 +116,7 @@ const PREDEFINED_LOUNGE_LOCATIONS: LoungeLocation[] = [
 
 interface OfferSpecificsPreset {
   id: string;
-  name: string; // e.g., "Standard Walk-In", "Bookable Premium"
+  name: string;
   walkInDetails: string;
   entitlement: string;
   walkInButtonText: string;
@@ -147,118 +150,68 @@ const PREDEFINED_OFFER_SPECIFICS_PRESETS: OfferSpecificsPreset[] = [
   },
 ];
 
-// Minimal interface for data fetched from /api/offers, used to populate partner list
-interface FetchedLoungeOrPartnerData {
-  id: string;
-  name: string;
-  bankName?: string; 
-  isPartner?: boolean; // Renamed from isMerchant
-}
-
-// Props for AddOfferForm, will need selectedPartnerId
 interface AddOfferFormProps {
-  selectedPartnerId: string | null; // To associate offer with a partner
+  selectedPartnerId: string | null; 
 }
 
-// Partner type for the sidebar list
-interface Partner {
-  partnerId: string;
-  partnerName: string;
-}
-
-const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSelectedPartnerId }) => {
+const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
   const [formData, setFormData] = useState<OfferFormDataState>(initialOfferFormData);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [responseMessage, setResponseMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   
-  const [partners, setPartners] = useState<Partner[]>([]);
-  const [internalSelectedPartnerId, setInternalSelectedPartnerId] = useState<string | null>(propSelectedPartnerId);
-  const [selectedMasterLocationId, setSelectedMasterLocationId] = useState<string>(PREDEFINED_LOUNGE_LOCATIONS[0].id); // Default to first location
-  const [selectedOfferSpecificsPresetId, setSelectedOfferSpecificsPresetId] = useState<string>(PREDEFINED_OFFER_SPECIFICS_PRESETS[0].id); // Default to first preset
-
-  // Refs for file inputs are no longer needed for image selection itself
-  // const imageInputRef = React.useRef<HTMLInputElement>(null); // No longer needed
-  // const imagesInputRef = React.useRef<HTMLInputElement>(null); // No longer needed
+  const [selectedMasterLocationId, setSelectedMasterLocationId] = useState<string>(PREDEFINED_LOUNGE_LOCATIONS[0].id);
+  const [selectedOfferSpecificsPresetId, setSelectedOfferSpecificsPresetId] = useState<string>(PREDEFINED_OFFER_SPECIFICS_PRESETS[0].id);
 
   const getRandomImage = () => PREDEFINED_TEST_IMAGES[Math.floor(Math.random() * PREDEFINED_TEST_IMAGES.length)];
-
   const getRandomCarouselImages = (count = 2) => {
     const shuffled = [...PREDEFINED_TEST_IMAGES].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, Math.min(count, shuffled.length));
   };
 
-  // Initialize form with random images and defaults from presets
   useEffect(() => {
     const initialRandomImage = getRandomImage();
-    const initialRandomCarouselImages = getRandomCarouselImages(2); // Get 2 random images for carousel
+    const initialRandomCarouselImages = getRandomCarouselImages(2);
 
-    setFormData(prev => ({
-      ...prev,
+    let baseFormData = { 
+      ...initialOfferFormData, // Start with all initial defaults
       image: initialRandomImage,
       carouselImages: initialRandomCarouselImages,
-    }));
+    };
 
-    // Set initial form data based on default selected master location
     const defaultLocation = PREDEFINED_LOUNGE_LOCATIONS.find(loc => loc.id === selectedMasterLocationId);
     if (defaultLocation) {
-      setFormData(prev => ({
-        ...prev,
+      baseFormData = {
+        ...baseFormData,
         location: defaultLocation.location,
         fullLocation: defaultLocation.fullLocation,
         airport: defaultLocation.airport,
         hours: defaultLocation.hours,
         directions: defaultLocation.directions,
-      }));
+      };
     }
 
     const defaultOfferPreset = PREDEFINED_OFFER_SPECIFICS_PRESETS.find(p => p.id === selectedOfferSpecificsPresetId);
     if (defaultOfferPreset) {
-      setFormData(prev => ({
-        ...prev,
+      baseFormData = {
+        ...baseFormData,
         walkInDetails: defaultOfferPreset.walkInDetails,
         entitlement: defaultOfferPreset.entitlement,
         walkInButtonText: defaultOfferPreset.walkInButtonText,
         fairUsePolicy: defaultOfferPreset.fairUsePolicy,
-      }));
+      };
     }
+    setFormData(baseFormData);
+    setSelectedAmenities([]); // Reset amenities when presets change
+  }, [selectedMasterLocationId, selectedOfferSpecificsPresetId]);
 
-    const fetchPartners = async () => {
-      try {
-        // Assuming an endpoint to get all partners for selection
-        // This might be the same as /api/offers and then processed, or a new one like /api/partners
-        const response = await fetch(`${API_PREFIX}/offers`); // Use API_PREFIX
-        if (!response.ok) throw new Error('Failed to fetch data for partner list');
-        const allData: FetchedLoungeOrPartnerData[] = await response.json();
-        
-        // Filter for actual partner entries (where isPartner is true)
-        const actualPartners = allData
-          .filter(item => item.isPartner === true) // Renamed from isMerchant
-          .map(partnerItem => ({
-            partnerId: partnerItem.id, 
-            partnerName: partnerItem.bankName || partnerItem.name, // Prefer bankName, fallback to name
-          }));
-        
-        const uniquePartnerDisplayList = Array.from(new Map(actualPartners.map(p => [p.partnerId, p])).values());
-        setPartners(uniquePartnerDisplayList);
-
-        // Handle propSelectedPartnerId if provided
-        if (propSelectedPartnerId && uniquePartnerDisplayList.some(p => p.partnerId === propSelectedPartnerId)) {
-          setInternalSelectedPartnerId(propSelectedPartnerId);
-        } else if (uniquePartnerDisplayList.length > 0 && !internalSelectedPartnerId) {
-          // If no partner is selected (e.g. on initial load without a prop)
-          // and there are partners, do not auto-select one to allow explicit user choice.
-          // If propSelectedPartnerId was given but not found in the filtered list, internalSelectedPartnerId will remain null or its previous state.
-        } else if (uniquePartnerDisplayList.length === 0) {
-            setInternalSelectedPartnerId(null); 
-        }
-
-      } catch (error) {
-        console.error("Error fetching or processing partners:", error);
-        setPartners([]);
-      }
-    };
-    fetchPartners();
-  }, [propSelectedPartnerId]); // Rerun if propSelectedPartnerId changes
+  // Effect to reset form when selectedPartnerId changes (e.g., user navigates away and back)
+  useEffect(() => {
+    if (selectedPartnerId) {
+        // Optionally, re-initialize or clear specific fields if needed when a new partner is selected
+        // For now, the main reset happens via the useEffect above when location/offer presets change
+        // or on successful submission.
+    }
+  }, [selectedPartnerId]);
 
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -266,41 +219,12 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSele
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // handleCarouselImagesChange is no longer needed as carousel images are set randomly
-  // const handleCarouselImagesChange = (e: ChangeEvent<HTMLSelectElement>) => {
-  //   const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
-  //   setFormData(prev => ({ ...prev, carouselImages: selectedOptions }));
-  // };
-
   const handleMasterLocationChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const locationId = e.target.value;
-    setSelectedMasterLocationId(locationId);
-    const selectedLocation = PREDEFINED_LOUNGE_LOCATIONS.find(loc => loc.id === locationId);
-    if (selectedLocation) {
-      setFormData(prev => ({
-        ...prev,
-        location: selectedLocation.location,
-        fullLocation: selectedLocation.fullLocation,
-        airport: selectedLocation.airport,
-        hours: selectedLocation.hours,
-        directions: selectedLocation.directions,
-      }));
-    }
+    setSelectedMasterLocationId(e.target.value);
   };
 
   const handleOfferSpecificsPresetChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const presetId = e.target.value;
-    setSelectedOfferSpecificsPresetId(presetId);
-    const selectedPreset = PREDEFINED_OFFER_SPECIFICS_PRESETS.find(p => p.id === presetId);
-    if (selectedPreset) {
-      setFormData(prev => ({
-        ...prev,
-        walkInDetails: selectedPreset.walkInDetails,
-        entitlement: selectedPreset.entitlement,
-        walkInButtonText: selectedPreset.walkInButtonText,
-        fairUsePolicy: selectedPreset.fairUsePolicy,
-      }));
-    }
+    setSelectedOfferSpecificsPresetId(e.target.value);
   };
 
   const handleAmenityChange = (amenityId: string) => {
@@ -313,41 +237,25 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSele
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!internalSelectedPartnerId) {
-      setResponseMessage({ type: 'error', message: 'Please select a partner first.' });
+    if (!selectedPartnerId) {
+      setResponseMessage({ type: 'error', message: 'No Partner ID selected. Please go to "View Partners & Offers" to select a partner context first, then return here.' });
       return;
     }
     setResponseMessage(null);
 
     const formPayload = new FormData();
-    // Append all formData fields except carouselImages (handled separately)
     Object.entries(formData).forEach(([key, value]) => {
       if (key !== 'carouselImages') {
-        formPayload.append(key, value as string); // Assuming most are strings, or will be stringified if not
+        formPayload.append(key, value as string);
       }
     });
     
-    // Append carouselImages as a JSON string array
     formPayload.append('carouselImages', JSON.stringify(formData.carouselImages));
-
     const amenitiesToSubmit = PREDEFINED_AMENITIES.filter(amenity => selectedAmenities.includes(amenity.id));
     formPayload.append('amenities', JSON.stringify(amenitiesToSubmit));
 
-    // File input refs are no longer used for image submission with predefined paths
-    // if (imageInputRef.current?.files?.[0]) {
-    //   formPayload.append('image', imageInputRef.current.files[0]);
-    // }
-    // if (imagesInputRef.current?.files) {
-    //   Array.from(imagesInputRef.current.files).forEach(file => {
-    //     formPayload.append('images', file);
-    //   });
-    // }
-    formPayload.append('partnerId', internalSelectedPartnerId); // Changed key for consistency, backend uses URL param
-
-
     try {
-      // This will be a NEW API endpoint
-      const response = await fetch(`${API_PREFIX}/partners/${internalSelectedPartnerId}/offers`, { // Use API_PREFIX and renamed path
+      const response = await fetch(`${API_PREFIX}/partners/${selectedPartnerId}/offers`, { 
         method: 'POST',
         body: formPayload,
       });
@@ -355,11 +263,16 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSele
 
       if (response.ok) {
         setResponseMessage({ type: 'success', message: result.message || 'Offer added successfully!' });
-        // Reset formData, including new image fields, to initial state
-        const defaultLocation = PREDEFINED_LOUNGE_LOCATIONS.find(loc => loc.id === selectedMasterLocationId);
-        const defaultOfferPreset = PREDEFINED_OFFER_SPECIFICS_PRESETS.find(p => p.id === selectedOfferSpecificsPresetId);
         
-        let resetFormData = { ...initialOfferFormData };
+        // Reset form to initial state including random images and preset-driven fields
+        const initialRandomImage = getRandomImage();
+        const initialRandomCarouselImages = getRandomCarouselImages(2);
+        let resetFormData = { 
+            ...initialOfferFormData,
+            image: initialRandomImage,
+            carouselImages: initialRandomCarouselImages
+        };
+        const defaultLocation = PREDEFINED_LOUNGE_LOCATIONS.find(loc => loc.id === selectedMasterLocationId);
         if (defaultLocation) {
             resetFormData = {
                 ...resetFormData,
@@ -370,6 +283,7 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSele
                 directions: defaultLocation.directions,
             };
         }
+        const defaultOfferPreset = PREDEFINED_OFFER_SPECIFICS_PRESETS.find(p => p.id === selectedOfferSpecificsPresetId);
         if (defaultOfferPreset) {
             resetFormData = {
                 ...resetFormData,
@@ -379,10 +293,6 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSele
                 fairUsePolicy: defaultOfferPreset.fairUsePolicy,
             };
         }
-        // Ensure image and carouselImages are reset to new random values
-        resetFormData.image = getRandomImage();
-        resetFormData.carouselImages = getRandomCarouselImages(2);
-
         setFormData(resetFormData);
         setSelectedAmenities([]);
       } else {
@@ -394,168 +304,137 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSele
     }
   };
 
-  if (partners.length > 0 && !internalSelectedPartnerId) {
-    // If partners are loaded but none is selected, show selection UI
+  if (!selectedPartnerId) {
     return (
-      <div style={{ display: 'flex' }}>
-        <aside style={{ width: '200px', borderRight: '1px solid #ccc', padding: '10px', height: '100vh', overflowY: 'auto'}}>
-          <h4>Select Partner</h4>
-          <ul>
-            {partners.map(partner => (
-              <li key={partner.partnerId} onClick={() => setInternalSelectedPartnerId(partner.partnerId)} style={{cursor: 'pointer', padding: '5px', borderBottom: '1px solid #eee'}}>
-                {partner.partnerName}
-              </li>
-            ))}
-          </ul>
-        </aside>
-        <section className="content-section" style={{flexGrow: 1, marginLeft: '20px'}}>
-             <h2>Add New Offer</h2>
-             <p>Please select a partner from the sidebar to add an offer.</p>
-        </section>
-      </div>
+      <section id="addOfferSection" className="content-section">
+        <h2>Add New Offer</h2>
+        <p style={{ color: 'orange', fontWeight: 'bold' }}>
+          Please select a partner context from the "View Partners & Offers" tab before adding a new offer.
+        </p>
+      </section>
     );
   }
 
-
   return (
-    <div style={{ display: 'flex' }}>
-        {partners.length > 0 && (
-            <aside style={{ width: '200px', borderRight: '1px solid #ccc', padding: '10px', height: 'calc(100vh - 60px)', overflowY: 'auto'}}>
-                <h4>Select Partner</h4>
-                <ul>
-                    {partners.map(partner => (
-                    <li 
-                        key={partner.partnerId} 
-                        onClick={() => setInternalSelectedPartnerId(partner.partnerId)} 
-                        style={{
-                            cursor: 'pointer', 
-                            padding: '8px', 
-                            borderBottom: '1px solid #eee',
-                            backgroundColor: internalSelectedPartnerId === partner.partnerId ? '#e0e0e0' : 'transparent'
-                        }}
+    <section id="addOfferSection" className="content-section">
+      <h2>Add New Offer for Partner ID: {selectedPartnerId}</h2>
+      <form id="newOfferForm" onSubmit={handleSubmit}>
+        <div className="form-section">
+            <h4>Offer Details</h4>
+            <div className="form-row">
+                <div className="form-cell">
+                    <label htmlFor="offerTitle">Offer Title:*</label>
+                    <input type="text" id="offerTitle" name="offerTitle" value={formData.offerTitle} onChange={handleInputChange} required />
+                </div>
+                <div className="form-cell">
+                    <label htmlFor="offerType">Offer Type:*</label>
+                    <select id="offerType" name="offerType" value={formData.offerType} onChange={handleInputChange} required>
+                    <option value="Direct Paid Access">Direct Paid Access</option>
+                    <option value="Conditional/Inquiry-Based Access">Conditional/Inquiry-Based Access</option>
+                    <option value="Reservation/Booking Required">Reservation/Booking Required</option>
+                    <option value="Membership/Credential-Based Exclusive Access">Membership/Credential-Based Exclusive Access</option>
+                    <option value="General Access (Eligibility Implied)">General Access (Eligibility Implied)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div className="form-section">
+            <h4>Offer Branding</h4>
+            <div className="form-row">
+                <div className="form-cell">
+                    <label htmlFor="bankName">Offer's Bank Name:*</label>
+                    <input type="text" id="bankName" name="bankName" value={formData.bankName} onChange={handleInputChange} placeholder="e.g., HSBC Premier" required />
+                </div>
+                <div className="form-cell">
+                    <label htmlFor="bankLogo">Offer's Bank Logo Path:*</label>
+                    <input type="text" id="bankLogo" name="bankLogo" value={formData.bankLogo} onChange={handleInputChange} placeholder="e.g., Banks/hsbc_premier_logo.png" required />
+                </div>
+            </div>
+        </div>
+
+        <div className="form-section">
+            <h3>Location & Access</h3>
+            <div className="form-row">
+                <div className="form-cell" style={{ flexBasis: '100%'}}>
+                    <label htmlFor="masterLocation">Select Lounge Location:*</label>
+                    <select id="masterLocation" name="masterLocation" value={selectedMasterLocationId} onChange={handleMasterLocationChange} required>
+                        {PREDEFINED_LOUNGE_LOCATIONS.map(loc => (
+                            <option key={loc.id} value={loc.id}>{loc.name}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div className="form-section">
+            <h3>Offer Specifics</h3>
+            <div className="form-row">
+                <div className="form-cell" style={{ flexBasis: '100%'}}>
+                    <label htmlFor="offerSpecificsPreset">Select Offer Configuration:*</label>
+                    <select 
+                        id="offerSpecificsPreset" 
+                        name="offerSpecificsPreset" 
+                        value={selectedOfferSpecificsPresetId} 
+                        onChange={handleOfferSpecificsPresetChange} 
+                        required
                     >
-                        {partner.partnerName}
-                    </li>
-                    ))}
-                </ul>
-            </aside>
-        )}
-        <section id="addOfferSection" className="content-section" style={{flexGrow: 1, marginLeft: partners.length > 0 ? '20px' : '0'}}>
-        <h2>Add New Offer {internalSelectedPartnerId ? `for ${partners.find(p=>p.partnerId === internalSelectedPartnerId)?.partnerName}` : ''}</h2>
-        {!internalSelectedPartnerId && partners.length === 0 && <p>Loading partners or no partners available. Cannot add offer.</p>}
-        {!internalSelectedPartnerId && partners.length > 0 && <p>Select a partner from the list to proceed.</p>}
+                        {PREDEFINED_OFFER_SPECIFICS_PRESETS.map(preset => (
+                            <option key={preset.id} value={preset.id}>{preset.name}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-cell">
+                    <label htmlFor="entitlementPrice">Entitlement Price (if applicable):</label>
+                    <input type="text" id="entitlementPrice" name="entitlementPrice" value={formData.entitlementPrice} onChange={handleInputChange} placeholder="e.g., 25 USD (if applicable)" />
+                </div>
+                <div className="form-cell">
+                    {/* This cell can be left empty or used for another field if layout needs balancing */}
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-cell" style={{ flexBasis: '100%'}}>
+                    <label htmlFor="description">Full Offer Description:*</label>
+                    <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} rows={4} required></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <div className="form-section">
+            <h3>Imagery</h3>
+            {/* Imagery is selected randomly. No UI elements are shown in this section. */}
+            <p style={{fontSize: '0.9em', color: '#555'}}>Main image and carousel images are set randomly for this offer. Paths: Main: '{formData.image}', Carousel: [{formData.carouselImages.join(', ')}]</p>
+        </div>
 
-        {internalSelectedPartnerId && (
-            <form id="newOfferForm" onSubmit={handleSubmit}>
-            <div className="form-section">
-                <h4>Offer Details</h4>
-                <div className="form-row">
-                    <div className="form-cell">
-                        <label htmlFor="offerTitle">Offer Title:*</label>
-                        <input type="text" id="offerTitle" name="offerTitle" value={formData.offerTitle} onChange={handleInputChange} required />
-                    </div>
-                    <div className="form-cell">
-                        <label htmlFor="offerType">Offer Type:*</label>
-                        <select id="offerType" name="offerType" value={formData.offerType} onChange={handleInputChange} required>
-                        <option value="Direct Paid Access">Direct Paid Access</option>
-                        <option value="Conditional/Inquiry-Based Access">Conditional/Inquiry-Based Access</option>
-                        <option value="Reservation/Booking Required">Reservation/Booking Required</option>
-                        <option value="Membership/Credential-Based Exclusive Access">Membership/Credential-Based Exclusive Access</option>
-                        <option value="General Access (Eligibility Implied)">General Access (Eligibility Implied)</option>
-                        </select>
-                    </div>
+        <div className="form-section">
+            <h3>Amenities (Select all that apply)</h3>
+            <div id="amenitiesCheckboxesContainer" className="amenities-checkbox-grid">
+            {PREDEFINED_AMENITIES.map(amenity => (
+                <div key={amenity.id} className="amenity-checkbox-item">
+                <input
+                    type="checkbox"
+                    id={`amenity-${amenity.id}-${selectedPartnerId || 'default'}`} 
+                    name="amenities"
+                    value={amenity.id}
+                    checked={selectedAmenities.includes(amenity.id)}
+                    onChange={() => handleAmenityChange(amenity.id)}
+                />
+                <label htmlFor={`amenity-${amenity.id}-${selectedPartnerId || 'default'}`}>{amenity.name}</label>
                 </div>
+            ))}
             </div>
+        </div>
 
-            <div className="form-section">
-                <h3>Location & Access</h3>
-                <div className="form-row">
-                    <div className="form-cell" style={{ flexBasis: '100%'}}>
-                        <label htmlFor="masterLocation">Select Lounge Location:*</label>
-                        <select id="masterLocation" name="masterLocation" value={selectedMasterLocationId} onChange={handleMasterLocationChange} required>
-                            {PREDEFINED_LOUNGE_LOCATIONS.map(loc => (
-                                <option key={loc.id} value={loc.id}>{loc.name}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-                {/* The detailed location fields are no longer displayed directly in the UI but are populated in formData */}
-            </div>
-
-            <div className="form-section">
-                <h3>Offer Specifics</h3>
-                <div className="form-row">
-                    <div className="form-cell" style={{ flexBasis: '100%'}}>
-                        <label htmlFor="offerSpecificsPreset">Select Offer Configuration:*</label>
-                        <select 
-                            id="offerSpecificsPreset" 
-                            name="offerSpecificsPreset" 
-                            value={selectedOfferSpecificsPresetId} 
-                            onChange={handleOfferSpecificsPresetChange} 
-                            required
-                        >
-                            {PREDEFINED_OFFER_SPECIFICS_PRESETS.map(preset => (
-                                <option key={preset.id} value={preset.id}>{preset.name}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-                {/* Individual fields (walkInDetails, entitlement, walkInButtonText, fairUsePolicy) are now controlled by the preset above 
-                    and their values are set in formData but not displayed as separate inputs. 
-                    Entitlement Price and Description remain as direct inputs. 
-                */}
-                <div className="form-row">
-                    <div className="form-cell">
-                        <label htmlFor="entitlementPrice">Entitlement Price (if applicable):</label>
-                        <input type="text" id="entitlementPrice" name="entitlementPrice" value={formData.entitlementPrice} onChange={handleInputChange} placeholder="e.g., 25 USD (if applicable)" />
-                    </div>
-                    <div className="form-cell">
-                        {/* This cell can be left empty or used for another field if layout needs balancing */}
-                    </div>
-                </div>
-                <div className="form-row">
-                    <div className="form-cell" style={{ flexBasis: '100%'}}>
-                        <label htmlFor="description">Full Offer Description:*</label>
-                        <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} rows={4} required></textarea>
-                    </div>
-                </div>
-            </div>
-            
-            <div className="form-section">
-                <h3>Imagery</h3>
-                {/* Imagery is selected randomly. No UI elements are shown in this section as per user request. */}
-                {/* The randomly selected image paths are still part of formData and will be submitted. */}
-            </div>
-
-            <div className="form-section">
-                <h3>Amenities (Select all that apply)</h3>
-                <div id="amenitiesCheckboxesContainer" className="amenities-checkbox-grid">
-                {PREDEFINED_AMENITIES.map(amenity => (
-                    <div key={amenity.id} className="amenity-checkbox-item">
-                    <input
-                        type="checkbox"
-                        id={`amenity-${amenity.id}-${internalSelectedPartnerId}`} // Ensure unique ID if multiple forms
-                        name="amenities"
-                        value={amenity.id}
-                        checked={selectedAmenities.includes(amenity.id)}
-                        onChange={() => handleAmenityChange(amenity.id)}
-                    />
-                    <label htmlFor={`amenity-${amenity.id}-${internalSelectedPartnerId}`}>{amenity.name}</label>
-                    </div>
-                ))}
-                </div>
-            </div>
-
-            <button type="submit" className="submit-button">Add Offer to Partner</button>
-            </form>
-        )}
-        {responseMessage && (
-            <div className={`form-response-message ${responseMessage.type}`}>
-            {responseMessage.message}
-            </div>
-        )}
-        </section>
-    </div>
+        <button type="submit" className="submit-button" disabled={!selectedPartnerId}>Add Offer to Partner</button>
+      </form>
+    {responseMessage && (
+        <div className={`form-response-message ${responseMessage.type}`}>
+        {responseMessage.message}
+        </div>
+    )}
+    </section>
   );
 };
 

@@ -9,15 +9,24 @@ type ViewName = 'integrate' | 'view_partners' | 'add_offer'; // Renamed view_mer
 
 function App() {
   const [currentView, setCurrentView] = useState<ViewName>('integrate');
+  const [selectedPartnerIdForNewOffer, setSelectedPartnerIdForNewOffer] = useState<string | null>(null);
+
+  const handleSetCurrentView = (view: ViewName) => {
+    // If navigating away from a view that uses selectedPartnerId, reset it
+    if (view !== 'add_offer' && view !== 'view_partners') {
+      setSelectedPartnerIdForNewOffer(null);
+    }
+    setCurrentView(view);
+  };
 
   const renderView = () => {
     switch (currentView) {
       case 'integrate':
         return <IntegrateOfferForm />;
       case 'view_partners': // Renamed case
-        return <ViewPartners />; // Renamed component
+        return <ViewPartners setCurrentView={handleSetCurrentView} setSelectedPartnerIdForNewOffer={setSelectedPartnerIdForNewOffer} />; 
       case 'add_offer': // Add case for AddOfferForm
-        return <AddOfferForm selectedPartnerId={null} />;
+        return <AddOfferForm selectedPartnerId={selectedPartnerIdForNewOffer} />;
       default:
         return <IntegrateOfferForm />;
     }
@@ -25,7 +34,7 @@ function App() {
 
   return (
     <div className="dashboard-layout">
-      <Sidebar setCurrentView={setCurrentView} currentView={currentView} />
+      <Sidebar setCurrentView={handleSetCurrentView} currentView={currentView} />
       <main id="mainContentArea">
         <header>
           <h1>Partner Offer Management</h1>

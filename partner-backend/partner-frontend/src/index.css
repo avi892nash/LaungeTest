@@ -371,3 +371,33 @@ input[type="file"] {
     width: 100%; /* Make input take full width of the cell */
     /* padding, margin-bottom, border, border-radius, box-sizing, font-size are inherited or can be set here if needed */
 }
+
+/* Styles for Offer Details Table */
+.offer-details-table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+.offer-details-table th,
+.offer-details-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.offer-details-table th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+    width: 30%; /* Give a bit more space for field names */
+}
+
+.offer-details-table td ul {
+    margin: 0;
+    padding-left: 20px;
+}
+.offer-details-table td ul li {
+    margin-bottom: 4px;
+}

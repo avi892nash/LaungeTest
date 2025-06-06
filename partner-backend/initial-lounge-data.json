@@ -31,7 +31,8 @@
     "directions": "Airside - After passport control and security check, the lounge is located across from gate E77.",
     "description": "Relax and unwind before your flight in the comfort of Marhaba Lounge. Enjoy a range of amenities designed to make your pre-flight experience seamless and enjoyable. Whether you want to catch up on work, enjoy a meal, or simply rest, Marhaba Lounge provides a tranquil escape from the bustling airport.",
     "bankName": "ABN AMRO",
-    "bankLogo": "Banks/abnamro.png"
+    "bankLogo": "Banks/abnamro.png",
+    "partnerId": "ABN AMRO"
   },
   {
     "id": "2",
@@ -59,7 +60,8 @@
     "description": "Experience luxury and comfort at the Ahlan Business Class Lounge. Offering a wide array of services and amenities to cater to the discerning traveler.",
     "bankName": "AU Small Finance Bank",
     "bankLogo": "Banks/ausmallfinancebank.png",
-    "offerType": "Conditional/Inquiry-Based Access"
+    "offerType": "Conditional/Inquiry-Based Access",
+    "partnerId": "AU Small Finance Bank"
   },
   {
     "id": "3",
@@ -86,7 +88,8 @@
     "directions": "Concourse D, opposite Gate D7.",
     "description": "Catch up on rest or freshen up with our state-of-the-art sleep pods and shower facilities. Perfect for transiting passengers or those with long layovers.",
     "bankName": "Abu Dhabi Commercial Bank",
-    "bankLogo": "Banks/abudhabicommercialbank.png"
+    "bankLogo": "Banks/abudhabicommercialbank.png",
+    "partnerId": "Abu Dhabi Commercial Bank"
   },
   {
     "id": "4",
@@ -118,7 +121,8 @@
     "description": "An exclusive retreat at JFK, the Centurion Lounge offers premium amenities, chef-inspired cuisine, and a full bar. Ideal for relaxing or working before your flight.",
     "bankName": "Airtel Payments Bank",
     "bankLogo": "Banks/airtelpaymentsbank.png",
-    "offerType": "Membership/Credential-Based Exclusive Access"
+    "offerType": "Membership/Credential-Based Exclusive Access",
+    "partnerId": "Airtel Payments Bank"
   },
   {
     "id": "5",
@@ -150,7 +154,8 @@
     "directions": "Airside - Terminal 5A South, after security. Follow signs for \"Galleries Lounges\".",
     "description": "The British Airways Galleries Club lounge at Heathrow T5 offers a sophisticated space with a variety of seating areas, dining options, and business facilities.",
     "bankName": "American Express",
-    "bankLogo": "Banks/americanexpress.png"
+    "bankLogo": "Banks/americanexpress.png",
+    "partnerId": "American Express"
   },
   {
     "id": "6",
@@ -183,7 +188,8 @@
     "description": "SATS Premier Lounge at Changi T1 provides a comfortable environment with a wide range of food, drinks, shower facilities, and even massage chairs for a relaxing pre-flight experience.",
     "bankName": "Australia and New Zealand Banking Group",
     "bankLogo": "Banks/australiaandnewzealandbankinggroup.png",
-    "offerType": "Direct Paid Access"
+    "offerType": "Direct Paid Access",
+    "partnerId": "Australia and New Zealand Banking Group"
   },
   {
     "id": "7",
@@ -211,7 +217,8 @@
     "directions": "Airside - Terminal 2E, Hall K, after security checks.",
     "description": "Experience Parisian elegance at the Air France Lounge in CDG T2E Hall K, featuring Clarins spa services and gourmet French food.",
     "bankName": "Axis bank",
-    "bankLogo": "Banks/axisbank.png"
+    "bankLogo": "Banks/axisbank.png",
+    "partnerId": "Axis bank"
   },
   {
     "id": "8",
@@ -240,7 +247,8 @@
     "description": "Indulge in the ANA Suite Lounge at Narita, offering exceptional Japanese hospitality, a live noodle bar, and a curated sake selection.",
     "bankName": "BNP Paribas",
     "bankLogo": "Banks/bnpparibas.png",
-    "offerType": "Membership/Credential-Based Exclusive Access"
+    "offerType": "Membership/Credential-Based Exclusive Access",
+    "partnerId": "BNP Paribas"
   },
   {
     "id": "9",
@@ -269,7 +277,8 @@
     "directions": "Airside - Tom Bradley International Terminal, after security, take elevator to Level 6.",
     "description": "The Star Alliance Lounge at LAX boasts an impressive indoor terrace, stylish bar, and various zones for relaxation and work.",
     "bankName": "Bandhan Bank",
-    "bankLogo": "Banks/bandhanbank.png"
+    "bankLogo": "Banks/bandhanbank.png",
+    "partnerId": "Bandhan Bank"
   },
   {
     "id": "10",
@@ -299,7 +308,8 @@
     "description": "The Emirates First Class Lounge in Concourse A is an epitome of luxury, offering direct boarding, fine dining, a spa, and a wine cellar.",
     "bankName": "Bank Maybank Indonesia",
     "bankLogo": "Banks/bankmaybankindonesia.png",
-    "offerType": "Membership/Credential-Based Exclusive Access"
+    "offerType": "Membership/Credential-Based Exclusive Access",
+    "partnerId": "Bank Maybank Indonesia"
   },
   {
     "id": "11",
@@ -328,7 +338,8 @@
     "directions": "Airside - Terminal 2A, after security, follow signs for \"Lounge A3\".",
     "description": "Plaza Premium Lounge at Heathrow T2 offers a comfortable space for all travellers, with food, drinks, and optional shower facilities.",
     "bankName": "Bank of America",
-    "bankLogo": "Banks/bankofamerica.png"
+    "bankLogo": "Banks/bankofamerica.png",
+    "partnerId": "Bank of America"
   },
   {
     "id": "12",
@@ -357,7 +368,8 @@
     "description": "The Wing, First Class Lounge by Cathay Pacific at HKG is renowned for its luxurious Cabanas, fine dining at The Haven, and tranquil atmosphere.",
     "bankName": "Bank of Bahrain and Kuwait",
     "bankLogo": "Banks/bankofbahrainandkuwait.png",
-    "offerType": "Membership/Credential-Based Exclusive Access"
+    "offerType": "Membership/Credential-Based Exclusive Access",
+    "partnerId": "Bank of Bahrain and Kuwait"
   },
   {
     "id": "13",
@@ -386,7 +398,8 @@
     "directions": "Airside - Terminal 2, Schengen Area (Level 04), near Gate G28.",
     "description": "The Lufthansa Senator Lounge at Munich Airport offers a comfortable Bavarian-themed environment with excellent food and relaxation options.",
     "bankName": "Bank of Baroda",
-    "bankLogo": "Banks/bankofbaroda.png"
+    "bankLogo": "Banks/bankofbaroda.png",
+    "partnerId": "Bank of Baroda"
   },
   {
     "id": "14",
@@ -415,7 +428,8 @@
     "description": "The Qantas First Lounge in Sydney, designed by Marc Newson, offers award-winning Rockpool dining, an Aurora Spa, and stunning tarmac views.",
     "bankName": "Bank of Ceylon",
     "bankLogo": "Banks/bankofceylon.png",
-    "offerType": "Membership/Credential-Based Exclusive Access"
+    "offerType": "Membership/Credential-Based Exclusive Access",
+    "partnerId": "Bank of Ceylon"
   },
   {
     "id": "15",
@@ -444,7 +458,8 @@
     "directions": "Airside - Terminal 4, Concourse B, near Gate B32.",
     "description": "The flagship Delta Sky Club at JFK T4 features an outdoor Sky Deck, premium food and beverage options, and ample space to relax or work.",
     "bankName": "Bank of China",
-    "bankLogo": "Banks/bankofchina.png"
+    "bankLogo": "Banks/bankofchina.png",
+    "partnerId": "Bank of China"
   },
   {
     "id": "16",
@@ -474,6 +489,7 @@
     "description": "The Turkish Airlines Lounge at Istanbul Airport is a vast, award-winning space offering diverse culinary delights, a cinema, golf simulator, and private suites.",
     "bankName": "Bank of India",
     "bankLogo": "Banks/bankofindia.png",
-    "offerType": "General Access (Eligibility Implied)"
+    "offerType": "General Access (Eligibility Implied)",
+    "partnerId": "Bank of India"
   }
 ]
