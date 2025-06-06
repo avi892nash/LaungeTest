@@ -44,6 +44,37 @@ interface OfferFormDataState {
   bankLogo: string; 
 }
 
+const BANK_LOGO_OPTIONS: string[] = [
+  "Banks/abnamro.png", "Banks/abudhabicommercialbank.png", "Banks/airtelpaymentsbank.png", 
+  "Banks/americanexpress.png", "Banks/ausmallfinancebank.png", "Banks/australiaandnewzealandbankinggroup.png", 
+  "Banks/axisbank.png", "Banks/bandhanbank.png", "Banks/bankmaybankindonesia.png", 
+  "Banks/bankofamerica.png", "Banks/bankofbahrainandkuwait.png", "Banks/bankofbaroda.png", 
+  "Banks/bankofceylon.png", "Banks/bankofchina.png", "Banks/bankofindia.png", 
+  "Banks/bankofmaharastra.png", "Banks/barclaysbank.png", "Banks/bnpparibas.png", 
+  "Banks/canarabank.png", "Banks/centralbankofindia.png", "Banks/citibank.png", 
+  "Banks/cityunionbank.png", "Banks/creditsuisse.png", "Banks/créditagricolecorporateandinvestmentbank.png", 
+  "Banks/csbbank.png", "Banks/dbsbank.png", "Banks/dcbbank.png", "Banks/deutschebank.png", 
+  "Banks/dhanlaxmibank.png", "Banks/dohabank.png", "Banks/emiratesnbd.png", 
+  "Banks/esafsmallfinancebankltd.png", "Banks/federalbank.png", "Banks/finopaymentsbank.png", 
+  "Banks/firstabudhabibank.png", "Banks/firstrandbank.png", "Banks/handelsbanken.png", 
+  "Banks/hdfcbank.png", "Banks/hsbcbank.png", "Banks/icicibank.png", "Banks/idbibank.png", 
+  "Banks/idfcbank.png", "Banks/indianbank.png", "Banks/indianoverseasbank.png", 
+  "Banks/indiapostpaymentsbank.png", "Banks/induslndbank.png", "Banks/industrial&commercialbankofchina.png", 
+  "Banks/industrialbankofkorea.png", "Banks/jammu&kashmirbank.png", "Banks/jiopaymentsbank.png", 
+  "Banks/jpmorganchase.png", "Banks/karnatakabank.png", "Banks/karurvysyabank.png", 
+  "Banks/kebhanabank.png", "Banks/kookminbank.png", "Banks/kotakmahindrabank.png", 
+  "Banks/krungthaibank.png", "Banks/mizuhocorporatebank.png", "Banks/mufgbank.png", 
+  "Banks/natwestbank.png", "Banks/paytmpaymentsbank.png", "Banks/punjab&sindbank.png", 
+  "Banks/punjabnationalbank(medium).png", "Banks/punjabnationalbank.png", "Banks/qatarnationalbank.png", 
+  "Banks/rabobank.png", "Banks/rblbank.png", "Banks/saxobank.png", "Banks/sberbank.png", 
+  "Banks/scotiabank.png", "Banks/shinhanbank.png", "Banks/sociétégénérale.png", 
+  "Banks/southindianbank.png", "Banks/standardcharteredbank.png", "Banks/statebankofindia.png", 
+  "Banks/sumitomomitsuibankingcorporation.png", "Banks/tamilnadmercantilebank.png", 
+  "Banks/ucobank.png", "Banks/ujjivansmallfinancebank.png", "Banks/unionbank.png", 
+  "Banks/unitedoverseasbank.png", "Banks/westpac.png", "Banks/wooribank.png", 
+  "Banks/yesbank(old).png"
+];
+
 const initialOfferFormData: OfferFormDataState = {
   offerTitle: '',
   offerType: 'Membership/Credential-Based Exclusive Access',
@@ -347,8 +378,13 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
                     <input type="text" id="bankName" name="bankName" value={formData.bankName} onChange={handleInputChange} placeholder="e.g., HSBC Premier" required />
                 </div>
                 <div className="form-cell">
-                    <label htmlFor="bankLogo">Offer's Bank Logo Path:*</label>
-                    <input type="text" id="bankLogo" name="bankLogo" value={formData.bankLogo} onChange={handleInputChange} placeholder="e.g., Banks/hsbc_premier_logo.png" required />
+                    <label htmlFor="bankLogo">Offer's Bank Logo:*</label>
+                    <select id="bankLogo" name="bankLogo" value={formData.bankLogo} onChange={handleInputChange} required>
+                        <option value="">Select a Bank Logo</option>
+                        {BANK_LOGO_OPTIONS.map(logoPath => (
+                            <option key={logoPath} value={logoPath}>{logoPath}</option>
+                        ))}
+                    </select>
                 </div>
             </div>
         </div>
@@ -402,11 +438,11 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
             </div>
         </div>
         
-        <div className="form-section">
+        {/* <div className="form-section">
             <h3>Imagery</h3>
-            {/* Imagery is selected randomly. No UI elements are shown in this section. */}
+            Imagery is selected randomly. No UI elements are shown in this section.
             <p style={{fontSize: '0.9em', color: '#555'}}>Main image and carousel images are set randomly for this offer. Paths: Main: '{formData.image}', Carousel: [{formData.carouselImages.join(', ')}]</p>
-        </div>
+        </div> */}
 
         <div className="form-section">
             <h3>Amenities (Select all that apply)</h3>
