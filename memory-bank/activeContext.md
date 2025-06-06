@@ -10,7 +10,7 @@
         - Initialized a new Vite + React + TypeScript project in `partner-backend/partner-frontend`.
         - Installed npm dependencies for the new React project.
     - **Core React Components Created (`partner-backend/partner-frontend/src/`):**
-        - `App.tsx`: Main application component, manages views (Integrate Offer, View Merchants) using state.
+        - `App.tsx`: Main application component, manages views (Integrate Offer, View Partners) using state.
         - `components/Sidebar.tsx`: React component for sidebar navigation.
         - `components/IntegrateOfferForm.tsx`: React component for the offer integration form.
             - Implemented state management for form fields (`useState`).
@@ -18,11 +18,11 @@
             - Implemented predefined amenity selection using checkboxes.
             - Handles form submission, including `FormData` for file uploads and API calls to `/api/integrate-offer`.
             - Includes basic response message display.
-        - `components/ViewMerchants.tsx`: React component for viewing merchants and offers.
-            - Implemented state for offers, merchants, loading, and errors.
+        - `components/ViewPartners.tsx`: React component for viewing partners and offers.
+            - Implemented state for offers, partners, loading, and errors.
             - Fetches data from `/api/offers`.
-            - Groups offers by merchant and displays a clickable list.
-            - Displays details for a selected merchant.
+            - Groups offers by partner and displays a clickable list.
+            - Displays details for a selected partner.
     - **Styling:**
         - Copied CSS from `partner-frontend_backup/style.css` to `partner-backend/partner-frontend/src/index.css`.
         - Imported `index.css` in `main.tsx` to apply global styles.
@@ -47,15 +47,15 @@
         - Added CSS for the two-column layout.
     - **`partner-backend/partner-frontend_backup/script.js`:**
         - Added SPA-like navigation logic.
-- **Partner Offer Dashboard UI Update (Previous - Merchant/Offer List Logic - in static version):**
+- **Partner Offer Dashboard UI Update (Previous - Partner/Offer List Logic - in static version):**
     - Modified `partner-backend/partner-frontend_backup/script.js`:
-        - Renamed `loadCurrentOffers` to `loadMerchantsAndOffers`.
-        - This function now fetches offers, groups them by `bankName` (merchant), and displays a clickable list of merchants.
-        - Added `displayOffersForMerchant` function to show offers for a selected merchant.
-        - Dynamically creates a div with `id="selectedMerchantOffers"` to display these offers.
+        - Renamed `loadCurrentOffers` to `loadPartnersAndOffers`.
+        - This function now fetches offers, groups them by `bankName` (partner), and displays a clickable list of partners.
+        - Added `displayOffersForPartner` function to show offers for a selected partner.
+        - Dynamically creates a div with `id="selectedPartnerOffers"` to display these offers.
     - Modified `partner-backend/partner-frontend/index.html`:
-        - Changed "Current Offers" heading to "Integrated Merchants".
-        - Changed "Load Current Offers" button text to "Load Merchants".
+        - Changed "Current Offers" heading to "Integrated Partners".
+        - Changed "Load Current Offers" button text to "Load Partners".
         - Updated placeholder text in `currentOffersContainer`.
 - **Image Handling Overhaul (Previous):**
     - Moved all static image assets from `src/assets/images/` to `partner-backend/public/images/`.

@@ -21,7 +21,7 @@
         - `App.tsx`: Manages overall layout and view switching.
         - `components/Sidebar.tsx`: Handles navigation.
         - `components/IntegrateOfferForm.tsx`: Replicates form functionality with React state, including predefined amenities and file uploads.
-        - `components/ViewMerchants.tsx`: Fetches and displays merchant/offer data.
+        - `components/ViewPartners.tsx`: Fetches and displays partner/offer data.
     - **Styling:** Existing CSS (`style.css` from backup) moved to `src/index.css` and imported globally.
     - **Vite Config (`vite.config.ts`):** API proxy to `http://localhost:3001` configured for development.
     - **Backend Server (`partner-backend/server.ts`):** Updated to serve the React app's `dist` folder for production and handle fallback routing.
@@ -57,9 +57,9 @@
                 - Predefined amenities selection works.
                 - Form submission (including file uploads) to `/api/integrate-offer` is successful.
                 - Response messages are displayed.
-            - "View Merchants & Offers" section:
-                - "Load Merchants & Offers" button fetches and displays data correctly.
-                - Clicking a merchant shows their specific offers.
+            - "View Partners & Offers" section:
+                - "Load Partners & Offers" button fetches and displays data correctly.
+                - Clicking a partner shows their specific offers.
     - **Crucial:** Test image loading from the backend and the new caching mechanism thoroughly across all relevant screens and components in the React Native app.
     - Verify `partner-backend` is operational (locally or on Render at `https://lounge-app-536s.onrender.com`) to serve images and API data for both the React Native app and the partner dashboard.
     - User to run `npx pod-install` (or `cd ios && pod install && cd ..`) to link new native dependencies for iOS.
@@ -82,7 +82,7 @@
     - Build out other screens and features of the LoungeApp.
 
 ## Current Status
-- **Partner Offer Dashboard:** Successfully converted to a React application using Vite. Includes sidebar navigation, offer integration form (with predefined amenities and file uploads), and merchant/offer viewing capabilities. Backend server updated to serve the built React app. Ready for build and comprehensive testing.
+- **Partner Offer Dashboard:** Successfully converted to a React application using Vite. Includes sidebar navigation, offer integration form (with predefined amenities and file uploads), and partner/offer viewing capabilities. Backend server updated to serve the built React app. Ready for build and comprehensive testing.
 - **Image Handling (React Native App):** New system for serving images from backend and caching on client-side is implemented. Ready for testing, contingent on backend availability and iOS pod installation.
 - **Backend Deployment:** Still a critical point. Verification of fixes for Render deployment is pending. Functionality of the new image system and the partner dashboard's data loading depends on this.
 - **Frontend (React Native App):**

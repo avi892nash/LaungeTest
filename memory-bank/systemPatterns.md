@@ -23,16 +23,16 @@
 - **Higher-Order Component (Wrapper Component for Caching - React Native App):**
     - `src/components/CachedImage.tsx` wraps the standard React Native `Image` component. It enhances `Image` with caching capabilities by interacting with `ImageCache.ts`, managing loading states, and determining whether to display a cached local version or fetch/display a remote version.
 - **Component-Based Architecture (React Partner Dashboard):**
-    - The dashboard UI (`partner-backend/partner-frontend/src/`) is broken down into reusable React components (e.g., `App.tsx`, `Sidebar.tsx`, `IntegrateOfferForm.tsx`, `ViewMerchants.tsx`).
+    - The dashboard UI (`partner-backend/partner-frontend/src/`) is broken down into reusable React components (e.g., `App.tsx`, `Sidebar.tsx`, `IntegrateOfferForm.tsx`, `ViewPartners.tsx`).
     - State management is handled within components using `useState` and `useRef`.
     - Props are used for parent-child communication.
-- **Dynamic List and Detail View (React Partner Dashboard - `ViewMerchants.tsx`):**
+- **Dynamic List and Detail View (React Partner Dashboard - `ViewPartners.tsx`):**
     - Fetches all offers from `/api/offers`.
-    - Groups offers by `bankName` (merchant) using JavaScript logic within the component.
-    - Dynamically renders a clickable list of merchants.
-    - On merchant click (managed by `selectedMerchant` state), filters and displays detailed offers for that specific merchant.
+    - Groups offers by `bankName` (partner) using JavaScript logic within the component.
+    - Dynamically renders a clickable list of partners.
+    - On partner click (managed by `selectedPartner` state), filters and displays detailed offers for that specific partner.
 - **SPA-like Navigation (React Partner Dashboard - `App.tsx` & `Sidebar.tsx`):**
-    - Uses React state (`currentView` in `App.tsx`) to conditionally render different view components (`IntegrateOfferForm.tsx`, `ViewMerchants.tsx`).
+    - Uses React state (`currentView` in `App.tsx`) to conditionally render different view components (`IntegrateOfferForm.tsx`, `ViewPartners.tsx`).
     - Sidebar links update this state, simulating page changes without full page reloads.
 - **Predefined Amenity Selection (React Partner Dashboard - `IntegrateOfferForm.tsx`):**
     - Uses a predefined array of amenity objects (`PREDEFINED_AMENITIES`).
@@ -51,10 +51,10 @@
     - File inputs are handled using `useRef` to access their `files` property directly.
     - On submission, a `FormData` object is constructed, appending text fields from state, selected amenities (as a JSON string), and files.
 - **API Interaction (React Partner Dashboard):**
-    - Uses `fetch` API for GET requests (e.g., `/api/offers` in `ViewMerchants.tsx`) and POST requests (e.g., `/api/integrate-offer` with `FormData` in `IntegrateOfferForm.tsx`).
+    - Uses `fetch` API for GET requests (e.g., `/api/offers` in `ViewPartners.tsx`) and POST requests (e.g., `/api/integrate-offer` with `FormData` in `IntegrateOfferForm.tsx`).
     - Handles API responses and errors, updating component state to reflect loading, success, or error messages.
-- **Offer Data Grouping (React Partner Dashboard - `ViewMerchants.tsx`):**
-    - Fetched offers are processed and grouped by `bankName` to create a list of unique merchants before display.
+- **Offer Data Grouping (React Partner Dashboard - `ViewPartners.tsx`):**
+    - Fetched offers are processed and grouped by `bankName` to create a list of unique partners before display.
 - **Amenity Data Collection (React Partner Dashboard - `IntegrateOfferForm.tsx`):**
     - Selected predefined amenities are collected from the `selectedAmenities` state (which stores IDs). These IDs are used to look up full amenity objects from `PREDEFINED_AMENITIES` before being JSON-stringified and sent with the form data.
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-type ViewName = 'integrate' | 'view_merchants' | 'add_offer';
+type ViewName = 'integrate' | 'view_partners' | 'add_offer'; // Renamed view_merchants
 
 interface SidebarProps {
   setCurrentView: (view: ViewName) => void;
@@ -22,20 +22,20 @@ const Sidebar: React.FC<SidebarProps> = ({ setCurrentView, currentView }) => {
               setCurrentView('integrate');
             }}
           >
-            Integrate New Merchant
+            Integrate New Partner 
           </a>
         </li>
         <li>
           <a
             href="#"
-            id="navViewMerchants"
-            className={currentView === 'view_merchants' ? 'active' : ''}
+            id="navViewPartners" 
+            className={currentView === 'view_partners' ? 'active' : ''} 
             onClick={(e) => {
               e.preventDefault();
-              setCurrentView('view_merchants');
+              setCurrentView('view_partners'); 
             }}
           >
-            View Merchants & Offers
+            View Partners & Offers 
           </a>
         </li>
         <li>

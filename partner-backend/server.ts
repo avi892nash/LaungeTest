@@ -41,7 +41,7 @@ interface Lounge {
   bankName: string; 
   bankLogo: string; 
   offerType: OfferType | string; 
-  isMerchant?: boolean; 
+  isPartner?: boolean; // Renamed from isMerchant
 }
 
 const app: Express = express();
@@ -115,7 +115,7 @@ app.post('/api/integrate-offer', upload, ((req: Request, res: Response, next: Ne
 
     if (!body.id || !body.name || !body.bankName) {
       cleanupFiles(files);
-      return res.status(400).json({ message: 'Invalid data. Missing required fields: id (Merchant ID), name (Merchant Name), bankName.' });
+      return res.status(400).json({ message: 'Invalid data. Missing required fields: id (Partner ID), name (Partner Name), bankName.' }); // Renamed text
     }
 
     const bankLogoFile = files?.['bankLogo']?.[0];
@@ -129,23 +129,23 @@ app.post('/api/integrate-offer', upload, ((req: Request, res: Response, next: Ne
       return res.status(400).json({ message: `Entry with ID ${body.id} already exists.` });
     }
 
-    const isMerchantOnlySubmission = !body.location && !body.description && !body.offerType && !files?.['image'];
+    const isPartnerOnlySubmission = !body.location && !body.description && !body.offerType && !files?.['image']; // Renamed variable
 
-    if (isMerchantOnlySubmission) {
-      const newMerchantEntry: Lounge = {
+    if (isPartnerOnlySubmission) { // Renamed variable
+      const newPartnerEntry: Lounge = { // Renamed variable
         id: body.id,
         name: body.name, 
         bankName: body.bankName,
         bankLogo: `images/uploads/${bankLogoFile.filename}`,
-        isMerchant: true, 
+        isPartner: true, // Renamed from isMerchant
         image: `images/uploads/${bankLogoFile.filename}`, 
         images: [],
-        location: "Merchant Profile", 
+        location: "Partner Profile", // Renamed text
         fullLocation: body.fullLocation || "Not Applicable", 
         airport: "N/A",
         hours: "N/A",
-        offerType: "N/A (Merchant Profile)",
-        description: `Profile for merchant: ${body.name}.`,
+        offerType: "N/A (Partner Profile)", // Renamed text
+        description: `Profile for partner: ${body.name}.`, // Renamed text
         amenities: [],
         amenitiesCount: 0,
         directions: body.directions || "N/A",
@@ -155,9 +155,9 @@ app.post('/api/integrate-offer', upload, ((req: Request, res: Response, next: Ne
         walkInButtonText: "View Offers", 
         fairUsePolicy: "N/A",
       };
-      loungeDataStore.push(newMerchantEntry);
-      console.log('New merchant integrated:', newMerchantEntry.name);
-      return res.status(201).json({ message: 'Merchant integrated successfully', merchant: newMerchantEntry });
+      loungeDataStore.push(newPartnerEntry); // Renamed variable
+      console.log('New partner integrated:', newPartnerEntry.name); // Renamed text and variable
+      return res.status(201).json({ message: 'Partner integrated successfully', partner: newPartnerEntry }); // Renamed text and variable
 
     } else {
       const mainImageFile = files?.['image']?.[0];
@@ -204,7 +204,7 @@ app.post('/api/integrate-offer', upload, ((req: Request, res: Response, next: Ne
         images: carouselImageFiles.map(file => `images/uploads/${file.filename}`),
         amenities: parsedAmenities,
         amenitiesCount: parsedAmenities.length,
-        isMerchant: false, 
+        isPartner: false, // Renamed from isMerchant (assuming this means "is this a partner profile itself")
       };
       
       if (!Object.values(OfferType).includes(newOffer.offerType as OfferType)) {
@@ -230,38 +230,38 @@ app.get('/api/offers', (req: Request, res: Response) => {
 // Middleware for parsing FormData without file uploads for the new endpoint
 const noFileUploadMulter = multer().none();
 
-app.post('/api/merchants/:merchantId/offers', noFileUploadMulter, (req: Request, res: Response, next: NextFunction) => {
+app.post('/api/partners/:partnerId/offers', noFileUploadMulter, (req: Request, res: Response, next: NextFunction) => { // Renamed path and param
   try {
-    const { merchantId } = req.params;
+    const { partnerId } = req.params; // Renamed param
     const body = req.body;
 
     // Basic validation
-    if (!merchantId) {
-      return res.status(400).json({ message: 'Merchant ID is required.' });
+    if (!partnerId) { // Renamed param
+      return res.status(400).json({ message: 'Partner ID is required.' }); // Renamed text
     }
     if (!body.offerTitle || !body.offerType || !body.location || !body.image || !body.carouselImages) {
       return res.status(400).json({ message: 'Missing required offer fields (e.g., offerTitle, offerType, location, image, carouselImages).' });
     }
 
-    const merchantExists = loungeDataStore.some(item => item.id === merchantId && item.isMerchant === true);
-    if (!merchantExists) {
-      // Attempt to find if it's a non-merchant entry, to give a more specific error, or just a general "not found"
-      const entryExistsAsNonMerchant = loungeDataStore.some(item => item.id === merchantId && !item.isMerchant);
-      if (entryExistsAsNonMerchant) {
-        return res.status(400).json({ message: `The entry with ID ${merchantId} is an offer, not a merchant. Cannot add offer to another offer.` });
+    const partnerExists = loungeDataStore.some(item => item.id === partnerId && item.isPartner === true); // Renamed variables
+    if (!partnerExists) { // Renamed variable
+      // Attempt to find if it's a non-partner entry, to give a more specific error, or just a general "not found"
+      const entryExistsAsNonPartner = loungeDataStore.some(item => item.id === partnerId && !item.isPartner); // Renamed variables
+      if (entryExistsAsNonPartner) { // Renamed variable
+        return res.status(400).json({ message: `The entry with ID ${partnerId} is an offer, not a partner. Cannot add offer to another offer.` }); // Renamed text and param
       }
-      return res.status(404).json({ message: `Merchant with ID ${merchantId} not found.` });
+      return res.status(404).json({ message: `Partner with ID ${partnerId} not found.` }); // Renamed text and param
     }
     
-    // Or, if merchantId is not the same as loungeDataStore item id, adjust this check.
-    // For now, assuming merchantId might correspond to a bankName or a specific merchant entry.
-    // Let's assume for simplicity that the merchant is identified by bankName for now,
+    // Or, if partnerId is not the same as loungeDataStore item id, adjust this check.
+    // For now, assuming partnerId might correspond to a bankName or a specific partner entry.
+    // Let's assume for simplicity that the partner is identified by bankName for now,
     // and the offer is associated with that bankName.
-    // A more robust system would have a separate merchants collection.
-    // The current AddOfferForm sends merchantId which is derived from existing offer 'id's,
-    // which might be confusing. Let's assume `merchantId` from params is the `bankName` for now for simplicity of adding to store.
-    // This part needs clarification on how merchants are truly identified and offers associated.
-    // For the purpose of this endpoint, we'll use merchantId as the bankName.
+    // A more robust system would have a separate partners collection.
+    // The current AddOfferForm sends partnerId which is derived from existing offer 'id's,
+    // which might be confusing. Let's assume `partnerId` from params is the `bankName` for now for simplicity of adding to store.
+    // This part needs clarification on how partners are truly identified and offers associated.
+    // For the purpose of this endpoint, we'll use partnerId as the bankName.
 
     let parsedCarouselImages: string[] = [];
     if (body.carouselImages) {
@@ -288,14 +288,14 @@ app.post('/api/merchants/:merchantId/offers', noFileUploadMulter, (req: Request,
     
     // Construct the new offer object
     // The ID for the new offer should be unique.
-    const newOfferId = `${merchantId}_offer_${Date.now()}`;
-    const associatedMerchant = loungeDataStore.find(m => m.id === merchantId); // Assuming merchantId is an ID of a merchant entry
+    const newOfferId = `${partnerId}_offer_${Date.now()}`; // Renamed param
+    const associatedPartner = loungeDataStore.find(m => m.id === partnerId); // Renamed variable and param
 
     const newOffer: Lounge = {
       id: newOfferId,
       name: body.offerTitle, // Using offerTitle as name
-      bankName: associatedMerchant ? associatedMerchant.bankName : merchantId, // Use merchantId as bankName if no direct merchant found
-      bankLogo: associatedMerchant ? associatedMerchant.bankLogo : '', // Use merchant's logo or a default
+      bankName: associatedPartner ? associatedPartner.bankName : partnerId, // Renamed variables
+      bankLogo: associatedPartner ? associatedPartner.bankLogo : '', // Renamed variables
       offerType: body.offerType as OfferType | string,
       location: body.location,
       fullLocation: body.fullLocation,
@@ -312,7 +312,7 @@ app.post('/api/merchants/:merchantId/offers', noFileUploadMulter, (req: Request,
       images: parsedCarouselImages.map(imgPath => `/images/${imgPath}`), // Assuming paths are relative
       amenities: parsedAmenities,
       amenitiesCount: parsedAmenities.length,
-      isMerchant: false,
+      isPartner: false, // Renamed from isMerchant
     };
 
     if (!Object.values(OfferType).includes(newOffer.offerType as OfferType) && typeof newOffer.offerType === 'string') {
@@ -321,11 +321,11 @@ app.post('/api/merchants/:merchantId/offers', noFileUploadMulter, (req: Request,
     }
 
     loungeDataStore.push(newOffer);
-    console.log(`New offer "${newOffer.name}" added for merchant ID "${merchantId}":`, newOffer);
-    res.status(201).json({ message: 'Offer added successfully to merchant.', offer: newOffer });
+    console.log(`New offer "${newOffer.name}" added for partner ID "${partnerId}":`, newOffer); // Renamed text and param
+    res.status(201).json({ message: 'Offer added successfully to partner.', offer: newOffer }); // Renamed text
 
   } catch (error) {
-    console.error(`Error in /api/merchants/${req.params.merchantId}/offers:`, error);
+    console.error(`Error in /api/partners/${req.params.partnerId}/offers:`, error); // Renamed path and req.params.partnerId
     next(error);
   }
 });

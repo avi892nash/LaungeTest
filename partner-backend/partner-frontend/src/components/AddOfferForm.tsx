@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 
-const API_URL = '/api'; // Using relative path for API calls
+// Construct the API path. If VITE_API_BASE_URL is defined, use it as a prefix for /api.
+// Otherwise, assume /api is a relative path (e.g., for proxy or same-origin deployment).
+const API_PREFIX = import.meta.env.VITE_API_BASE_URL
+  ? `${import.meta.env.VITE_API_BASE_URL}/api`
+  : '/api';
 
 // Assuming Amenity interface is defined elsewhere or can be defined here
 interface Amenity {
@@ -148,7 +152,7 @@ interface FetchedLoungeOrPartnerData {
   id: string;
   name: string;
   bankName?: string; 
-  isMerchant?: boolean;
+  isPartner?: boolean; // Renamed from isMerchant
 }
 
 // Props for AddOfferForm, will need selectedPartnerId
@@ -222,13 +226,13 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSele
       try {
         // Assuming an endpoint to get all partners for selection
         // This might be the same as /api/offers and then processed, or a new one like /api/partners
-        const response = await fetch(`${API_URL}/offers`); 
+        const response = await fetch(`${API_PREFIX}/offers`); // Use API_PREFIX
         if (!response.ok) throw new Error('Failed to fetch data for partner list');
         const allData: FetchedLoungeOrPartnerData[] = await response.json();
         
-        // Filter for actual partner entries (where isMerchant is true)
+        // Filter for actual partner entries (where isPartner is true)
         const actualPartners = allData
-          .filter(item => item.isMerchant === true) // Filter activated
+          .filter(item => item.isPartner === true) // Renamed from isMerchant
           .map(partnerItem => ({
             partnerId: partnerItem.id, 
             partnerName: partnerItem.bankName || partnerItem.name, // Prefer bankName, fallback to name
@@ -343,7 +347,7 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId: propSele
 
     try {
       // This will be a NEW API endpoint
-      const response = await fetch(`${API_URL}/merchants/${internalSelectedPartnerId}/offers`, { // Example new endpoint
+      const response = await fetch(`${API_PREFIX}/partners/${internalSelectedPartnerId}/offers`, { // Use API_PREFIX and renamed path
         method: 'POST',
         body: formPayload,
       });
