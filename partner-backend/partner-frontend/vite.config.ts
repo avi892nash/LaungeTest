@@ -13,6 +13,11 @@ export default defineConfig({
         // secure: false, // Uncomment if your backend is not HTTPS
         // rewrite: (path) => path.replace(/^\/api/, '') // Uncomment if you need to remove /api prefix
       },
+      // Proxy /images requests to our backend server
+      '/images': {
+        target: 'http://localhost:3001', // Your backend server address
+        changeOrigin: true,
+      }
     },
   },
 })

@@ -46,6 +46,8 @@
 - **Partner Offer Dashboard - Automatic Random Amenities in `AddOfferForm.tsx`:**
     - Removed manual amenity selection UI from the form (`partner-backend/partner-frontend/src/components/AddOfferForm.tsx`).
     - Implemented functionality to automatically assign 5 random amenities to each new offer upon submission.
+- **Backend - Corrected Partner Logo Path Storage (`server.ts`):**
+    - Modified the `/api/integrate-partner` endpoint in `partner-backend/server.ts` to store only the filename (e.g., `bankLogo-timestamp.jpg`) for partner logos, instead of `images/filename.jpg`. This prevents URL malformation (e.g., `images/images/filename.jpg`) when the frontend constructs the full image path.
 
 - **Backend API Base URL Configured (Previous):**
     - `src/data/mockData.ts` uses `API_BASE_URL = 'https://lounge-app-536s.onrender.com/api'`.
@@ -120,6 +122,7 @@
 - **Backend Data Handling:**
     - Initial data is now loaded from `partner-backend/structured-data.json` which has a nested partner-offer structure.
     - `partner-backend/server.ts` has been updated to process this new structure for its API endpoints (`/api/partners`, `/api/offers`, and POST endpoints for adding partners/offers).
+    - The `/api/integrate-partner` endpoint now correctly stores partner logo paths as filenames only, ensuring proper URL construction by the frontend.
     - Data modifications via API are currently in-memory and do not persist back to the `structured-data.json` file on disk.
 - **Image Handling (React Native App):** New system for serving images from backend and caching on client-side is implemented. Ready for testing, contingent on backend availability and iOS pod installation.
 - **Backend Deployment:** Still a critical point. Verification of fixes for Render deployment is pending. Functionality of the new image system and the partner dashboard's data loading depends on this.

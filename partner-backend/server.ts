@@ -191,7 +191,7 @@ app.post('/api/integrate-partner', upload, ((req: Request, res: Response, next: 
     const newPartner: Partner = {
       id: body.id, // Partner's unique ID from the form
       name: body.name, // Partner's Name from the form
-      logo: `images/${bankLogoFile.filename}`, // bankLogoFile is guaranteed to exist
+      logo: bankLogoFile.filename, // Store only the filename, frontend will add /images/ prefix
     };
 
     // Check if partner with this ID already exists in structuredDataStore

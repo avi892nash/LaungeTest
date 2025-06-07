@@ -1,9 +1,13 @@
 # Active Context
 
 ## Current Work Focus
-- Updated `partner-backend/partner-frontend/src/components/AddOfferForm.tsx` to remove manual amenity selection and automatically apply 5 random amenities to new offers.
+- Fixed partner logo path storage in `partner-backend/server.ts` to ensure correct image URL formation for newly created partners.
 
 ## Recent Changes
+- **Backend - Correct Partner Logo Path Storage (server.ts):**
+    - Modified the `/api/integrate-partner` endpoint in `partner-backend/server.ts`.
+    - Partner logos (`partnerLogo`) are now stored as just the `filename.ext` (e.g., `bankLogo-timestamp.jpg`) instead of `images/filename.ext`.
+    - This change ensures correct URL construction when the frontend prepends the `/images/` path, preventing potential `images/images/` duplication in the final URL.
 - **Partner Offer Dashboard - Automatic Random Amenities (AddOfferForm.tsx):**
     - Modified `partner-backend/partner-frontend/src/components/AddOfferForm.tsx` to remove the manual amenity selection checkboxes.
     - Implemented logic in `handleSubmit` to automatically select 5 random amenities from `PREDEFINED_AMENITIES` and include them in the submitted offer data.
@@ -161,6 +165,7 @@
     4.  Thoroughly test the new React-based Partner Offer Dashboard by accessing `http://localhost:3001`. This includes:
         - Verifying the fix in `AddOfferForm.tsx`: Ensure that manually entered fields (like Offer Title, Bank Name, Description) are preserved when changing "Select Lounge Location" or "Select Offer Configuration".
         - Verifying the new amenity handling in `AddOfferForm.tsx`: Confirm that the UI for manual amenity selection is removed and that new offers are submitted with 5 automatically assigned random amenities.
+        - Verifying that logos for newly integrated partners (via "Integrate New Partner" form) are displayed correctly, confirming the fix for partner logo path storage in `server.ts`.
         - Paying special attention to the new tabular display in "View Full Data".
         - Verifying that new offers created have correctly formed image URLs when fetched by the client.
 - (Previous Frontend Next Steps - to be revisited after backend deployment and image caching are verified):
