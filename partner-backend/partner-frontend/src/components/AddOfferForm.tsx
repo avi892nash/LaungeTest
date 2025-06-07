@@ -187,7 +187,7 @@ interface AddOfferFormProps {
 
 const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
   const [formData, setFormData] = useState<OfferFormDataState>(initialOfferFormData);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  // selectedAmenities state removed
   const [responseMessage, setResponseMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   
   const [selectedMasterLocationId, setSelectedMasterLocationId] = useState<string>(PREDEFINED_LOUNGE_LOCATIONS[0].id);
@@ -200,39 +200,42 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
   };
 
   useEffect(() => {
-    const initialRandomImage = getRandomImage();
-    const initialRandomCarouselImages = getRandomCarouselImages(2);
+    // Use functional update to preserve existing manually entered fields
+    setFormData(prevFormData => {
+      const initialRandomImage = getRandomImage(); // Assuming these should still be randomized on change
+      const initialRandomCarouselImages = getRandomCarouselImages(2);
 
-    let baseFormData = { 
-      ...initialOfferFormData, // Start with all initial defaults
-      image: initialRandomImage,
-      carouselImages: initialRandomCarouselImages,
-    };
-
-    const defaultLocation = PREDEFINED_LOUNGE_LOCATIONS.find(loc => loc.id === selectedMasterLocationId);
-    if (defaultLocation) {
-      baseFormData = {
-        ...baseFormData,
-        location: defaultLocation.location,
-        fullLocation: defaultLocation.fullLocation,
-        airport: defaultLocation.airport,
-        hours: defaultLocation.hours,
-        directions: defaultLocation.directions,
+      let updatedFormData = {
+        ...prevFormData, // Preserve existing data
+        image: initialRandomImage, // Then update/randomize images
+        carouselImages: initialRandomCarouselImages,
       };
-    }
 
-    const defaultOfferPreset = PREDEFINED_OFFER_SPECIFICS_PRESETS.find(p => p.id === selectedOfferSpecificsPresetId);
-    if (defaultOfferPreset) {
-      baseFormData = {
-        ...baseFormData,
-        walkInDetails: defaultOfferPreset.walkInDetails,
-        entitlement: defaultOfferPreset.entitlement,
-        walkInButtonText: defaultOfferPreset.walkInButtonText,
-        fairUsePolicy: defaultOfferPreset.fairUsePolicy,
-      };
-    }
-    setFormData(baseFormData);
-    setSelectedAmenities([]); // Reset amenities when presets change
+      const defaultLocation = PREDEFINED_LOUNGE_LOCATIONS.find(loc => loc.id === selectedMasterLocationId);
+      if (defaultLocation) {
+        updatedFormData = {
+          ...updatedFormData,
+          location: defaultLocation.location,
+          fullLocation: defaultLocation.fullLocation,
+          airport: defaultLocation.airport,
+          hours: defaultLocation.hours,
+          directions: defaultLocation.directions,
+        };
+      }
+
+      const defaultOfferPreset = PREDEFINED_OFFER_SPECIFICS_PRESETS.find(p => p.id === selectedOfferSpecificsPresetId);
+      if (defaultOfferPreset) {
+        updatedFormData = {
+          ...updatedFormData,
+          walkInDetails: defaultOfferPreset.walkInDetails,
+          entitlement: defaultOfferPreset.entitlement,
+          walkInButtonText: defaultOfferPreset.walkInButtonText,
+          fairUsePolicy: defaultOfferPreset.fairUsePolicy,
+        };
+      }
+      return updatedFormData;
+    });
+    // setSelectedAmenities([]); // Reset amenities when presets change - Removed
   }, [selectedMasterLocationId, selectedOfferSpecificsPresetId]);
 
   // Effect to reset form when selectedPartnerId changes (e.g., user navigates away and back)
@@ -258,13 +261,7 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
     setSelectedOfferSpecificsPresetId(e.target.value);
   };
 
-  const handleAmenityChange = (amenityId: string) => {
-    setSelectedAmenities(prev =>
-      prev.includes(amenityId)
-        ? prev.filter(id => id !== amenityId)
-        : [...prev, amenityId]
-    );
-  };
+  // handleAmenityChange function removed
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -282,7 +279,13 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
     });
     
     formPayload.append('carouselImages', JSON.stringify(formData.carouselImages));
-    const amenitiesToSubmit = PREDEFINED_AMENITIES.filter(amenity => selectedAmenities.includes(amenity.id));
+
+    // Generate 5 random amenities
+    const getRandomAmenityObjects = (count = 5): Amenity[] => {
+      const shuffled = [...PREDEFINED_AMENITIES].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, Math.min(count, shuffled.length));
+    };
+    const amenitiesToSubmit = getRandomAmenityObjects(5);
     formPayload.append('amenities', JSON.stringify(amenitiesToSubmit));
 
     try {
@@ -325,7 +328,7 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
             };
         }
         setFormData(resetFormData);
-        setSelectedAmenities([]);
+        // setSelectedAmenities([]); // Removed
       } else {
         setResponseMessage({ type: 'error', message: result.message || 'Failed to add offer.' });
       }
@@ -444,24 +447,7 @@ const AddOfferForm: React.FC<AddOfferFormProps> = ({ selectedPartnerId }) => {
             <p style={{fontSize: '0.9em', color: '#555'}}>Main image and carousel images are set randomly for this offer. Paths: Main: '{formData.image}', Carousel: [{formData.carouselImages.join(', ')}]</p>
         </div> */}
 
-        <div className="form-section">
-            <h3>Amenities (Select all that apply)</h3>
-            <div id="amenitiesCheckboxesContainer" className="amenities-checkbox-grid">
-            {PREDEFINED_AMENITIES.map(amenity => (
-                <div key={amenity.id} className="amenity-checkbox-item">
-                <input
-                    type="checkbox"
-                    id={`amenity-${amenity.id}-${selectedPartnerId || 'default'}`} 
-                    name="amenities"
-                    value={amenity.id}
-                    checked={selectedAmenities.includes(amenity.id)}
-                    onChange={() => handleAmenityChange(amenity.id)}
-                />
-                <label htmlFor={`amenity-${amenity.id}-${selectedPartnerId || 'default'}`}>{amenity.name}</label>
-                </div>
-            ))}
-            </div>
-        </div>
+        {/* Amenities selection section removed - 5 random amenities will be applied automatically */}
 
         <button type="submit" className="submit-button" disabled={!selectedPartnerId}>Add Offer to Partner</button>
       </form>

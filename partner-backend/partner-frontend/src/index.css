@@ -401,3 +401,211 @@ input[type="file"] {
 .offer-details-table td ul li {
     margin-bottom: 4px;
 }
+
+/* Modern Button Styles */
+.btn-modern {
+    padding: 8px 15px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    text-decoration: none; /* Remove underline from button text if it's an anchor */
+    display: inline-flex; /* For aligning icon and text if needed */
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4; /* Ensure text is vertically centered */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Primary blue */
+    color: white;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue */
+    border-color: #0056b3;
+    color: white;
+}
+
+/* Partner List Styles */
+.partner-list-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef; /* Lighter border */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.partner-list-item:hover {
+    background-color: #f8f9fa; /* Light hover effect */
+}
+
+.partner-list-item:last-child {
+    border-bottom: none;
+}
+
+.partner-name {
+    font-weight: 500;
+    color: #0A2540; /* Dark blue from sidebar */
+    text-decoration: none; /* Remove underline */
+}
+
+.partner-name:hover {
+    text-decoration: none; /* Ensure no underline on hover */
+}
+
+.partner-list-item.selected {
+    background-color: #e0e7ff; /* A light blue/purple to indicate selection */
+    font-weight: bold;
+}
+.partner-list-item.selected .partner-name {
+    color: #003d99; /* Darker blue for selected item text */
+}
+
+/* Two-column layout for ViewPartners when a partner is selected */
+.view-partners-layout {
+    display: flex;
+    gap: 20px; /* Space between offer list and offer card */
+}
+
+.view-partners-list-column {
+    flex: 1; /* Or a fixed width, e.g., flex: 0 0 400px; */
+    /* max-width: 500px; */ /* Optional: constrain width of list */
+}
+
+.view-partners-detail-column {
+    flex: 2; /* Or a fixed width, e.g., flex: 0 0 600px; */
+    /* border-left: 1px solid #e0e0e0; */ /* Optional separator */
+    /* padding-left: 20px; */ /* Optional spacing */
+}
+
+
+/* Offer Card View Styles */
+.offer-card-view {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.offer-card-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px; /* Ensure it takes some space */
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    color: #777;
+    text-align: center;
+    padding: 20px;
+}
+
+
+.offer-card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.offer-bank-logo {
+    max-height: 40px;
+    max-width: 120px; /* Adjust as needed */
+    object-fit: contain;
+}
+
+.offer-card-header h3 {
+    margin: 0;
+    font-size: 1.4em;
+    color: #0A2540;
+}
+
+.offer-main-image {
+    width: 100%;
+    max-height: 250px; /* Adjust as needed */
+    object-fit: cover; /* Or 'contain' depending on desired look */
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.offer-card-body p {
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    color: #333;
+}
+.offer-card-body p strong {
+    color: #111;
+}
+
+.offer-full-details-toggle {
+    margin-top: 20px;
+}
+.offer-full-details-toggle summary {
+    cursor: pointer;
+    font-weight: 500;
+    color: #007bff;
+    padding: 5px 0;
+}
+.offer-full-details-toggle summary:hover {
+    color: #0056b3;
+}
+
+/* Ensure the nested table within the card uses the existing styles */
+.offer-card-view .offer-details-table {
+    margin-top: 10px; /* Adjust spacing if needed */
+}
+
+/* Offer list within ViewPartners when a partner is selected */
+.partner-offers-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 500px; /* Example max height */
+    overflow-y: auto; /* Scroll if many offers */
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+}
+
+.partner-offers-list-item {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+.partner-offers-list-item:hover {
+    background-color: #f8f9fa;
+}
+.partner-offers-list-item:last-child {
+    border-bottom: none;
+}
+.partner-offers-list-item.selected {
+    background-color: #d1eaff; /* Lighter blue for selected offer */
+    font-weight: 500;
+}
+.partner-offers-list-item h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+    color: #0A2540;
+}
+.partner-offers-list-item p {
+    margin: 0;
+    font-size: 0.85em;
+    color: #555;
+}
+
+.partner-list-logo {
+    max-height: 30px; /* Adjust size as needed */
+    max-width: 100px; /* Adjust size as needed */
+    object-fit: contain;
+    /* margin-right: 10px; /* Space between logo and name - handled by span margin now */
+    border-radius: 3px; /* Optional: slight rounding */
+}

@@ -1,10 +1,63 @@
 # Active Context
 
 ## Current Work Focus
-- Improved UI for "View Full Data" in the Partner Offer Dashboard.
-- Committed and pushed recent changes.
+- Updated `partner-backend/partner-frontend/src/components/AddOfferForm.tsx` to remove manual amenity selection and automatically apply 5 random amenities to new offers.
 
 ## Recent Changes
+- **Partner Offer Dashboard - Automatic Random Amenities (AddOfferForm.tsx):**
+    - Modified `partner-backend/partner-frontend/src/components/AddOfferForm.tsx` to remove the manual amenity selection checkboxes.
+    - Implemented logic in `handleSubmit` to automatically select 5 random amenities from `PREDEFINED_AMENITIES` and include them in the submitted offer data.
+    - Removed the `selectedAmenities` state and related functions (`handleAmenityChange`, `setSelectedAmenities`).
+- **Partner Offer Dashboard - Preserve Form Data in AddOfferForm (AddOfferForm.tsx):**
+    - Modified `partner-backend/partner-frontend/src/components/AddOfferForm.tsx` to use a functional update for `setFormData` within the `useEffect` hook that triggers on lounge location or offer preset changes.
+    - This prevents manually entered data (e.g., "Offer Title", "Bank Name", "Description") from being cleared when these dropdowns are changed.
+- **Backend Data Restructuring - Centralized Partner and Offer Data:**
+    - Created `partner-backend/structured-data.json` to store partner and their associated offers in a nested structure. This replaces the previous `partner-backend/initial-lounge-data.json` which was a flat list of offers.
+    - Modified `partner-backend/server.ts`:
+        - Updated to load initial data from `structured-data.json`.
+        - Redefined internal data structures (`PartnerWithOffers`, `OfferInPartner`, `FlatOffer`) to manage the nested data.
+        - The main in-memory store is now `structuredDataStore`.
+        - Adapted the `/api/partners` GET endpoint to extract and serve partner information from `structuredDataStore`.
+        - Adapted the `/api/offers` GET endpoint to flatten offers from `structuredDataStore` and serve them, maintaining compatibility with the frontend's expected offer structure.
+        - Updated the `/api/integrate-partner` POST endpoint to add new partners to the `structuredDataStore`.
+        - Updated the `/api/partners/:partnerId/offers` POST endpoint to add new offers to the appropriate partner within `structuredDataStore`.
+- **Partner Offer Dashboard - Partner Logo Path Fix (ViewPartners.tsx):**
+    - Modified `partner-backend/partner-frontend/src/components/ViewPartners.tsx` to ensure the `partner.logo` URL is correctly constructed with the `/images/` prefix after the `imageBaseUrl`. This resolves an issue where partner logos in the main list were missing this path segment.
+- **Partner Offer Dashboard - Display Bank Logos in Partner List (ViewPartners.tsx):**
+    - Modified `partner-backend/partner-frontend/src/components/ViewPartners.tsx` to display the bank logo next to each partner name in the main integrated partners list.
+        - The `bankLogo` is fetched from the first offer of the partner.
+        - An `<img>` tag with class `partner-list-logo` was added.
+        - `imageBaseUrl` was defined in the component for constructing image URLs.
+    - Added CSS for `.partner-list-logo` to `partner-backend/partner-frontend/src/index.css` to style the displayed logos (max-height, object-fit, etc.).
+- **Partner Offer Dashboard - Image Path Correction (OfferCardView.tsx):**
+    - Modified `partner-backend/partner-frontend/src/components/OfferCardView.tsx` to ensure all image `src` attributes (for `offer.bankLogo`, `offer.image`, and images in `offer.images[]`) are correctly prefixed with `/images/` after the `imageBaseUrl`. This aligns with the backend's static serving route for images.
+- **Partner Offer Dashboard - Offer Detail View Rework (ViewPartners.tsx & New OfferCardView.tsx):**
+    - Created `partner-backend/partner-frontend/src/components/OfferCardView.tsx` to render individual offer details in a card format.
+    - Added CSS styles to `partner-backend/partner-frontend/src/index.css` for:
+        - The `OfferCardView` component (`.offer-card-view`, `.offer-card-header`, etc.).
+        - A two-column layout (`.view-partners-layout`, `.view-partners-list-column`, `.view-partners-detail-column`).
+        - A list for offers of a selected partner (`.partner-offers-list`, `.partner-offers-list-item`).
+    - Modified `partner-backend/partner-frontend/src/components/ViewPartners.tsx`:
+        - Imported `OfferCardView`.
+        - Added state `selectedOfferForCardView` to manage which offer's details are shown in the card.
+        - When a partner is selected, the view now splits into two columns:
+            - Left: Lists offers for the selected partner. Clicking an offer updates `selectedOfferForCardView`.
+            - Right: Displays the `OfferCardView` for the `selectedOfferForCardView`.
+        - Added a "Back to All Partners" button to return to the main partner list.
+        - Exported `Offer` and `Amenity` interfaces and fixed type issues in `OfferCardView.tsx`.
+- **Partner Offer Dashboard - UI Modernization (ViewPartners.tsx - List Styling):**
+    - Added new CSS classes to `partner-backend/partner-frontend/src/index.css` for:
+        - Modern button styling (`.btn-modern`, `.btn-primary`).
+        - Improved partner list item styling (`.partner-list-item`, `.partner-name`, `.selected`).
+    - Updated `partner-backend/partner-frontend/src/components/ViewPartners.tsx`:
+        - Applied the new CSS classes to buttons and the main partner list items.
+        - Removed previous inline styles for these elements.
+        - Changed partner list to display `bankName` (if available) instead of just `partnerId` for better readability.
+- **Partner Offer Dashboard - Automatic Data Fetching:**
+    - Modified `partner-backend/partner-frontend/src/components/ViewPartners.tsx`:
+        - Removed the "Load Partners & Offers" button.
+        - Implemented `useEffect` to call `fetchOffers` when the component mounts, so data is loaded automatically.
+        - Updated the "no partners found" message and added a loading indicator.
 - **Partner Offer Dashboard UI Improvement (View Full Data):**
     - Modified `partner-backend/partner-frontend/src/components/ViewPartners.tsx` to display offer details within the `<details>` summary in a tabular format instead of a JSON string.
     - Added CSS styles to `partner-backend/partner-frontend/src/index.css` for the `.offer-details-table` class to improve readability of the new table.
@@ -105,12 +158,16 @@
     1.  **Backend Image Path Fix:** Corrected `partner-backend/server.ts` to store plain image filenames for offers added via the partner dashboard, preventing duplicated `/images/` segments in URLs.
     2.  Build the new React partner dashboard (`cd partner-backend/partner-frontend && npm run build`).
     3.  Run the backend server (`cd partner-backend && npm start` or similar).
-    4.  Thoroughly test the new React-based Partner Offer Dashboard by accessing `http://localhost:3001`, paying special attention to the new tabular display in "View Full Data" and verifying that new offers created have correctly formed image URLs when fetched by the client.
+    4.  Thoroughly test the new React-based Partner Offer Dashboard by accessing `http://localhost:3001`. This includes:
+        - Verifying the fix in `AddOfferForm.tsx`: Ensure that manually entered fields (like Offer Title, Bank Name, Description) are preserved when changing "Select Lounge Location" or "Select Offer Configuration".
+        - Verifying the new amenity handling in `AddOfferForm.tsx`: Confirm that the UI for manual amenity selection is removed and that new offers are submitted with 5 automatically assigned random amenities.
+        - Paying special attention to the new tabular display in "View Full Data".
+        - Verifying that new offers created have correctly formed image URLs when fetched by the client.
 - (Previous Frontend Next Steps - to be revisited after backend deployment and image caching are verified):
     - Verify UI/UX of `ExploreScreen.tsx` (airport search, filter dropdown).
     - Test search and filter functionalities.
     - Continue replacing placeholder icons and refining styling.
-- Update `memory-bank/progress.md` to reflect the UI improvement for "View Full Data".
+- Update `memory-bank/progress.md` to reflect all recent changes to `ViewPartners.tsx` and the new `OfferCardView.tsx`.
 
 ## Active Decisions and Considerations
 - **Custom Image Caching:** A custom image caching solution was implemented using `react-native-fs` and `@react-native-async-storage/async-storage`. This was chosen due to `react-native-fast-image` having peer dependency conflicts with the project's React 19 version.

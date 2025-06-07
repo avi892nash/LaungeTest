@@ -11,7 +11,7 @@ const API_PREFIX = import.meta.env.VITE_API_BASE_URL
 interface PartnerFormDataState { // Renamed
   partnerId: string; // Renamed
   partnerName: string; // Renamed
-  bankName: string;
+  // bankName: string; // Removed as per user feedback
   // bankLogo will be handled via FormData API
 }
 
@@ -19,7 +19,7 @@ interface PartnerFormDataState { // Renamed
 const initialPartnerFormData: PartnerFormDataState = { // Renamed
   partnerId: '', // Renamed
   partnerName: '', // Renamed
-  bankName: '',
+  // bankName: '', // Removed as per user feedback
 };
 
 const IntegrateOfferForm: React.FC = () => {
@@ -43,7 +43,7 @@ const IntegrateOfferForm: React.FC = () => {
     // Map frontend state to backend expected field names
     formPayload.append('id', formData.partnerId); // Renamed formData property
     formPayload.append('name', formData.partnerName); // Renamed formData property
-    formPayload.append('bankName', formData.bankName);
+    // bankName is now optional on the backend and not sent from frontend
 
     // Append bankLogo file
     if (bankLogoInputRef.current?.files?.[0]) {
@@ -51,7 +51,7 @@ const IntegrateOfferForm: React.FC = () => {
     }
     
     try {
-      const response = await fetch(`${API_PREFIX}/integrate-offer`, {
+      const response = await fetch(`${API_PREFIX}/integrate-partner`, { // Renamed endpoint
         method: 'POST',
         body: formPayload, 
       });
@@ -88,10 +88,7 @@ const IntegrateOfferForm: React.FC = () => {
               <td><label htmlFor="partnerName">Partner Name:*</label></td> {/* Renamed htmlFor, text */}
               <td><input type="text" id="partnerName" name="partnerName" value={formData.partnerName} onChange={handleInputChange} required style={{ width: '100%' }} /></td> {/* Renamed id, name, value */}
             </tr>
-            <tr>
-              <td><label htmlFor="bankName">Associated Partner/Bank Name:*</label></td>
-              <td><input type="text" id="bankName" name="bankName" value={formData.bankName} onChange={handleInputChange} required style={{ width: '100%' }} /></td>
-            </tr>
+            {/* Bank Name row removed as per user feedback */}
             <tr>
               <td><label htmlFor="bankLogo">Partner/Bank Logo:*</label></td>
               <td><input type="file" id="bankLogo" name="bankLogo" accept="image/*" ref={bankLogoInputRef} required style={{ width: '100%' }} /></td>

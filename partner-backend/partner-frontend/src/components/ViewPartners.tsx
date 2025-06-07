@@ -1,4 +1,5 @@
-import React, { useState } from 'react'; // Removed useEffect
+import React, { useState, useEffect } from 'react';
+import OfferCardView from './OfferCardView'; // Import the new component
 
 // Construct the API path. If VITE_API_BASE_URL is defined, use it as a prefix for /api.
 // Otherwise, assume /api is a relative path (e.g., for proxy or same-origin deployment).
@@ -6,16 +7,10 @@ const API_PREFIX = import.meta.env.VITE_API_BASE_URL
   ? `${import.meta.env.VITE_API_BASE_URL}/api`
   : '/api';
 
-interface Amenity {
+export interface Offer {
   id: string;
   name: string;
-  icon: string;
-}
-
-interface Offer {
-  id: string;
-  name: string;
-  bankName: string; // This is used as the key for grouping partners
+  bankName: string;
   offerType: string;
   location: string;
   fullLocation: string;
@@ -28,16 +23,29 @@ interface Offer {
   walkInButtonText: string;
   fairUsePolicy: string;
   description: string;
-  image: string; // Assuming image path/URL
-  bankLogo: string; // Assuming logo path/URL
-  images: string[]; // Assuming array of paths/URLs
+  image: string;
+  bankLogo: string;
+  images: string[];
   amenities: Amenity[];
-  partnerId: string; // Added to match backend
+  partnerId: string;
 }
 
-interface Partners { // Renamed from Merchants
-  [key: string]: Offer[]; // Key will now be partnerId
+export interface Amenity {
+  id: string;
+  name: string;
+  icon: string;
 }
+
+// New interface for Partner
+export interface Partner { // Exporting for potential use elsewhere, though not strictly needed by this component alone
+  id: string;
+  name: string;
+  logo: string;
+}
+
+// interface PartnersGrouped { // Renamed for clarity -> Now unused, removing
+//   [key: string]: Offer[];
+// }
 
 interface ViewPartnersProps {
   setCurrentView: (view: 'integrate' | 'view_partners' | 'add_offer') => void;
@@ -45,191 +53,182 @@ interface ViewPartnersProps {
 }
 
 const ViewPartners: React.FC<ViewPartnersProps> = ({ setCurrentView, setSelectedPartnerIdForNewOffer }) => {
-  // const [allOffers, setAllOffers] = useState<Offer[]>([]); // allOffers is not used
-  const [, setAllOffers] = useState<Offer[]>([]); // Keep setAllOffers if it's used for type inference or future use
-  const [partners, setPartners] = useState<Partners>({}); // Renamed from merchants, setMerchants
-  const [selectedPartnerId, setSelectedPartnerId] = useState<string | null>(null); // Stores the selected partnerId
+  const [allOffers, setAllOffersInternal] = useState<Offer[]>([]); // Renamed internal setter
+  const [actualPartners, setActualPartners] = useState<Partner[]>([]); // New state for actual partners
+  // const [partners, setPartners] = useState<PartnersGrouped>({}); // Removed unused state
+  const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null); // Changed to store Partner object
+  const [selectedOfferForCardView, setSelectedOfferForCardView] = useState<Offer | null>(null);
+  const imageBaseUrl = import.meta.env.VITE_IMAGE_BASE_URL || 'http://localhost:3001'; // For image URLs
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchOffers = async () => {
+  // Updated to handle Partner object
+  const handlePartnerSelect = (partner: Partner) => {
+    setSelectedPartner(partner);
+    setSelectedOfferForCardView(null); 
+  };
+
+  const fetchData = async () => { // Renamed and updated
     setIsLoading(true);
     setError(null);
-    setSelectedPartnerId(null);
-    setSelectedPartnerIdForNewOffer(null); // Reset when fetching all offers
+    setSelectedPartner(null); 
+    setSelectedOfferForCardView(null);
+    setSelectedPartnerIdForNewOffer(null); // This prop setter might need re-evaluation based on selectedPartner.id
     try {
-      const response = await fetch(`${API_PREFIX}/offers`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      // Fetch Actual Partners
+      const partnersResponse = await fetch(`${API_PREFIX}/partners`);
+      if (!partnersResponse.ok) {
+        throw new Error(`HTTP error! Fetching partners status: ${partnersResponse.status}`);
       }
-      const offersData: Offer[] = await response.json();
-      setAllOffers(offersData);
+      const partnersData: Partner[] = await partnersResponse.json();
+      setActualPartners(partnersData);
 
-      if (offersData && offersData.length > 0) {
-        const groupedByPartner: Partners = {}; 
-        offersData.forEach(offer => {
-          if (!offer.partnerId) {
-            console.warn('Offer missing partnerId:', offer);
-            return; // Skip offers without partnerId
-          }
-          if (!groupedByPartner[offer.partnerId]) {
-            groupedByPartner[offer.partnerId] = [];
-          }
-          groupedByPartner[offer.partnerId].push(offer);
-        });
-        setPartners(groupedByPartner); 
-      } else {
-        setPartners({}); // Renamed from setMerchants
+      // Fetch All Offers
+      const offersResponse = await fetch(`${API_PREFIX}/offers`);
+      if (!offersResponse.ok) {
+        throw new Error(`HTTP error! Fetching offers status: ${offersResponse.status}`);
       }
+      const offersData: Offer[] = await offersResponse.json();
+      setAllOffersInternal(offersData); // Corrected setter name
+
+      // Removed logic for grouping offers into `partners` state as it's no longer used directly for rendering.
+      // Offers for a selected partner are now filtered from `allOffers`.
+      
     } catch (err) {
-      console.error('Error loading offers:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load offers.');
-      setPartners({}); // Renamed from setMerchants
+      console.error('Error loading data:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load data.');
+      setActualPartners([]);
+      setAllOffersInternal([]);
+      // setPartners({}); // Removed: partners state is gone
     } finally {
       setIsLoading(false);
     }
   };
-  
-  // Optionally load offers when component is first displayed (if desired)
-  // useEffect(() => {
-  //   fetchOffers();
-  // }, []);
+
+  useEffect(() => {
+    fetchData(); // Call renamed function
+  }, []);
 
   return (
-    <section id="viewPartnersSection" className="content-section"> {/* Renamed id */}
-      <h2>Integrated Partners & Offers</h2> {/* Renamed text */}
-      <button type="button" id="loadOffersButton" onClick={fetchOffers} disabled={isLoading}>
-        {isLoading ? 'Loading...' : 'Load Partners & Offers'} {/* Renamed text */}
-      </button>
+    <section id="viewPartnersSection" className="content-section">
+      <h2>Integrated Partners & Offers</h2>
 
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      {isLoading && <p>Loading partners and offers...</p>}
 
-      {!isLoading && Object.keys(partners).length === 0 && !error && ( /* Renamed merchants to partners */
-        <p>No partners found. Click "Load Partners & Offers" or ensure offers are integrated.</p> /* Renamed text */
+      {/* Updated condition to check actualPartners */}
+      {!isLoading && actualPartners.length === 0 && !error && (
+        <p>No partners found. Use the 'Integrate New Partner' form to add partners.</p>
       )}
 
-      {Object.keys(partners).length > 0 && ( /* Renamed merchants to partners */
-        <div id="currentOffersContainer"> {/* This ID is for styling from existing CSS - kept for now */}
-          <h3>Integrated Partners (by Partner ID):</h3> {/* Renamed text */}
-          <ul className="partner-list"> {/* Renamed class */}
-            {Object.keys(partners).sort().map(partnerId => ( 
-              <li 
-                key={partnerId} 
-                onClick={() => setSelectedPartnerId(partnerId)} 
-                style={{ 
-                  cursor: 'pointer', 
-                  textDecoration: selectedPartnerId === partnerId ? 'none' : 'underline', 
-                  fontWeight: selectedPartnerId === partnerId ? 'bold' : 'normal', 
-                  padding: '8px',
-                  borderBottom: '1px solid #eee',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
-                <span onClick={() => setSelectedPartnerId(partnerId)}>
-                  {partnerId} ({partners[partnerId].length} offer(s))
-                </span>
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent li's onClick from firing
-                    setSelectedPartnerIdForNewOffer(partnerId);
-                    setCurrentView('add_offer');
-                  }}
-                  style={{ marginLeft: '10px', padding: '2px 5px', fontSize: '0.8em' }}
+      {/* Updated to iterate over actualPartners and use selectedPartner state */}
+      {actualPartners.length > 0 && !selectedPartner && (
+        <div id="currentOffersContainer">
+          <h3>Integrated Partners:</h3>
+          <ul className="partner-list">
+            {actualPartners.sort((a, b) => a.name.localeCompare(b.name)).map((partner: Partner) => { // Added explicit type for partner
+              const offersForThisPartner = allOffers.filter(offer => offer.partnerId === partner.id);
+              const offerCount = offersForThisPartner.length;
+              const currentPartnerId = partner.id; // Assign to a const for clarity
+
+              // Since this block is rendered when !selectedPartner (i.e., selectedPartner is null),
+              // an item in this list cannot be the "selected" one.
+              // The 'selected' class logic is removed here.
+              const classNames = ['partner-list-item'];
+              // if (selectedPartner && selectedPartner.id === currentPartnerId) { // This logic is always false here
+              //   classNames.push('selected');
+              // }
+
+              return (
+                <li
+                  key={currentPartnerId} 
+                  className={classNames.join(' ')} // Will always be 'partner-list-item'
+                  onClick={() => handlePartnerSelect(partner)} // Pass Partner object
                 >
-                  Add Offer
-                </button>
-              </li>
-            ))}
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {partner.logo && ( // Use partner.logo
+                      <img
+                        src={`${imageBaseUrl}/images/${partner.logo.startsWith('images/') ? partner.logo.substring('images/'.length) : partner.logo}`}
+                        alt={`${partner.name} logo`}
+                        className="partner-list-logo"
+                      />
+                    )}
+                    <span className="partner-name" style={{ marginLeft: partner.logo ? '10px' : '0' }}>
+                      {partner.name} ({offerCount} offer(s))
+                    </span>
+                  </div>
+                  <button
+                    className="btn-modern btn-primary"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPartnerIdForNewOffer(currentPartnerId); 
+                      setCurrentView('add_offer');
+                    }}
+                  >
+                    Add Offer
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
 
-      {selectedPartnerId && partners[selectedPartnerId] && ( 
-        <div id="selectedPartnerOffers"> {/* Renamed id */}
-          <h3>Offers from Partner ID: {selectedPartnerId}:</h3> 
-          {/* Button to add offer to the currently viewed partner, an alternative to the list button */}
-          <button
+      {/* Updated to use selectedPartner state and derive offers from allOffers */}
+      {selectedPartner && (
+        <div>
+          {/* Button to go back to the main partner list */}
+          <button 
+            className="btn-modern" 
             onClick={() => {
-                setSelectedPartnerIdForNewOffer(selectedPartnerId);
-                setCurrentView('add_offer');
-            }}
-            style={{ marginBottom: '10px', padding: '5px 10px' }}
-            >
-            Add New Offer to {selectedPartnerId}
+              setSelectedPartner(null); // Use setSelectedPartner
+              setSelectedOfferForCardView(null);
+            }} 
+            style={{ marginBottom: '20px' }}
+          >
+            &larr; Back to All Partners
           </button>
-          {partners[selectedPartnerId].map(offer => ( 
-            <div key={offer.id} className="offer-detail-item"> {/* Class for styling */}
-              <h4>{offer.name} (Offer ID: {offer.id})</h4>
-              <p><strong>Bank Name:</strong> {offer.bankName}</p>
-              <p><strong>Offer Type:</strong> {offer.offerType}</p>
-              <details>
-                <summary>View Full Data</summary>
-                <table className="offer-details-table">
-                  <thead>
-                    <tr>
-                      <th>Field</th>
-                      <th>Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>Offer Name</td><td>{offer.name}</td></tr>
-                    <tr><td>Offer ID</td><td>{offer.id}</td></tr>
-                    <tr><td>Bank Name</td><td>{offer.bankName}</td></tr>
-                    <tr><td>Offer Type</td><td>{offer.offerType}</td></tr>
-                    <tr><td>Location</td><td>{offer.location}</td></tr>
-                    <tr><td>Full Location</td><td>{offer.fullLocation}</td></tr>
-                    <tr><td>Airport</td><td>{offer.airport}</td></tr>
-                    <tr><td>Hours</td><td>{offer.hours}</td></tr>
-                    <tr><td>Directions</td><td>{offer.directions}</td></tr>
-                    <tr><td>Walk-in Details</td><td>{offer.walkInDetails}</td></tr>
-                    <tr><td>Entitlement</td><td>{offer.entitlement}</td></tr>
-                    <tr><td>Entitlement Price</td><td>{offer.entitlementPrice}</td></tr>
-                    <tr><td>Walk-in Button Text</td><td>{offer.walkInButtonText}</td></tr>
-                    <tr><td>Fair Use Policy</td><td>{offer.fairUsePolicy}</td></tr>
-                    <tr><td>Description</td><td>{offer.description}</td></tr>
-                    <tr><td>Image</td><td>{offer.image}</td></tr>
-                    <tr><td>Bank Logo</td><td>{offer.bankLogo}</td></tr>
-                    <tr><td>Partner ID</td><td>{offer.partnerId}</td></tr>
-                    <tr>
-                      <td>Images</td>
-                      <td>
-                        {offer.images && offer.images.length > 0 ? (
-                          <ul>
-                            {offer.images.map((img, index) => (
-                              <li key={index}>{img}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          'N/A'
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Amenities</td>
-                      <td>
-                        {offer.amenities && offer.amenities.length > 0 ? (
-                          <ul>
-                            {offer.amenities.map(amenity => (
-                              <li key={amenity.id}>{amenity.name} (Icon: {amenity.icon})</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          'N/A'
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </details>
-              <hr />
+
+          <div className="view-partners-layout">
+            <div className="view-partners-list-column">
+              {/* Use selectedPartner.name for the header */}
+              <h3>Offers from {selectedPartner.name}:</h3>
+              <button
+                className="btn-modern btn-primary"
+                onClick={() => {
+                  setSelectedPartnerIdForNewOffer(selectedPartner.id); // Use selectedPartner.id
+                  setCurrentView('add_offer');
+                }}
+                style={{ marginBottom: '10px', width: '100%' }}
+              >
+                Add New Offer to {selectedPartner.name}
+              </button>
+              {/* Filter allOffers for the selectedPartner.id */}
+              {allOffers.filter(offer => offer.partnerId === selectedPartner.id).length > 0 ? (
+                <ul className="partner-offers-list">
+                  {allOffers.filter(offer => offer.partnerId === selectedPartner.id).map(offer => (
+                    <li
+                      key={offer.id}
+                      className={`partner-offers-list-item ${selectedOfferForCardView?.id === offer.id ? 'selected' : ''}`}
+                      onClick={() => setSelectedOfferForCardView(offer)}
+                    >
+                      <h4>{offer.name}</h4>
+                      <p>Type: {offer.offerType} - Location: {offer.location}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No offers found for this partner.</p>
+              )}
             </div>
-          ))}
+            <div className="view-partners-detail-column">
+              <OfferCardView offer={selectedOfferForCardView} />
+            </div>
+          </div>
         </div>
       )}
     </section>
   );
 };
 
-export default ViewPartners; // Renamed from ViewMerchants
+export default ViewPartners;

@@ -1,0 +1,272 @@
+[
+  {
+    "partnerId": "ABN AMRO",
+    "partnerName": "ABN AMRO",
+    "partnerLogo": "Banks/abnamro.png",
+    "offers": [
+      {
+        "id": "1",
+        "offerType": "Direct Paid Access",
+        "name": "Marhaba Lounge (Concourse D)",
+        "image": "test1.webp",
+        "images": ["test2.webp", "test3.jpg", "test4.webp"],
+        "location": "Terminal 1 • International Departure",
+        "fullLocation": "Terminal 1, International Departures, Dubai International Airport",
+        "airport": "Dubai International Airport (DBX)",
+        "hours": "24 hours daily",
+        "walkInDetails": "Get access to the lounge today",
+        "entitlement": "1 x Entitlement per person",
+        "entitlementPrice": "If entitlements are exhausted, visits will be charged at $32 pp",
+        "walkInButtonText": "Walk-in",
+        "fairUsePolicy": "Fair use policy applies. See Terms & Conditions for specifics.",
+        "amenities": [
+          { "id": "a1", "name": "Fridge", "icon": "fridge.png" },
+          { "id": "a2", "name": "Beer", "icon": "beer.png" },
+          { "id": "a3", "name": "Ice Cream", "icon": "ice_cream.png" },
+          { "id": "a4", "name": "Showers", "icon": "shower.png" },
+          { "id": "a5", "name": "Washroom", "icon": "washroom.png" },
+          { "id": "a6", "name": "Wi-Fi", "icon": "wifi.png" },
+          { "id": "a7", "name": "Lobby", "icon": "lobby.png" }
+        ],
+        "amenitiesCount": 7,
+        "directions": "Airside - After passport control and security check, the lounge is located across from gate E77.",
+        "description": "Relax and unwind before your flight in the comfort of Marhaba Lounge. Enjoy a range of amenities designed to make your pre-flight experience seamless and enjoyable. Whether you want to catch up on work, enjoy a meal, or simply rest, Marhaba Lounge provides a tranquil escape from the bustling airport."
+      }
+    ]
+  },
+  {
+    "partnerId": "AU Small Finance Bank",
+    "partnerName": "AU Small Finance Bank",
+    "partnerLogo": "Banks/ausmallfinancebank.png",
+    "offers": [
+      {
+        "id": "2",
+        "name": "Ahlan Business Class Lounge (Concourse D)",
+        "image": "test5.jpg",
+        "images": ["test1.webp"],
+        "location": "Terminal 1 • International Departure",
+        "fullLocation": "Terminal 1, International Departures, Dubai International Airport",
+        "airport": "Dubai International Airport (DBX)",
+        "hours": "Open 24/7",
+        "walkInDetails": "Access available for eligible passengers.",
+        "entitlement": "Subject to airline/cardholder benefits",
+        "entitlementPrice": "Enquire at desk for paid access.",
+        "walkInButtonText": "Enquire Access",
+        "fairUsePolicy": "Terms and conditions apply.",
+        "amenities": [
+          { "id": "b1", "name": "Premium Wi-Fi", "icon": "wifi.png" },
+          { "id": "b2", "name": "Gourmet Dining", "icon": "fridge.png" },
+          { "id": "b3", "name": "Bar", "icon": "beer.png" },
+          { "id": "b4", "name": "Business Center", "icon": "fridge.png" },
+          { "id": "b5", "name": "Reception", "icon": "receptionist_bell.png" }
+        ],
+        "amenitiesCount": 5,
+        "directions": "Located in Concourse D, near Gate D12.",
+        "description": "Experience luxury and comfort at the Ahlan Business Class Lounge. Offering a wide array of services and amenities to cater to the discerning traveler.",
+        "offerType": "Conditional/Inquiry-Based Access"
+      }
+    ]
+  },
+  {
+    "partnerId": "Abu Dhabi Commercial Bank",
+    "partnerName": "Abu Dhabi Commercial Bank",
+    "partnerLogo": "Banks/abudhabicommercialbank.png",
+    "offers": [
+      {
+        "id": "3",
+        "offerType": "Reservation/Booking Required",
+        "name": "sleep 'n fly Sleep Lounge & Showers (Concourse D)",
+        "image": "test2.webp",
+        "images": ["test3.jpg"],
+        "location": "Terminal 1 • International Departure",
+        "fullLocation": "Terminal 1, International Departures, Dubai International Airport",
+        "airport": "Dubai International Airport (DBX)",
+        "hours": "By appointment",
+        "walkInDetails": "Book your sleep pod or shower.",
+        "entitlement": "Various packages available",
+        "entitlementPrice": "Starting from $20.",
+        "walkInButtonText": "Book Now",
+        "fairUsePolicy": "Booking terms apply.",
+        "amenities": [
+          { "id": "c1", "name": "Sleep Pods", "icon": "fridge.png" },
+          { "id": "c2", "name": "Showers", "icon": "shower.png" },
+          { "id": "c3", "name": "Wi-Fi", "icon": "wifi.png" },
+          { "id": "c4", "name": "Toilet", "icon": "toilet.png" }
+        ],
+        "amenitiesCount": 4,
+        "directions": "Concourse D, opposite Gate D7.",
+        "description": "Catch up on rest or freshen up with our state-of-the-art sleep pods and shower facilities. Perfect for transiting passengers or those with long layovers."
+      }
+    ]
+  },
+  {
+    "partnerId": "Airtel Payments Bank",
+    "partnerName": "Airtel Payments Bank",
+    "partnerLogo": "Banks/airtelpaymentsbank.png",
+    "offers": [
+      {
+        "id": "4",
+        "name": "Centurion Lounge JFK",
+        "image": "test4.webp",
+        "images": ["test1.webp", "test2.webp"],
+        "location": "Terminal 4 • Post-Security",
+        "fullLocation": "Terminal 4, Near Gate A2, John F. Kennedy International Airport",
+        "airport": "John F. Kennedy International Airport (JFK)",
+        "hours": "05:00 - 22:00 daily",
+        "walkInDetails": "Exclusive for Centurion Card Members",
+        "entitlement": "Cardholder + 2 guests",
+        "entitlementPrice": "N/A",
+        "walkInButtonText": "Show Card",
+        "fairUsePolicy": "Subject to capacity.",
+        "amenities": [
+          { "id": "d1", "name": "Wi-Fi", "icon": "wifi.png" },
+          { "id": "d2", "name": "Premium Food", "icon": "fridge.png" },
+          { "id": "d3", "name": "Full Bar Service", "icon": "beer.png" },
+          { "id": "d4", "name": "Showers", "icon": "shower.png" },
+          { "id": "d5", "name": "Workspaces", "icon": "fridge.png" },
+          { "id": "d6", "name": "Lobby", "icon": "lobby.png" }
+        ],
+        "amenitiesCount": 6,
+        "directions": "Airside - Terminal 4, past security, near Gate A2.",
+        "description": "An exclusive retreat at JFK, the Centurion Lounge offers premium amenities, chef-inspired cuisine, and a full bar. Ideal for relaxing or working before your flight.",
+        "offerType": "Membership/Credential-Based Exclusive Access"
+      }
+    ]
+  },
+  {
+    "partnerId": "American Express",
+    "partnerName": "American Express",
+    "partnerLogo": "Banks/americanexpress.png",
+    "offers": [
+      {
+        "id": "5",
+        "offerType": "Conditional/Inquiry-Based Access",
+        "name": "British Airways Galleries Club LHR",
+        "image": "test5.jpg",
+        "images": ["test3.jpg", "test4.webp"],
+        "location": "Terminal 5A South • Departures",
+        "fullLocation": "Terminal 5A South, Departures Level, London Heathrow Airport",
+        "airport": "London Heathrow Airport (LHR)",
+        "hours": "05:00 - 22:30 daily",
+        "walkInDetails": "Eligible Oneworld passengers",
+        "entitlement": "Business Class, First Class, Oneworld Sapphire/Emerald",
+        "entitlementPrice": "Complimentary for eligible passengers",
+        "walkInButtonText": "Check Eligibility",
+        "fairUsePolicy": "Standard airline lounge policies apply.",
+        "amenities": [
+          { "id": "e1", "name": "Wi-Fi", "icon": "wifi.png" },
+          { "id": "e2", "name": "Food & Drinks", "icon": "fridge.png" },
+          { "id": "e3", "name": "Business Center", "icon": "fridge.png" },
+          { "id": "e4", "name": "Wine Gallery", "icon": "beer.png" },
+          { "id": "e5", "name": "Kids Zone", "icon": "fridge.png" },
+          { "id": "e6", "name": "Reception", "icon": "receptionist_bell.png" }
+        ],
+        "amenitiesCount": 6,
+        "directions": "Airside - Terminal 5A South, after security. Follow signs for \"Galleries Lounges\".",
+        "description": "The British Airways Galleries Club lounge at Heathrow T5 offers a sophisticated space with a variety of seating areas, dining options, and business facilities."
+      }
+    ]
+  },
+  {
+    "partnerId": "Australia and New Zealand Banking Group",
+    "partnerName": "Australia and New Zealand Banking Group",
+    "partnerLogo": "Banks/australiaandnewzealandbankinggroup.png",
+    "offers": [
+      {
+        "id": "6",
+        "name": "SATS Premier Lounge SIN T1",
+        "image": "test1.webp",
+        "images": ["test5.jpg", "test2.webp"],
+        "location": "Terminal 1 • Departure Transit Hall",
+        "fullLocation": "Terminal 1, Departure Transit Hall, Level 3, Singapore Changi Airport",
+        "airport": "Singapore Changi Airport (SIN)",
+        "hours": "24 hours daily",
+        "walkInDetails": "Priority Pass, DragonPass, eligible airline passengers",
+        "entitlement": "Varies by program",
+        "entitlementPrice": "Paid access available, approx $58 SGD",
+        "walkInButtonText": "Purchase Access",
+        "fairUsePolicy": "Maximum 3-hour stay.",
+        "amenities": [
+          { "id": "f1", "name": "Wi-Fi", "icon": "wifi.png" },
+          { "id": "f2", "name": "Buffet Food & Drinks", "icon": "fridge.png" },
+          { "id": "f3", "name": "Showers with Amenities", "icon": "shower.png" },
+          { "id": "f4", "name": "Massage Chairs", "icon": "fridge.png" },
+          { "id": "f5", "name": "VIP Rooms (Chargeable)", "icon": "fridge.png" },
+          { "id": "f6", "name": "Charging Stations", "icon": "fridge.png" },
+          { "id": "f7", "name": "Toilet", "icon": "toilet.png" }
+        ],
+        "amenitiesCount": 7,
+        "directions": "Airside - Terminal 1, Level 3, Departure Transit Hall. Near C Gates.",
+        "description": "SATS Premier Lounge at Changi T1 provides a comfortable environment with a wide range of food, drinks, shower facilities, and even massage chairs for a relaxing pre-flight experience.",
+        "offerType": "Direct Paid Access"
+      }
+    ]
+  },
+  {
+    "partnerId": "Axis bank",
+    "partnerName": "Axis bank",
+    "partnerLogo": "Banks/axisbank.png",
+    "offers": [
+      {
+        "id": "7",
+        "offerType": "Conditional/Inquiry-Based Access",
+        "name": "Air France Lounge CDG T2E Hall K",
+        "image": "test2.webp",
+        "images": ["test3.jpg", "test4.webp"],
+        "location": "Terminal 2E Hall K • Departures",
+        "fullLocation": "Terminal 2E, Hall K, Charles de Gaulle Airport, Paris",
+        "airport": "Charles de Gaulle Airport (CDG)",
+        "hours": "05:30 - 23:30 daily",
+        "walkInDetails": "SkyTeam Elite Plus, Business/First Class passengers",
+        "entitlement": "Varies by ticket/status",
+        "entitlementPrice": "Paid access sometimes available",
+        "walkInButtonText": "Inquire at Desk",
+        "fairUsePolicy": "Standard lounge policies.",
+        "amenities": [
+          { "id": "g1", "name": "Wi-Fi", "icon": "wifi.png" },
+          { "id": "g2", "name": "French Cuisine Buffet", "icon": "fridge.png" },
+          { "id": "g3", "name": "Clarins Spa", "icon": "fridge.png" },
+          { "id": "g4", "name": "Showers", "icon": "shower.png" },
+          { "id": "g5", "name": "Lobby", "icon": "lobby.png" }
+        ],
+        "amenitiesCount": 5,
+        "directions": "Airside - Terminal 2E, Hall K, after security checks.",
+        "description": "Experience Parisian elegance at the Air France Lounge in CDG T2E Hall K, featuring Clarins spa services and gourmet French food."
+      }
+    ]
+  },
+  {
+    "partnerId": "BNP Paribas",
+    "partnerName": "BNP Paribas",
+    "partnerLogo": "Banks/bnpparibas.png",
+    "offers": [
+      {
+        "id": "8",
+        "name": "ANA Suite Lounge NRT T1",
+        "image": "test3.jpg",
+        "images": ["test1.webp", "test5.jpg"],
+        "location": "Terminal 1 Satellite 5 • International",
+        "fullLocation": "Terminal 1, Satellite 5, Narita International Airport, Tokyo",
+        "airport": "Tokyo Narita International Airport (NRT)",
+        "hours": "07:00 - Last ANA departure",
+        "walkInDetails": "ANA First Class, Star Alliance First Class passengers",
+        "entitlement": "First Class ticket holders",
+        "entitlementPrice": "N/A",
+        "walkInButtonText": "Present Boarding Pass",
+        "fairUsePolicy": "Exclusive access.",
+        "amenities": [
+          { "id": "h1", "name": "Wi-Fi", "icon": "wifi.png" },
+          { "id": "h2", "name": "Live Kitchen Noodle Bar", "icon": "fridge.png" },
+          { "id": "h3", "name": "Sake Bar", "icon": "beer.png" },
+          { "id": "h4", "name": "Private Work Booths", "icon": "fridge.png" },
+          { "id": "h5", "name": "Showers", "icon": "shower.png" },
+          { "id": "h6", "name": "Reception", "icon": "receptionist_bell.png" }
+        ],
+        "amenitiesCount": 6,
+        "directions": "Airside - Terminal 1, Satellite 5, near Gate 51.",
+        "description": "Indulge in the ANA Suite Lounge at Narita, offering exceptional Japanese hospitality, a live noodle bar, and a curated sake selection.",
+        "offerType": "Membership/Credential-Based Exclusive Access"
+      }
+    ]
+  }
+]

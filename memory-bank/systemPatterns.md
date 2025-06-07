@@ -7,7 +7,8 @@
     - Client implements caching for these images.
 - **Partner Offer Dashboard (React Application):**
     - The frontend for partner offer management, now located in `partner-backend/partner-frontend/src/`, is a React application built with Vite and TypeScript.
-    - It interacts with the `/api/offers` and `/api/integrate-offer` endpoints of the `partner-backend`.
+    - It interacts with the `/api/partners`, `/api/offers`, `/api/integrate-partner`, and `/api/partners/:partnerId/offers` endpoints of the `partner-backend`.
+    - **Backend Data Source:** The `partner-backend` now loads its initial data from `partner-backend/structured-data.json`. This file contains a nested structure where each partner object holds an array of its associated offers. This data is managed in-memory by the server.
     - **Layout:** Implemented as a two-column layout (using React components) with a fixed sidebar for navigation and a main content area for displaying different views.
     - **Build Process:** Uses Vite for development (dev server with HMR, proxy) and production builds (output to `partner-backend/partner-frontend/dist/`).
 - (To be defined further)
@@ -50,11 +51,13 @@
     - Text-based form inputs are managed using a single state object (`formData`).
     - File inputs are handled using `useRef` to access their `files` property directly.
     - On submission, a `FormData` object is constructed, appending text fields from state, selected amenities (as a JSON string), and files.
-- **API Interaction (React Partner Dashboard):**
-    - Uses `fetch` API for GET requests (e.g., `/api/offers` in `ViewPartners.tsx`) and POST requests (e.g., `/api/integrate-offer` with `FormData` in `IntegrateOfferForm.tsx`).
-    - Handles API responses and errors, updating component state to reflect loading, success, or error messages.
-- **Offer Data Grouping (React Partner Dashboard - `ViewPartners.tsx`):**
-    - Fetched offers are processed and grouped by `bankName` to create a list of unique partners before display.
+- **Backend Data Management and API Interaction (Partner Offer Dashboard):**
+    - **Data Source:** Initial partner and offer data is loaded from `partner-backend/structured-data.json` into an in-memory nested structure (`structuredDataStore`) on the backend server (`partner-backend/server.ts`).
+    - **GET `/api/partners`:** Serves a list of partner core details (id, name, logo) extracted from the `structuredDataStore`.
+    - **GET `/api/offers`:** Serves a flattened list of all offers. Each offer is extracted from its parent partner in `structuredDataStore` and includes its `partnerId` and specific `bankName`/`bankLogo` for frontend compatibility.
+    - **POST `/api/integrate-partner`:** Adds a new partner (with an empty offers list) to the in-memory `structuredDataStore`.
+    - **POST `/api/partners/:partnerId/offers`:** Adds a new offer to the specified partner's `offers` array within the in-memory `structuredDataStore`.
+    - **Frontend Interaction:** The React dashboard (`ViewPartners.tsx`) fetches partners from `/api/partners` and all offers from `/api/offers`. It then locally filters offers based on the selected partner's ID for display.
 - **Amenity Data Collection (React Partner Dashboard - `IntegrateOfferForm.tsx`):**
     - Selected predefined amenities are collected from the `selectedAmenities` state (which stores IDs). These IDs are used to look up full amenity objects from `PREDEFINED_AMENITIES` before being JSON-stringified and sent with the form data.
 
