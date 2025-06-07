@@ -48,6 +48,9 @@
     - Implemented functionality to automatically assign 5 random amenities to each new offer upon submission.
 - **Backend - Corrected Partner Logo Path Storage (`server.ts`):**
     - Modified the `/api/integrate-partner` endpoint in `partner-backend/server.ts` to store only the filename (e.g., `bankLogo-timestamp.jpg`) for partner logos, instead of `images/filename.jpg`. This prevents URL malformation (e.g., `images/images/filename.jpg`) when the frontend constructs the full image path.
+- **Partner Dashboard - Standardized Relative Image URLs:**
+    - Updated `partner-backend/partner-frontend/src/components/ViewPartners.tsx` and `partner-backend/partner-frontend/src/components/OfferCardView.tsx` to set `imageBaseUrl = ''`.
+    - This ensures all image URLs are constructed as relative paths (e.g., `/images/filename.jpg`), for consistent handling by Vite's dev proxy and production server configurations.
 
 - **Backend API Base URL Configured (Previous):**
     - `src/data/mockData.ts` uses `API_BASE_URL = 'https://lounge-app-536s.onrender.com/api'`.
@@ -117,6 +120,7 @@
     - The "View Full Data" (within `OfferCardView` and previously in `ViewPartners`) uses a tabular display.
     - Fixed a bug in `AddOfferForm.tsx` to prevent unintended clearing of form fields during preset/location changes.
     - Amenity selection in `AddOfferForm.tsx` is now automated: manual selection UI removed, 5 random amenities are assigned on offer creation.
+    - Image URLs in `ViewPartners.tsx` and `OfferCardView.tsx` are now consistently relative (e.g., `/images/filename.jpg`), relying on the Vite proxy for `/images` in development.
     - Backend server updated to serve the built React app.
     - All recent changes committed and pushed. Ready for build and comprehensive testing.
 - **Backend Data Handling:**

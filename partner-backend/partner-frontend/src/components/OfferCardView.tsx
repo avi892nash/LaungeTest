@@ -16,7 +16,7 @@ const OfferCardView: React.FC<OfferCardViewProps> = ({ offer }) => {
 
   // Helper to construct image URLs, assuming VITE_IMAGE_BASE_URL is set in .env
   // Or use a fixed base URL if appropriate
-  const imageBaseUrl = import.meta.env.VITE_IMAGE_BASE_URL || 'http://localhost:3001';
+  const imageBaseUrl = ''; // Always use relative paths for images
 
 
   return (

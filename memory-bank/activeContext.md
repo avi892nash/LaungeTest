@@ -1,9 +1,13 @@
 # Active Context
 
 ## Current Work Focus
-- Fixed partner logo path storage in `partner-backend/server.ts` to ensure correct image URL formation for newly created partners.
+- Standardized image URL handling in the Partner Dashboard (ViewPartners.tsx, OfferCardView.tsx) to use relative paths, ensuring compatibility with the Vite proxy for development and simplifying production deployment.
 
 ## Recent Changes
+- **Partner Dashboard - Enforce Relative Image URLs:**
+    - Modified `partner-backend/partner-frontend/src/components/ViewPartners.tsx` and `partner-backend/partner-frontend/src/components/OfferCardView.tsx`.
+    - Set `imageBaseUrl` to `''` (empty string) in both components.
+    - This change ensures all image URLs are constructed as relative paths (e.g., `/images/filename.jpg`). These relative paths will be handled by the Vite proxy (for `/images`) during development and will rely on appropriate server routing in production.
 - **Backend - Correct Partner Logo Path Storage (server.ts):**
     - Modified the `/api/integrate-partner` endpoint in `partner-backend/server.ts`.
     - Partner logos (`partnerLogo`) are now stored as just the `filename.ext` (e.g., `bankLogo-timestamp.jpg`) instead of `images/filename.ext`.
@@ -162,12 +166,11 @@
     1.  **Backend Image Path Fix:** Corrected `partner-backend/server.ts` to store plain image filenames for offers added via the partner dashboard, preventing duplicated `/images/` segments in URLs.
     2.  Build the new React partner dashboard (`cd partner-backend/partner-frontend && npm run build`).
     3.  Run the backend server (`cd partner-backend && npm start` or similar).
-    4.  Thoroughly test the new React-based Partner Offer Dashboard by accessing `http://localhost:3001`. This includes:
+    4.  Thoroughly test the new React-based Partner Offer Dashboard by accessing the frontend URL (e.g., `http://localhost:5173` if using Vite dev server). This includes:
         - Verifying the fix in `AddOfferForm.tsx`: Ensure that manually entered fields (like Offer Title, Bank Name, Description) are preserved when changing "Select Lounge Location" or "Select Offer Configuration".
         - Verifying the new amenity handling in `AddOfferForm.tsx`: Confirm that the UI for manual amenity selection is removed and that new offers are submitted with 5 automatically assigned random amenities.
-        - Verifying that logos for newly integrated partners (via "Integrate New Partner" form) are displayed correctly, confirming the fix for partner logo path storage in `server.ts`.
+        - Verifying that all images (partner logos, offer images, bank logos from presets) load correctly using relative paths (which should be proxied by Vite to `http://localhost:3001/images/...` in dev). This confirms the `imageBaseUrl=''` change and the Vite proxy for `/images` are working together.
         - Paying special attention to the new tabular display in "View Full Data".
-        - Verifying that new offers created have correctly formed image URLs when fetched by the client.
 - (Previous Frontend Next Steps - to be revisited after backend deployment and image caching are verified):
     - Verify UI/UX of `ExploreScreen.tsx` (airport search, filter dropdown).
     - Test search and filter functionalities.

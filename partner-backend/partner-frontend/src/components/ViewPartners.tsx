@@ -58,7 +58,7 @@ const ViewPartners: React.FC<ViewPartnersProps> = ({ setCurrentView, setSelected
   // const [partners, setPartners] = useState<PartnersGrouped>({}); // Removed unused state
   const [selectedPartner, setSelectedPartner] = useState<Partner | null>(null); // Changed to store Partner object
   const [selectedOfferForCardView, setSelectedOfferForCardView] = useState<Offer | null>(null);
-  const imageBaseUrl = import.meta.env.VITE_IMAGE_BASE_URL || 'http://localhost:3001'; // For image URLs
+  const imageBaseUrl = ''; // Always use relative paths for images
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
